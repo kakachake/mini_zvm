@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mvvm</title>
   </head>
@@ -11,7 +10,7 @@
   </body>
   <script src="/dist/iife/main.js"></script>
   <script>
-    const { effect, reactive } = ZVM;
+    const { effect, reactive, computed, watch } = ZVM;
     console.log(effect);
     const data = reactive({
       a: 1,
@@ -39,6 +38,29 @@
             effect();
           });
         },
+      }
+    );
+    cData = computed(() => {
+      return data.a + data.b.c;
+    });
+
+    watch(
+      cData,
+      (newValue) => {
+        console.log("watch computed：", newValue.value);
+      },
+      {
+        immediate: true,
+      }
+    );
+    console.log(cData);
+    watch(
+      () => cData.value,
+      (newValue) => {
+        console.log("watch computed fn：", newValue);
+      },
+      {
+        immediate: true,
       }
     );
     // 虽然数据改变了四次，但是只会执行三次副作用函数

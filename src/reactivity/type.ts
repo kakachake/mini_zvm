@@ -5,3 +5,7 @@ export type EffectFn = {
     scheduler?: (effectFn: EffectFn) => void;
   };
 };
+export interface EffectOptions {
+  lazy?: boolean;
+  scheduler?: (effect: EffectFn) => void;
+}
