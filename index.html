@@ -34,7 +34,7 @@
       {
         scheduler(effect) {
           Promise.resolve().then(() => {
-            console.log("这是scheduler打印的，他应该在最后打印：");
+            console.log("这是scheduler打印的，应该在最后打印：");
             effect();
           });
         },
