@@ -1,1 +1,1 @@
-export { createReactive } from "./reactivity/reactive";
+export { reactive, shallowReactive, effect } from "./reactivity/reactive";

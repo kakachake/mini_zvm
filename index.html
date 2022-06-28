@@ -11,6 +11,40 @@
   </body>
   <script src="/dist/iife/main.js"></script>
   <script>
-    console.log(ZVM);
+    const { effect, reactive } = ZVM;
+    console.log(effect);
+    const data = reactive({
+      a: 1,
+      b: {
+        c: 4,
+      },
+      is: true,
+    });
+    effect(() => {
+      console.log(data.is ? data.a : data.b.c);
+      effect(() => {
+        // 会执行5次，data.is*2、data.a*3
+        console.log("嵌套的effect", data.a);
+      });
+    });
+
+    effect(
+      () => {
+        console.log(data.a);
+      },
+      {
+        scheduler(effect) {
+          Promise.resolve().then(() => {
+            console.log("这是scheduler打印的，他应该在最后打印：");
+            effect();
+          });
+        },
+      }
+    );
+    // 虽然数据改变了四次，但是只会执行三次副作用函数
+    data.is = false; // 执行
+    data.a = 2; // 不执行，因为is===false，不会收集data.a依赖
+    data.is = true; // 执行
+    data.a = 3; // 执行
   </script>
 </html>
