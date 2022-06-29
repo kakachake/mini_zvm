@@ -10,6 +10,7 @@
       <div z-on:click="handleClick">{{a}}</div>
       <input type="text" z-model="b" />
       <div>当前b的值为：{{b}}。</div>
+      <div>可以是表达式：{{b+a}}</div>
       <button z-on:click="handleBtnClick">显示/隐藏</button>
       <div z-if="isShow">v-if</div>
       <div z-else>else</div>

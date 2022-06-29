@@ -19,3 +19,19 @@ export function getValueByPath(obj, path) {
   }
   return obj;
 }
+
+export function _with(scopeName: string, exp: string) {
+  exp = exp.replace(/s/g, "");
+  exp = " " + exp;
+  const quickRegex = /([\s\+\-\*\/%&\|\^!\*~]\s*?)([a-zA-Z_$][a-zA-Z_$0-9]*?)/g;
+
+  exp = exp.replace(quickRegex, (a, b, c) => {
+    return b + scopeName + "." + c;
+  });
+  return exp;
+}
+
+export function runInScope(scope, scopeName: string, exp: string) {
+  const func = new Function(scopeName, "return " + _with(scopeName, exp));
+  return func(scope);
+}

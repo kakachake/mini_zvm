@@ -1,7 +1,7 @@
 import { watch } from "../main";
 import { VM } from "../type";
 import { render } from "./render";
-import { getValueByPath, setValueByPath } from "./util";
+import { getValueByPath, runInScope, setValueByPath } from "./util";
 
 function on(node: Element, vm: VM, directive: string, expression: string) {
   // z-on:click -> click
@@ -86,7 +86,7 @@ function bind(
 
   watch(
     () => {
-      return getValueByPath(vm.$data, expression);
+      return runInScope(vm.$data, "scope", expression);
     },
     (newValue) => {
       renderFn && renderFn(node, newValue, replace);
