@@ -3,7 +3,7 @@ import { VM } from "../type";
 import { render } from "./render";
 import { getValueByPath, setValueByPath } from "./util";
 
-function on(node: Element, vm: VM, directive, expression) {
+function on(node: Element, vm: VM, directive: string, expression: string) {
   // z-on:click -> click
   console.log(directive);
   const eventType = directive.split(":")[1];
@@ -39,6 +39,40 @@ function text(node: Text, vm: VM, directive, expression, replace) {
   bind(node, vm, "text", expression, replace);
 }
 
+function _if(node: HTMLElement, vm: VM, directives, expression, replace) {
+  const next = node.nextElementSibling;
+  console.log(next);
+
+  let elseNode: HTMLElement | null = null;
+  if (next && next.getAttribute("z-else") !== undefined) {
+    elseNode = next as HTMLElement;
+  }
+  console.log(node);
+
+  console.log(elseNode);
+
+  const updated = (newvalue) => {
+    console.log("newValue", newvalue);
+
+    if (newvalue) {
+      node.style.display = "block";
+      elseNode && (elseNode.style.display = "none");
+    } else {
+      node.style.display = "none";
+      elseNode && (elseNode.style.display = "block");
+    }
+  };
+  watch(
+    () => {
+      return !!getValueByPath(vm.$data, expression);
+    },
+    updated,
+    {
+      immediate: true,
+    }
+  );
+}
+
 function bind(
   node: Node,
   vm: VM,
@@ -60,4 +94,4 @@ function bind(
   );
 }
 
-export default { on, model, text };
+export default { on, model, text, if: _if };

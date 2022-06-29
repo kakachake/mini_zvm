@@ -59,6 +59,8 @@ export class Compile {
     if (DIR_REG.test(directive)) {
       // 例如 v-on:click，截取v-on
       const dir = directive.substring(2).split(":")[0];
+      console.log(dir);
+
       // 寻找该指令
       directives[dir] && directives[dir](node, vm, directive, expression);
     }

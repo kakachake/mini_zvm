@@ -1,7 +1,7 @@
 import typescript from "rollup-plugin-typescript2";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-
+import { terser } from "rollup-plugin-terser";
 export const file = (type) => `dist/index.${type}.js`;
 
 const overrides = {
@@ -25,7 +25,7 @@ export default {
     },
     {
       format: "iife",
-      sourcemap: "inline",
+      // sourcemap: "inline",
       dir: "dist/iife",
       name: "ZVM",
     },
@@ -38,5 +38,6 @@ export default {
       extensions: [".js", ".ts"], //允许我们加载第三方模块
     }),
     commonjs(), // 转换为ES6版本
+    // terser(),
   ],
 };
