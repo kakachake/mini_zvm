@@ -9,3 +9,8 @@ export interface EffectOptions {
   lazy?: boolean;
   scheduler?: (effect: EffectFn) => void;
 }
+export enum TriggerType {
+  SET,
+  ADD,
+  DELETE,
+}

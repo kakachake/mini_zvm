@@ -1,8 +1,11 @@
-import { EffectFn, EffectOptions } from "./type";
+import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
 let activeEffectFn: EffectFn;
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
+
+// 迭代器key
+export const ITERATE_KEY = Symbol("iterate");
 
 // effect函数栈
 const effectFnStack: Array<EffectFn> = [];
@@ -63,21 +66,52 @@ export function track(target, key) {
 
 export function trigger(
   target,
-  key: string | symbol
-  // info: {
-  //   type: TriggerType;
-  //   oldValue?: any;
-  //   newValue?: any;
-  // }
+  key: string | symbol,
+  {
+    type,
+    newValue,
+    oldValue,
+  }: {
+    type: TriggerType;
+    oldValue?: any;
+    newValue?: any;
+  }
 ) {
   const depsMap = bucket.get(target);
+  console.log(target, key, type);
+
   if (!depsMap) return;
+
   const effectsToRun = new Set<EffectFn>();
   const deps = depsMap.get(key);
+
+  const iterateEffects = depsMap.get(ITERATE_KEY);
+
   deps &&
     deps.forEach((effectFn) => {
       effectsToRun.add(effectFn);
     });
+
+  // 只有添加和删除操作才会改变对象的keys，故此时需要触发iterateEffects
+  if (type === TriggerType.ADD || type === TriggerType.DELETE) {
+    iterateEffects &&
+      iterateEffects.forEach((effectFn) => {
+        if (effectFn != activeEffectFn) {
+          effectsToRun.add(effectFn);
+        }
+      });
+  }
+
+  // 如果TriggerType === ADD, 并且target是数组，说明数组的长度发生变化，则需要把数组的length也触发
+  if (type === TriggerType.ADD && Array.isArray(target)) {
+    const lengthEffects = depsMap.get("length");
+    lengthEffects &&
+      lengthEffects.forEach((effectFn) => {
+        if (effectFn != activeEffectFn) {
+          effectsToRun.add(effectFn);
+        }
+      });
+  }
 
   effectsToRun.forEach((effectFn) => {
     // 避免循环触发

@@ -1,15 +1,10 @@
-import { track, trigger } from "./effect";
+import { ITERATE_KEY, track, trigger } from "./effect";
+import { TriggerType } from "./type";
 
 const RAW_KEY = Symbol("raw_key");
 
 // 创建一个map来记录已经被代理的对象，避免重复代理
 const reactiveMap = new Map();
-
-// enum TriggerType {
-//   SET,
-//   ADD,
-//   DELETE,
-// }
 
 /**
  * 创建一个响应式对象
@@ -24,6 +19,9 @@ function createReactive(obj: any, { isShallow = false }) {
       // 代理对象可以通过RAW_KEY获取到原始数据
       if (key === RAW_KEY) {
         return target;
+      }
+
+      if (Array.isArray(target)) {
       }
 
       if (typeof key !== "symbol") {
@@ -47,17 +45,46 @@ function createReactive(obj: any, { isShallow = false }) {
     },
     set(target, key, newVal, receiver) {
       const oldVal = target[key];
+
+      const type = Array.isArray(target)
+        ? // 如果是数组且key值小于长度，则认为是set，否则是插入新元素
+          Number(key) < target.length
+          ? TriggerType.SET
+          : TriggerType.ADD
+        : // 如果对象含有key属性，则认为是set，否则是新增属性
+        Object.prototype.hasOwnProperty.call(target, key)
+        ? TriggerType.SET
+        : TriggerType.ADD;
       const res = Reflect.set(target, key, newVal, receiver);
+
       if (oldVal !== newVal) {
-        trigger(
-          target,
-          key
-          //   {
-          //   type: TriggerType.SET,
-          //   oldValue: oldVal,
-          //   newValue: newVal,
-          // }
-        );
+        trigger(target, key, {
+          type: type,
+          oldValue: oldVal,
+          newValue: newVal,
+        });
+      }
+      return res;
+    },
+    has(target, key) {
+      track(target, key);
+      return Reflect.has(target, key);
+    },
+    ownKeys(target) {
+      track(target, Array.isArray(target) ? "length" : ITERATE_KEY);
+      return Reflect.ownKeys(target);
+    },
+    deleteProperty(target, key) {
+      const hasKey = Object.prototype.hasOwnProperty.call(target, key);
+      const res = Reflect.deleteProperty(target, key);
+      if (hasKey && res) {
+        Array.isArray(target)
+          ? trigger(target, key, {
+              type: TriggerType.SET,
+            })
+          : trigger(target, key, {
+              type: TriggerType.DELETE,
+            });
       }
       return res;
     },

@@ -68,5 +68,18 @@
     data.a = 2; // 不执行，因为is===false，不会收集data.a依赖
     data.is = true; // 执行
     data.a = 3; // 执行
+    const a = reactive([]);
+
+    effect(() => {
+      for (i in a) {
+        console.log(a[i]);
+      }
+    });
+    a.push(1);
+    a.push(2);
+    a.push(3);
+    a.push(4);
+    a[0] = 2;
+    a.length = 2;
   </script>
 </html>

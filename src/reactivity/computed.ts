@@ -1,4 +1,5 @@
 import { effect, track, trigger } from "./effect";
+import { TriggerType } from "./type";
 
 export function computed(getter: () => any) {
   let value: any;
@@ -12,7 +13,9 @@ export function computed(getter: () => any) {
         // 将dirty设为true，表示数据发生改变，需要更新
         dirty = true;
         // 调用trigger，告知computed的依赖发生变化让他们重新执行
-        trigger(obj, "value");
+        trigger(obj, "value", {
+          type: TriggerType.SET,
+        });
       }
     },
   });
