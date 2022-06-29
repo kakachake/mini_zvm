@@ -71,9 +71,11 @@
     const a = reactive([]);
 
     effect(() => {
+      console.log("遍历开始");
       for (i in a) {
         console.log(a[i]);
       }
+      console.log("遍历结束");
     });
     a.push(1);
     a.push(2);

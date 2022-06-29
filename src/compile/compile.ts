@@ -8,7 +8,7 @@ export class Compile {
     this.node = node;
     this.vm = vm;
     const frag = this.nodeToFragment(this.node);
-    console.log(frag);
+
     this.compile(frag, this.vm);
     this.node.appendChild(frag);
   }
@@ -36,6 +36,7 @@ export class Compile {
       }
     });
   }
+
   compileText(node: Text, vm: VM) {
     const text = node.textContent;
     if (!text) return;
@@ -59,10 +60,12 @@ export class Compile {
     if (DIR_REG.test(directive)) {
       // 例如 v-on:click，截取v-on
       const dir = directive.substring(2).split(":")[0];
-      console.log(dir);
+      console.log("当前解析指令：", dir);
 
       // 寻找该指令
       directives[dir] && directives[dir](node, vm, directive, expression);
+      console.log("解析指令完成：", dir);
+      node.removeAttribute(directive);
     }
   }
 }

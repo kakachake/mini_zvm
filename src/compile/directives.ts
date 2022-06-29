@@ -1,19 +1,14 @@
-import { watch } from "../main";
+import { effect, watch } from "../main";
 import { VM } from "../type";
 import { render } from "./render";
 import { getValueByPath, runInScope, setValueByPath } from "./util";
 
 function on(node: Element, vm: VM, directive: string, expression: string) {
   // z-on:click -> click
-  console.log(directive);
+
   const eventType = directive.split(":")[1];
 
   const fn = vm.$options.methods && vm.$options.methods[expression];
-  console.log(vm.$options.methods);
-  console.log(fn);
-
-  console.log(node);
-  console.log(eventType);
 
   if (eventType && fn) {
     node.addEventListener(eventType, fn.bind(vm));
@@ -35,25 +30,39 @@ function model(
   });
 }
 
-function text(node: Text, vm: VM, directive, expression, replace) {
-  bind(node, vm, "text", expression, replace);
+function text(
+  node: Text,
+  vm: VM,
+  directive: string,
+  expression: string,
+  replace = ""
+) {
+  const renderFn = render["textRender"];
+
+  if (renderFn) {
+    watch(
+      () => {
+        return runInScope(vm.$data, "scope", expression);
+      },
+      (newValue) => {
+        renderFn && renderFn(node, newValue, replace);
+      },
+      {
+        immediate: true,
+      }
+    );
+  }
 }
 
-function _if(node: HTMLElement, vm: VM, directives, expression, replace) {
+function _if(node: HTMLElement, vm: VM, directives, expression) {
   const next = node.nextElementSibling;
-  console.log(next);
 
   let elseNode: HTMLElement | null = null;
   if (next && next.getAttribute("z-else") !== undefined) {
     elseNode = next as HTMLElement;
   }
-  console.log(node);
-
-  console.log(elseNode);
 
   const updated = (newvalue) => {
-    console.log("newValue", newvalue);
-
     if (newvalue) {
       node.style.display = "block";
       elseNode && (elseNode.style.display = "none");
@@ -76,22 +85,22 @@ function _if(node: HTMLElement, vm: VM, directives, expression, replace) {
 function bind(
   node: Node,
   vm: VM,
-  dir: string,
+  directive,
   expression: string,
   replace: string
 ) {
-  const value = getValueByPath(vm.$data, expression);
-  const renderFn = render[dir + "Render"];
-  renderFn && renderFn(node, value, replace);
+  const dirSplit = directive.split(":");
+  const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
 
-  watch(
-    () => {
-      return runInScope(vm.$data, "scope", expression);
-    },
-    (newValue) => {
-      renderFn && renderFn(node, newValue, replace);
-    }
-  );
+  const value = runInScope(vm.$data, "scope", expression);
+
+  const renderFn = render[dir + "Render"];
+
+  if (renderFn) {
+    effect(() => {
+      renderFn(node, value);
+    });
+  }
 }
 
-export default { on, model, text, if: _if };
+export default { on, model, text, if: _if, bind };

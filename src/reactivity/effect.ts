@@ -1,6 +1,8 @@
+import { shoudTrack } from "./reactive";
 import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
 let activeEffectFn: EffectFn;
+
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
 
@@ -34,6 +36,7 @@ export function effect(fn: () => void, options: EffectOptions = {}) {
   };
 
   effectFn.options = options;
+  effectFn.deps = [];
 
   if (!options.lazy) {
     effectFn();
@@ -54,7 +57,7 @@ function cleanUp(effectFn: EffectFn) {
 }
 
 export function track(target, key) {
-  if (!activeEffectFn) return;
+  if (!activeEffectFn || !shoudTrack) return;
   const depsMap =
     bucket.get(target) || bucket.set(target, new Map()).get(target);
   const deps = depsMap!.get(key) || depsMap!.set(key, new Set()).get(key);
@@ -78,7 +81,6 @@ export function trigger(
   }
 ) {
   const depsMap = bucket.get(target);
-  console.log(target, key, type);
 
   if (!depsMap) return;
 

@@ -7,7 +7,8 @@
   </head>
   <body>
     <div id="app">
-      <div z-on:click="handleClick">{{a}}</div>
+      <div z-bind:class="class" z-on:click="handleClick">{{a}}</div>
+
       <input type="text" z-model="b" />
       <div>当前b的值为：{{b}}。</div>
       <div>可以是表达式：{{b+a}}</div>
@@ -26,11 +27,17 @@
           a: 111,
           b: "",
           isShow: true,
+          active: false,
+          class: {
+            active: true,
+            default: true,
+          },
         };
       },
       methods: {
         handleClick() {
           this.a++;
+          this.class.active = !this.class.active;
         },
         handleBtnClick() {
           this.isShow = !this.isShow;
@@ -38,4 +45,12 @@
       },
     });
   </script>
+  <style>
+    * {
+      user-select: none;
+    }
+    .active {
+      background-color: red;
+    }
+  </style>
 </html>
