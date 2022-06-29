@@ -3,6 +3,12 @@ import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
 let activeEffectFn: EffectFn;
 
+export let needTrigger = true;
+
+export function toggleNeedTrigger(flag: boolean) {
+  needTrigger = flag;
+}
+
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
 
@@ -80,6 +86,7 @@ export function trigger(
     newValue?: any;
   }
 ) {
+  if (!needTrigger) return;
   const depsMap = bucket.get(target);
 
   if (!depsMap) return;

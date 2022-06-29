@@ -24,10 +24,13 @@ export function _with(scopeName: string, exp: string) {
   //去除空格
   exp = exp.replace(/\s/g, "");
   exp = " " + exp;
-  const quickRegex = /([\s\+\-\*\/%&\|\^!\*~]\s*?)([a-zA-Z_$][a-zA-Z_$0-9]*?)/g;
+  const quickRegex =
+    /([:\s\+\-\*\/%&\|\^!\*~]\s*?)(([a-zA-Z_$][a-zA-Z_$0-9]*))/g;
+  // javascript 关键字的正则
+  const boolRegex = /(true|false|null|undefined)/g;
 
   exp = exp.replace(quickRegex, (a, b, c) => {
-    return b + scopeName + "." + c;
+    return boolRegex.test(c) ? b + c : b + scopeName + "." + c;
   });
 
   return exp;

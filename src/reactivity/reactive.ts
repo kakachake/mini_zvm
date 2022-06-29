@@ -10,25 +10,6 @@ export const shoudTrack = true;
 
 const reactiveMap = new Map();
 
-const arrayInstrumentations = {};
-
-["push", "shift", "pop", "unshift", "splice"].forEach((method) => {
-  // 取得原始的方法
-  const originMethod = Array.prototype[method];
-  // 重写
-  arrayInstrumentations[method] = function (...args) {
-    console.log(this, args);
-    // 停止追踪
-    // shoudTrack = false;
-
-    const res = originMethod.call(this, ...args);
-    // 在调用原始方法之后，恢复追踪，即允许追踪
-    // shoudTrack = true;
-
-    return res;
-  };
-});
-
 /**
  * 创建一个响应式对象
  * @param obj 对象
@@ -39,13 +20,11 @@ const arrayInstrumentations = {};
 function createReactive(obj: any, { isShallow = false }) {
   return new Proxy(obj, {
     get(target, key, receiver) {
+      // console.log(key);
+
       // 代理对象可以通过RAW_KEY获取到原始数据
       if (key === RAW_KEY) {
         return target;
-      }
-
-      if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
-        return Reflect.get(arrayInstrumentations, key, receiver);
       }
 
       if (typeof key !== "symbol") {
