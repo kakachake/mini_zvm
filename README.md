@@ -120,9 +120,9 @@ const app = createApp({
 <button z-on:click="yourmethod"></button>
 ```
 
-#### 各个指令介绍
+### 各个指令介绍
 
-##### z-bind
+#### z-bind
 
 上述已经介绍过了，这里不再重复介绍。
 
@@ -228,7 +228,7 @@ handleDelClick(index) {
 },
 ```
 
-##### z-if、z-else 条件渲染
+#### z-if、z-else 条件渲染
 
 `z-if` 指令被用于按条件渲染一个区块。这个区块只会在指令的表达式为真时才被渲染。
 
