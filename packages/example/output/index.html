@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  <script defer src="index.b938df223fbf0c054261.js"></script></head>
+  <script defer src="index.e09dbfed4398f5a949ae.js"></script></head>
   <body>
     <div id="app">
       <div z-bind:class="class" z-on:click="handleClick('test')">{{a}}</div>
@@ -41,6 +41,7 @@
           z-on:click="handleDelClick(index)"
           z-for="(item,index) in items"
         >
+          <div>点击即可删除</div>
           <div>{{item.msg}}</div>
           <div>{{index}}</div>
           <div>{{a}}</div>
