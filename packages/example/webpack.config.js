@@ -2,7 +2,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: {
-    nvm: "./src/index.js",
+    index: "./src/index.js",
+    if: "./src/if.js",
   },
   output: {
     filename: "[name].[hash].js",
@@ -14,8 +15,13 @@ module.exports = {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       template: "./index.html",
-      inject: "head",
       filename: "index.html",
+      chunks: ["index"],
+    }),
+    new HtmlWebpackPlugin({
+      template: "./if.html",
+      filename: "if.html",
+      chunks: ["if"],
     }),
   ],
   devServer: {
