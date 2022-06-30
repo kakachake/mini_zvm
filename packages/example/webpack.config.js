@@ -7,6 +7,7 @@ module.exports = {
   },
   output: {
     filename: "[name].[hash].js",
+    path: __dirname + "/output",
   },
   module: {
     rules: [],

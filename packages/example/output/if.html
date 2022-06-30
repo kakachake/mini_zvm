@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <script defer src="if.b451f5d42195b5f5927b.js"></script></head>
+  <body>
+    <div id="app">
+      <button z-on:click="handleBtnClick">显示/隐藏</button>
+      <div z-if="isShow">z-if</div>
+      <div z-else>else</div>
+    </div>
+  </body>
+  <style>
+    * {
+      user-select: none;
+    }
+    .active {
+      background-color: red;
+    }
+  </style>
+</html>
