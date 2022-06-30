@@ -7,6 +7,7 @@
   "scripts": {
     "dev:zvm": "pnpm -F zvm dev",
     "dev:example": "pnpm -F example dev",
+    "build:example": "pnpm -F example build",
     "prepare": "husky install",
     "lint": "eslint packages/**/src/**/*.ts",
     "commit": "npx cz"

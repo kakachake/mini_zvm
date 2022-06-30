@@ -73,14 +73,15 @@ export const render = {
           },
           vm
         );
-        console.log(childVm);
 
         // debugger;
         Object.setPrototypeOf(childVm, vm);
 
         // console.log(childVm);
 
-        new Compile(cloneNode, childVm).mount();
+        new Compile(cloneNode, childVm, {
+          compileRoot: true,
+        }).mount();
         lastNode = cloneNode;
       }
     };

@@ -14,7 +14,7 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
 
   const method = matchMethod[1];
   const methodArgs: any = [];
-  console.log(matchMethod);
+  console.log(method);
 
   const singleReg = /^'(.*)'$/;
   if (matchMethod && matchMethod[3]) {
