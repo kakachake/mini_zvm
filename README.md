@@ -127,7 +127,7 @@ const app = createApp({
 
 #### z-on 监听事件
 
-你可以使用 `v-on` 指令 来监听 DOM 事件和运行 JavaScript 代码
+你可以使用 `z-on` 指令 来监听 DOM 事件和运行 JavaScript 代码
 事件处理器的值为一个函数名
 
 ```javascript
@@ -190,7 +190,7 @@ app.mount("#app");
 ```
 
 ```html
-<li v-for="(item,index) in items">
+<li z-for="(item,index) in items">
   <div>{{item.msg}}</div>
   <div>{{index}}</div>
   <div>{{ parentData }}</div>
@@ -202,7 +202,7 @@ app.mount("#app");
 你可以在 `z-for` 的**内部元素**使用 `z-on` 指令来绑定事件，例如：
 
 ```html
-<li v-for="(item,index) in items">
+<li z-for="(item,index) in items">
   <div>{{item.msg}}</div>
   <div>{{index}}</div>
   <div>{{ parentData }}</div>
@@ -222,7 +222,7 @@ handleDelClick(index) {
 
 `z-else`仅当 `z-if` 的表达式为假时才会被渲染。
 
-**一个`v-else`元素必须跟在一个 v-if 或者 v-else-if 元素后面，否则将不会识别它。**
+**一个`z-else`元素必须跟在一个 z-if 或者 z-else-if 元素后面，否则将不会识别它。**
 
 简单示例：
 

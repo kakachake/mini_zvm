@@ -8,7 +8,7 @@
     "dev:zvm": "pnpm -F zvm dev",
     "dev:example": "pnpm -F example dev",
     "prepare": "husky install",
-    "lint": "eslint package/**/*.ts",
+    "lint": "eslint packages/**/src/**/*.ts",
     "commit": "npx cz"
   },
   "devDependencies": {
