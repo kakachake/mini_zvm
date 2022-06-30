@@ -7,18 +7,26 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
   // z-on:click -> click
   // 函数调用
 
-  const methodReg = /^(\w+)([(](\w+)[)])?/;
+  const methodReg = /^(\w+)([(](['\w']+)[)])?/;
   const matchMethod = expression.match(methodReg);
 
   if (!matchMethod) return;
 
   const method = matchMethod[1];
   const methodArgs: any = [];
+  console.log(matchMethod);
 
+  const singleReg = /^'(.*)'$/;
   if (matchMethod && matchMethod[3]) {
     const args = matchMethod[3].split(",");
     args.forEach((arg) => {
-      methodArgs.push(getValueByPath(vm.$data, arg));
+      // 单引号正则
+
+      if (singleReg.test(arg)) {
+        methodArgs.push(arg.replace(singleReg, "$1"));
+      } else {
+        methodArgs.push(getValueByPath(vm.$data, arg));
+      }
     });
   }
   const eventType = directive.split(":")[1];

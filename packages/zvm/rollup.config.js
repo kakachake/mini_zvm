@@ -38,6 +38,6 @@ export default {
       extensions: [".js", ".ts"], //允许我们加载第三方模块
     }),
     commonjs(), // 转换为ES6版本
-    // terser(),
+    terser(),
   ],
 };

@@ -1,14 +1,16 @@
 {
-  "name": "mini_mvvm",
+  "name": "zvm",
   "version": "0.0.1",
   "private": true,
+  "main": "/dist/es/index.js",
+  "module": "dist/es/main.js",
   "author": "kakachake",
   "description": "mvvm简化版，仅供学习使用",
   "scripts": {
-    "dev:zvm": "pnpm -F zvm dev",
-    "dev:example": "pnpm -F example dev",
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
     "prepare": "husky install",
-    "lint": "eslint package/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "commit": "npx cz"
   },
   "devDependencies": {
