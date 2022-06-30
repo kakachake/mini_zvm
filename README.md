@@ -35,6 +35,18 @@ app.mount("#app");
 </div>
 ```
 
+## 示例
+
+```
+
+pnpm i
+pnpm run dev:example
+//打开 http://localhost:8080/查看效果
+
+```
+
+[展示地址](http://101.43.155.53/front_end_baidu/mini_mvvm/zvm.html)
+
 ## 基础
 
 ### 创建应用实例
@@ -260,21 +272,5 @@ pnpm i
 cd packages/zvm
 pnpm run build
 //手动打开根目录下的 zvm.html 即可查看效果
-
-```
-
-## 示例
-
-```
-
-pnpm i
-pnpm run dev:example
-//打开 http://localhost:8080/查看效果
-
-```
-
-[展示地址](http://101.43.155.53/front_end_baidu/mini_mvvm/zvm.html)
-
-```
 
 ```
