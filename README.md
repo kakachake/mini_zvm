@@ -45,7 +45,7 @@ pnpm run dev:example
 
 ```
 
-[展示地址](http://101.43.155.53/front_end_baidu/mini_mvvm/zvm.html)
+[展示地址](https://mini-vue3.vercel.app/)
 
 ## 基础
 
