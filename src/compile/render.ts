@@ -1,5 +1,5 @@
-import { toggleNeedTrigger } from "../reactivity/effect";
-import { VM } from "../type";
+import { VM } from "../zvm/type";
+import { createVM } from "../zvm/zvm";
 import { Compile } from "./compile";
 import { insertAfter } from "./dom";
 
@@ -46,20 +46,13 @@ export const render = {
       forNodes.length = 0;
     }
     return (value, index, items, vm: VM) => {
-      console.log("重新渲染");
-
       clearNodes();
       let lastNode: Node | null = _previousNode;
       // node.parentNode?.removeChild(node);
       for (let i = 0; i < items.length; i++) {
+        if (!items[i]) continue;
         const cloneNode = _cloneNode.cloneNode(true);
-        console.log(cloneNode);
 
-        toggleNeedTrigger(false);
-        const tempValueData = vm.$data[value];
-        const tempIndexData = vm.$data[index];
-        vm.$data[index] = i;
-        vm.$data[value] = items[i];
         // node.appendChild(frag);
         // TODO
         (cloneNode as Element).removeAttribute("z-for");
@@ -71,12 +64,24 @@ export const render = {
         }
         lastNode = cloneNode;
         forNodes.push(cloneNode);
-        new Compile(cloneNode, vm);
-        lastNode = cloneNode;
+        const childVm = createVM(
+          {
+            data: {
+              [value]: items[i],
+              [index]: i,
+            },
+          },
+          vm
+        );
+        console.log(childVm);
 
-        vm.$data[value] = tempValueData;
-        vm.$data[index] = tempIndexData;
-        toggleNeedTrigger(true);
+        // debugger;
+        Object.setPrototypeOf(childVm, vm);
+
+        // console.log(childVm);
+
+        new Compile(cloneNode, childVm).mount();
+        lastNode = cloneNode;
       }
     };
   },

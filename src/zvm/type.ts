@@ -9,4 +9,10 @@ export interface VM {
   $el?: HTMLElement;
   $data?: any;
   $options: ZvmOptions;
+  mount?: (el: string) => void;
+}
+
+export interface App {
+  vm: VM;
+  mount: (el: string) => void;
 }

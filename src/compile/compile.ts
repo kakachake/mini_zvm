@@ -1,4 +1,4 @@
-import { VM } from "../type";
+import { VM } from "../zvm/type";
 import directives from "./directives";
 
 export class Compile {
@@ -6,13 +6,23 @@ export class Compile {
   vm: VM;
   // 设置标记变量，对于v-for的子元素，不需要继续深度遍历
   needDeepCompile = true;
+  frag: DocumentFragment;
   constructor(node: Node, vm: VM) {
     this.node = node;
     this.vm = vm;
-    const frag = this.nodeToFragment(this.node);
+    this.frag = this.nodeToFragment(this.node);
 
-    this.compile(frag, this.vm);
-    this.node.appendChild(frag);
+    this.compile(this.frag, this.vm);
+    // this.node.appendChild(this.frag);
+  }
+
+  mount(el?: string) {
+    if (el) {
+      const element = document.querySelector(el);
+      element && element.appendChild(this.frag);
+    } else {
+      this.node.appendChild(this.frag);
+    }
   }
 
   nodeToFragment(node: Node) {
@@ -67,8 +77,6 @@ export class Compile {
       // 例如 v-on:click，截取v-on
       const dir = directive.substring(2).split(":")[0];
       if (DIR_FOR_REG.test(directive)) {
-        console.log(node, directive);
-
         this.needDeepCompile = false;
       }
       // 寻找该指令

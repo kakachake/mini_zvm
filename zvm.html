@@ -25,7 +25,7 @@
       <div>可以是表达式：{{b+a}}</div>
       <div>===============================</div>
       <button z-on:click="handleBtnClick">显示/隐藏</button>
-      <div z-if="isShow">v-if</div>
+      <div z-if="isShow">z-if</div>
       <div z-else>else</div>
       <div>===============================</div>
       z-for：
@@ -33,6 +33,7 @@
         <li class="class" aria-disabled="" z-for="(item,index) in items">
           <div>{{item.msg}}</div>
           <div>{{index}}</div>
+          <div>{{a}}</div>
           <button z-on:click="handleDelClick(index)">删除</button>
         </li>
       </ul>
@@ -43,10 +44,11 @@
   <script src="./dist/iife/main.js"></script>
   <script>
     const { createApp } = ZVM;
-    createApp({
-      el: "#app",
+    const app = createApp({
+      template: "#app",
       data() {
         return {
+          parentData: "外层的数据",
           a: 111,
           b: "",
           isShow: true,
@@ -89,18 +91,20 @@
         },
         handleAddItem() {
           this.items.push({
-            msg: "新增的数据",
+            msg: "新增的数据" + this.a++,
           });
         },
         handleDelClick(index) {
           console.log(index);
-          debugger;
-          this.items[index].msg = "删除的数据";
 
-          // this.items.splice(index, 1);
+          console.log(this);
+
+          this.items.splice(index, 1);
         },
       },
     });
+
+    app.mount("#app");
   </script>
   <style>
     * {

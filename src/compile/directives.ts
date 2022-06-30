@@ -1,5 +1,5 @@
 import { effect, watch } from "../main";
-import { VM } from "../type";
+import { VM } from "../zvm/type";
 import { render } from "./render";
 import { getValueByPath, runInScope, setValueByPath } from "./util";
 
@@ -22,9 +22,8 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
     });
   }
   const eventType = directive.split(":")[1];
-  const fn = vm.$options.methods && vm.$options.methods[method];
-  console.log(methodArgs);
 
+  const fn = vm && vm[method];
   if (eventType && fn) {
     node.addEventListener(eventType, fn.bind(vm, ...methodArgs));
   }
@@ -58,7 +57,7 @@ function text(
   if (renderFn) {
     watch(
       () => {
-        return runInScope(vm.$data, "scope", expression);
+        return runInScope(vm, "scope", expression);
       },
       (newValue) => {
         renderFn && renderFn(node, newValue, replace);
@@ -89,7 +88,7 @@ function _if(node: HTMLElement, vm: VM, directives, expression) {
   };
   watch(
     () => {
-      return !!runInScope(vm.$data, "scope", expression);
+      return !!runInScope(vm, "scope", expression);
     },
     updated,
     {
@@ -103,24 +102,18 @@ function _for(node: HTMLElement, vm: VM, directive, expression: string) {
   expression = expression.replace(/\s/g, "");
   const REF_LIST_FOR = /[(](\w+)(,(\w+))[)]in(\w+)/;
   const forMatch = expression.match(REF_LIST_FOR);
-  console.log(forMatch);
+
   if (forMatch && forMatch[4]) {
     const [, value, , index, list] = forMatch;
 
     const renderFor = render.forRender(node);
     effect(() => {
-      renderFor(value, index, runInScope(vm.$data, "scope", list), vm);
+      renderFor(value, index, runInScope(vm, "scope", list), vm);
     });
   }
 }
 
-function bind(
-  node: Node,
-  vm: VM,
-  directive,
-  expression: string,
-  replace: string
-) {
+function bind(node: Node, vm: VM, directive, expression: string) {
   const dirSplit = directive.split(":");
 
   const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
@@ -131,7 +124,7 @@ function bind(
   }
   if (renderFn) {
     effect(() => {
-      renderFn(node, runInScope(vm.$data, "scope", expression));
+      renderFn(node, runInScope(vm, "scope", expression));
     });
   }
 }

@@ -20,8 +20,6 @@ const reactiveMap = new Map();
 function createReactive(obj: any, { isShallow = false }) {
   return new Proxy(obj, {
     get(target, key, receiver) {
-      // console.log(key);
-
       // 代理对象可以通过RAW_KEY获取到原始数据
       if (key === RAW_KEY) {
         return target;
