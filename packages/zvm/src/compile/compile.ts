@@ -73,7 +73,7 @@ export class Compile {
 
   compileElement(node: HTMLElement, vm: VM) {
     const attr = Array.from(node.attributes);
-    console.log(attr);
+
     const isZFor = attr.findIndex((attr: Attr) => {
       return DIR_FOR_REG.test(attr.nodeName);
     });

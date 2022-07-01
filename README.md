@@ -168,12 +168,26 @@ app.mount("#app");
 </div>
 ```
 
-也可以传递参数
+##### 传递参数
 
 ```html
 <div id="app">
   <button z-on:click="handleClick('test')">Count is: {{ count }}</button>
 </div>
+```
+
+##### 访问原生事件参数
+
+有时我们需要在内联事件处理器中访问原生 DOM 事件。你可以向该处理器方法传入一个特殊的 `$event` 变量
+
+```javascript
+<div z-bind:class="class" z-on:click="handleClick('test', $event, a)"></div>
+```
+
+```javascript
+handleClick(arg1, $event, arg2) {
+  console.log("点击了：",  $event.target);
+},
 ```
 
 #### z-for

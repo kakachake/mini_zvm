@@ -5,7 +5,7 @@ const app = createApp({
   data() {
     return {
       parentData: "外层的数据",
-      a: 1,
+      a: 111,
       b: "",
       isShow: true,
       active: false,
@@ -16,7 +16,6 @@ const app = createApp({
       obj: {
         name: 123,
       },
-      href: "http://www.baidu.com",
       isActive: true,
       isDisabled: false,
       items: [
@@ -33,8 +32,9 @@ const app = createApp({
     };
   },
   methods: {
-    handleClick(msg) {
-      console.log(msg);
+    handleClick(...args) {
+      console.log("点击了：", args[1].target);
+      console.log(args);
       this.a++;
       this.class.active = !this.class.active;
     },
@@ -55,14 +55,7 @@ const app = createApp({
     handleDelClick(index) {
       console.log(index);
 
-      console.log(this);
-
       this.items.splice(index, 1);
-    },
-    handleChangeUrl() {
-      setTimeout(() => {
-        this.href = "http://www.bilibili.com";
-      }, 1000);
     },
   },
 });

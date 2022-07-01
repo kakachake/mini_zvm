@@ -7,23 +7,31 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
   // z-on:click -> click
   // 函数调用
 
-  const methodReg = /^(\w+)([(](['\w']+)[)])?/;
+  const methodReg = /^(\w+)([(]((,?[$'\w']+)+)[)])?/;
+  expression = expression.replace(/\s/g, "");
   const matchMethod = expression.match(methodReg);
 
   if (!matchMethod) return;
 
   const method = matchMethod[1];
-  const methodArgs: any = [];
-  console.log(method);
+  const methodArgs: any[] = [];
 
   const singleReg = /^'(.*)'$/;
+  const $eventReg = /(\$event)$/;
+  // 如果能查到$event就把位置记下来
+  let $eventIdx = -1;
   if (matchMethod && matchMethod[3]) {
+    // 去除括号
+
     const args = matchMethod[3].split(",");
     args.forEach((arg) => {
-      // 单引号正则
-
+      // 匹配到单引号就是普通的字符串
       if (singleReg.test(arg)) {
+        // 去除单引号
         methodArgs.push(arg.replace(singleReg, "$1"));
+      } else if ($eventReg.test(arg)) {
+        methodArgs.push(arg);
+        $eventIdx = methodArgs.length - 1;
       } else {
         methodArgs.push(getValueByPath(vm.$data, arg));
       }
@@ -33,7 +41,12 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
 
   const fn = vm && vm[method];
   if (eventType && fn) {
-    node.addEventListener(eventType, fn.bind(vm, ...methodArgs));
+    node.addEventListener(eventType, (e) => {
+      if (!!~$eventIdx) {
+        methodArgs.splice($eventIdx, 1, e);
+      }
+      return fn.call(vm, ...methodArgs);
+    });
   }
 }
 

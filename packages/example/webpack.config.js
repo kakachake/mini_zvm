@@ -1,10 +1,26 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const requireContext = require("require-context");
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const files = requireContext(path.join(__dirname, "./src"), false, /\.js$/);
+const entries = {};
+const plugins = [];
+files.keys().forEach((key) => {
+  console.log(key);
+  key = key.replace(".js", "");
+  entries[key] = `./src/${key}.js`;
+  plugins.push(
+    new HtmlWebpackPlugin({
+      template: `./template/${key}.html`,
+      filename: `${key}.html`,
+      chunks: [key],
+    })
+  );
+});
+
 module.exports = {
   mode: "development",
-  entry: {
-    index: "./src/index.js",
-    if: "./src/if.js",
-  },
+  entry: { ...entries, index: "./index.js" },
   output: {
     filename: "[name].[hash].js",
     path: __dirname + "/output",
@@ -14,16 +30,13 @@ module.exports = {
   },
   plugins: [
     // see https://github.com/ampedandwired/html-webpack-plugin
+    ...plugins,
     new HtmlWebpackPlugin({
-      template: "./index.html",
-      filename: "index.html",
+      template: `index.html`,
+      filename: `index.html`,
       chunks: ["index"],
     }),
-    new HtmlWebpackPlugin({
-      template: "./if.html",
-      filename: "if.html",
-      chunks: ["if"],
-    }),
+    new CleanWebpackPlugin(),
   ],
   devServer: {
     hot: true,

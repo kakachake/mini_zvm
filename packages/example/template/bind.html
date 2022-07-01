@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  <script defer src="if.2c997790b759c8c980dd.js"></script></head>
+  </head>
   <body>
     <div id="app">
-      <button z-on:click="handleBtnClick">显示/隐藏</button>
-      <div z-if="isShow">z-if</div>
-      <div z-else>else</div>
+      <div z-bind:data-zvm="data">普通attr,打开控制台查看</div>
+      <button z-bind:disabled="isDisable">
+        布尔型 Attribute {{isDisable?"失效了":"恢复了"}}
+      </button>
+      <button z-on:click="handleBtnClick">点击使旁边的按钮失效/恢复</button>
     </div>
   </body>
   <style>

@@ -6,57 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
-    <div id="app">
-      <div z-bind:class="class" z-on:click="handleClick('test')">{{a}}</div>
-      <div>{{obj.name}}</div>
-      <div z-text="a"></div>
-      <div>===============================</div>
-      <div z-bind:class="{active: isActive}">支持对象形式绑定</div>
-      <button z-on:click="handleClassClick">切换class</button>
-      <div>===============================</div>
-      <button z-bind:disabled="isDisabled">disabled</button>
-      <button z-bind:data-zvm="a">普通attr,打开控制台查看</button>
-      <a target="_blank" z-bind:href="href" z-on:click="handleChangeUrl"
-        >点击两次，不同链接</a
-      >
-      <button z-on:click="handleDisabled">普通attr绑定</button>
-      <div>===============================</div>
-      <div>
-        <input type="text" z-model="b" />
-      </div>
-      <div>当前b的值为：{{b}}。</div>
-      <div>可以是表达式：{{b+a}}</div>
-      <div>可以是表达式disabled：{{isDisabled?"yes":"no"}}</div>
-      <div>===============================</div>
-      <button z-on:click="handleBtnClick">显示/隐藏</button>
-      <div z-if="isShow">z-if</div>
-      <div z-else>else</div>
-      <div>===============================</div>
-      z-for：
-      <ul>
-        <li
-          class="class"
-          aria-disabled=""
-          z-on:click="handleDelClick(index)"
-          z-for="(item,index) in items"
-        >
-          <div>点击即可删除</div>
-          <div>{{item.msg}}</div>
-          <div>{{index}}</div>
-          <div>{{a}}</div>
-          <!-- <button z-on:click="handleDelClick(index)">删除</button> -->
-        </li>
-      </ul>
-      <button z-on:click="handleAddItem">addItem</button>
-    </div>
-  </body>
+  <body></body>
   <style>
-    * {
-      user-select: none;
+    a {
+      display: block;
+      color: #61aee3;
     }
-    .active {
-      background-color: red;
+    a:hover {
+      color: #3136aa;
     }
   </style>
 </html>
