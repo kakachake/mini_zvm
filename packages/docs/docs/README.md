@@ -4,7 +4,7 @@ home: true
 heroText: Welcome to ZVM.
 tagline: mini vue.
 actionText: 快速上手 →
-actionLink: /zh/guide/
+actionLink: /guide/
 features:
   # - title: test
   #   details: test
