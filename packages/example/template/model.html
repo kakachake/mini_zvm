@@ -8,8 +8,23 @@
   </head>
   <body>
     <div id="app">
-      <input placeholder="输入试试" type="text" z-model="data" />
-      {{data}}
+      <div>
+        可以是普通的输入框，也可以是textarea
+        <input placeholder="输入试试" type="text" z-model="data" />
+        <textarea name="" id="" cols="30" rows="10" z-model="data"></textarea>
+        {{data}}
+      </div>
+      <div>
+        可以是checkbox
+        <input type="checkbox" id="checkbox" z-model="checked" />
+        <label for="checkbox">{{ checked }}</label>
+      </div>
+      <div>
+        也可以是radio
+        <input type="radio" id="radio" z-model="picked" value="123" />
+        <input type="radio" id="radio" z-model="picked" value="456" />
+        <label for="radio">{{ picked }}</label>
+      </div>
     </div>
   </body>
 </html>

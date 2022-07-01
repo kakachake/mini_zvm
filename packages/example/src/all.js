@@ -24,6 +24,8 @@ const app = createApp({
   },
   data() {
     return {
+      checked: true,
+      picked: "",
       songHotList: [],
       parentData: "外层的数据",
       a: 111,

@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="upgrade-insecure-requests"
-    />
     <title>Document</title>
   </head>
   <body>
@@ -48,7 +44,15 @@
       <button z-on:click="handleDisabled">普通attr绑定</button>
       <div>===============================</div>
       <div>
+        可以是input,也可是textarea
         <input type="text" z-model="b" />
+        <input type="text" z-model="b" />
+        <input type="checkbox" id="checkbox" value="check" z-model="checked" />
+        <label for="checkbox">{{ checked }}</label>
+        <input type="radio" id="radio" z-model="picked" value="123" />
+        <input type="radio" id="radio" z-model="picked" value="456" />
+        <label for="radio">{{ picked }}</label>
+        <textarea name="" id="" cols="30" rows="10" z-model="b"></textarea>
       </div>
       <div>当前b的值为：{{b}}。</div>
       <div>可以是表达式：{{b+a}}</div>

@@ -5,6 +5,20 @@ import { insertAfter } from "./dom";
 
 export const render = {
   textRender: (node: Node, text: string, replace: string) => {
+    if (node.nodeName === "INPUT") {
+      const inputType = (node as HTMLInputElement).getAttribute("type");
+
+      console.log(inputType);
+      // radio不是设置value，而是判断是否选中
+      if (inputType === "radio") {
+        console.log("radio");
+        const value = (node as HTMLInputElement).value;
+        (node as HTMLInputElement).checked = text === value;
+        return;
+      }
+      (node as HTMLInputElement).value = text;
+      return;
+    }
     if (!Object.hasOwn(node, "_textContent")) {
       Object.defineProperty(node, "_textContent", {
         value: node.textContent,

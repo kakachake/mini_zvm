@@ -5,6 +5,8 @@ const app = createApp({
   data() {
     return {
       data: "",
+      checked: "",
+      picked: "",
     };
   },
 });

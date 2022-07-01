@@ -61,16 +61,47 @@ function model(
 ) {
   // TODO bind input
   const value = vm.$data[expression];
-  node.value = value;
+  text(node, vm, directive, expression);
 
-  node.addEventListener("input", (e: Event) => {
-    setValueByPath(vm.$data, expression, (e.target as HTMLInputElement).value);
-  });
+  // 如果是input
+  if (
+    (node.tagName === "INPUT" && node.type === "text") ||
+    node.tagName === "TEXTAREA"
+  ) {
+    node.addEventListener("input", (e: Event) => {
+      setValueByPath(
+        vm.$data,
+        expression,
+        (e.target as HTMLInputElement).value
+      );
+      e.preventDefault();
+    });
+  }
+  // 如果是checkbox
+  if (node.tagName === "INPUT" && node.type === "checkbox") {
+    node.addEventListener("change", (e: Event) => {
+      setValueByPath(
+        vm.$data,
+        expression,
+        (e.target as HTMLInputElement).checked
+      );
+    });
+  }
+  //如果是radio
+  if (node.tagName === "INPUT" && node.type === "radio") {
+    node.addEventListener("change", (e: Event) => {
+      setValueByPath(
+        vm.$data,
+        expression,
+        (e.target as HTMLInputElement).value
+      );
+    });
+  }
 }
 
 // 通用函数，既适用z-text，也适用{{text}}
 function text(
-  node: Text,
+  node: Node,
   vm: VM,
   directive: string,
   expression: string,
