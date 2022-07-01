@@ -132,9 +132,36 @@ const app = createApp({
 
 基本用法：
 
+##### 文本
+
 ```html
 <input type="text" z-model="text" />
 <p>text is: {{ text }}</p>
+```
+
+##### 多行文本
+
+```html
+<textarea z-model="text"></textarea>
+```
+
+##### 复选框
+
+```html
+<input type="checkbox" id="checkbox" z-model="checked" />
+<label for="checkbox">{{ checked }}</label>
+```
+
+##### 单选
+
+```html
+<div>Picked: {{ picked }}</div>
+
+<input type="radio" id="one" value="One" z-model="picked" />
+<label for="one">One</label>
+
+<input type="radio" id="two" value="Two" z-model="picked" />
+<label for="two">Two</label>
 ```
 
 #### z-on 监听事件

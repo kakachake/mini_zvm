@@ -38,8 +38,12 @@
         <input type="text" z-model="b" />
         <input type="checkbox" id="checkbox" value="check" z-model="checked" />
         <label for="checkbox">{{ checked }}</label>
-        <input type="radio" id="radio" z-model="picked" value="123" />
-        <input type="radio" id="radio" z-model="picked" value="456" />
+
+        <input type="radio" id="one" value="One" z-model="picked" />
+        <label for="one">One</label>
+
+        <input type="radio" id="two" value="Two" z-model="picked" />
+        <label for="two">Two</label>
         <label for="radio">{{ picked }}</label>
         <textarea name="" id="" cols="30" rows="10" z-model="b"></textarea>
       </div>
