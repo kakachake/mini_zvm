@@ -56,6 +56,9 @@ function initLiftcycle(context: VM, options: ZvmOptions) {
   if (options.created) {
     context.pubsub?.subscribe("created", options.created.bind(context));
   }
+  if (options.mounted) {
+    context.pubsub?.subscribe("mounted", options.mounted.bind(context));
+  }
 }
 
 function proxyMethod(context: VM, key: string) {

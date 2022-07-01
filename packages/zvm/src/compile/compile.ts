@@ -27,6 +27,7 @@ export class Compile {
     } else {
       this.node.appendChild(this.frag);
     }
+    this.vm.pubsub?.publish("mounted");
   }
 
   nodeToFragment(node: Node) {

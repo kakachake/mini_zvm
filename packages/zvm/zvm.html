@@ -7,7 +7,11 @@
   </head>
   <body>
     <div id="app">
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div
+        id="firstEle"
+        z-bind:class="class"
+        z-on:click="handleClick('test', $event, a)"
+      >
         点击试试{{a}}
       </div>
 
@@ -75,8 +79,8 @@
           a: 111,
           b: "",
           checked: true,
-          isShow: true,
           picked: "",
+          isShow: true,
           active: false,
           class: {
             active: true,
@@ -99,6 +103,12 @@
             },
           ],
         };
+      },
+
+      mounted() {
+        console.log("mounted");
+        const el = document.getElementById("firstEle");
+        console.log(el);
       },
       methods: {
         handleClick(...args) {
