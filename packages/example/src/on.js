@@ -18,6 +18,9 @@ const app = createApp({
       this.data++;
       this.class.active = !this.class.active;
     },
+    handleClick2(e) {
+      console.log(e);
+    },
   },
 });
 

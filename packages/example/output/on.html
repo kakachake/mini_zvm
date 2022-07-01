@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  <script defer src="on.2c997790b759c8c980dd.js"></script></head>
+  <script defer src="on.0abf84b23f092d82e59a.js"></script></head>
   <body>
     <div id="app">
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div z-bind:class="class">
+        <button z-on:click="handleClick('test', $event, data)">点击我</button>
         点击打开控制台查看效果{{data}}
+      </div>
+      <div>
+        <button z-on:click="handleClick2">点击我</button>
+        不传参数会和原生一样传递event对象
       </div>
     </div>
   </body>

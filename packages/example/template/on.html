@@ -8,8 +8,13 @@
   </head>
   <body>
     <div id="app">
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div z-bind:class="class">
+        <button z-on:click="handleClick('test', $event, data)">点击我</button>
         点击打开控制台查看效果{{data}}
+      </div>
+      <div>
+        <button z-on:click="handleClick2">点击我</button>
+        不传参数会和原生一样传递event对象
       </div>
     </div>
   </body>

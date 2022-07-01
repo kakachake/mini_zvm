@@ -45,6 +45,9 @@ function on(node: Element, vm: VM, directive: string, expression: string) {
       if (!!~$eventIdx) {
         methodArgs.splice($eventIdx, 1, e);
       }
+      if (!methodArgs.length) {
+        methodArgs.push(e);
+      }
       return fn.call(vm, ...methodArgs);
     });
   }
