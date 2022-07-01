@@ -15,6 +15,7 @@ files.keys().forEach((key) => {
   key = keyReg.exec(key)[1];
   const a = document.createElement("a");
   a.setAttribute("href", `${key}.html`);
+  a.setAttribute("target", "show");
   a.text = nameDict[key];
-  document.body.appendChild(a);
+  tabs.appendChild(a);
 });

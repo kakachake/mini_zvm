@@ -15,7 +15,7 @@
   \******************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("const nameDict = {\n  all: \"全部展示\",\n  bind: \"z-bind attr绑定展示\",\n  for: \"z-for列表渲染\",\n  on: \"z-on事件处理\",\n  if: \"z-if/else\",\n  text: \"z-text\",\n  model: \"z-model 双向绑定\",\n};\n\nconst files = __webpack_require__(\"./src sync \\\\.js$\");\nconsole.log(files);\nconst keyReg = /^\\.\\/(.*).js/;\nfiles.keys().forEach((key) => {\n  key = keyReg.exec(key)[1];\n  const a = document.createElement(\"a\");\n  a.setAttribute(\"href\", `${key}.html`);\n  a.text = nameDict[key];\n  document.body.appendChild(a);\n});\n\n\n//# sourceURL=webpack://example/./index.js?");
+eval("const nameDict = {\n  all: \"全部展示\",\n  bind: \"z-bind attr绑定展示\",\n  for: \"z-for列表渲染\",\n  on: \"z-on事件处理\",\n  if: \"z-if/else\",\n  text: \"z-text\",\n  model: \"z-model 双向绑定\",\n};\n\nconst files = __webpack_require__(\"./src sync \\\\.js$\");\nconsole.log(files);\nconst keyReg = /^\\.\\/(.*).js/;\nfiles.keys().forEach((key) => {\n  key = keyReg.exec(key)[1];\n  const a = document.createElement(\"a\");\n  a.setAttribute(\"href\", `${key}.html`);\n  a.setAttribute(\"target\", \"show\");\n  a.text = nameDict[key];\n  tabs.appendChild(a);\n});\n\n\n//# sourceURL=webpack://example/./index.js?");
 
 /***/ }),
 
