@@ -129,6 +129,7 @@ function _for(node: HTMLElement, vm: VM, directive, expression: string) {
 
   if (forMatch && forMatch[4]) {
     const [, value, , index, list] = forMatch;
+    console.log(list);
 
     const renderFor = render.forRender(node);
     effect(() => {

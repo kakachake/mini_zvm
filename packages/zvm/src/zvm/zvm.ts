@@ -1,10 +1,11 @@
 import { Compile } from "../compile/compile";
+import { PubSub } from "../pubsub/pubsub";
 import { reactive } from "../reactivity/reactive";
-import { App, VM } from "./type";
+import { App, VM, ZvmOptions } from "./type";
 
 // 初始化vm
 export function createVM(options, parentVM = {}, needProxy = true): VM {
-  const vm = Object.create(parentVM);
+  const vm: VM = Object.create(parentVM);
   vm.$el = document.querySelector(options.template);
   vm.$data =
     typeof options.data === "function"
@@ -16,6 +17,8 @@ export function createVM(options, parentVM = {}, needProxy = true): VM {
       : options.data;
 
   vm.$options = options;
+  vm.pubsub = new PubSub();
+  initLiftcycle(vm, options);
   Object.keys(vm.$data).forEach((key) => {
     proxyData(vm, key);
   });
@@ -29,9 +32,9 @@ export function createVM(options, parentVM = {}, needProxy = true): VM {
   return vm;
 }
 
-export function createApp(this, options): App {
+export function createApp(this, options: ZvmOptions): App {
   const vm = createVM(options, this);
-
+  vm.pubsub?.publish("created");
   const compile = new Compile(vm.$el!, vm);
   return { vm, mount: compile.mount.bind(compile) };
 }
@@ -49,17 +52,23 @@ function proxyData(obj, key) {
   });
 }
 
-function proxyMethod(obj, key) {
-  Object.defineProperty(obj, key, {
+function initLiftcycle(context: VM, options: ZvmOptions) {
+  if (options.created) {
+    context.pubsub?.subscribe("created", options.created.bind(context));
+  }
+}
+
+function proxyMethod(context: VM, key: string) {
+  Object.defineProperty(context, key, {
     configurable: false,
     enumerable: true,
     get: () => {
-      return obj.$options.methods[key];
+      return context.$options?.methods?.[key];
     },
   });
 }
 
-function initComputed(context, computed) {
+function initComputed(context: VM, computed: object) {
   if (typeof computed === "object") {
     Object.keys(computed).forEach((key) => {
       Object.defineProperty(context, key, {

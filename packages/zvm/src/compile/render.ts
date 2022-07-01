@@ -46,6 +46,8 @@ export const render = {
       forNodes.length = 0;
     }
     return (value, index, items, vm: VM) => {
+      console.log(items);
+
       clearNodes();
       let lastNode: Node | null = _previousNode;
       // node.parentNode?.removeChild(node);

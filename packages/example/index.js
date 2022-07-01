@@ -6,6 +6,7 @@ const nameDict = {
   if: "z-if/else",
   text: "z-text",
   model: "z-model 双向绑定",
+  created: "created 初始化数据",
 };
 
 const files = require.context("./src", false, /\.js$/);
