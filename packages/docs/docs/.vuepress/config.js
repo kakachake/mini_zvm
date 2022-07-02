@@ -7,6 +7,7 @@ module.exports = {
     lineNumbers: true,
   },
   themeConfig: {
+    smoothScroll: true,
     sidebar: "auto",
     nav: [
       {
@@ -23,7 +24,12 @@ module.exports = {
       },
     ],
     sidebar: {
-      "/guide/": [["/guide/", "指南"]],
+      "/guide/": [
+        ["", "介绍"],
+        ["instance", "组件实例"],
+        ["template", "模板语法"],
+        ["directives", "各个指令介绍"],
+      ],
     },
     sidebarDepth: 2,
     lastUpdated: "Last Updated",
