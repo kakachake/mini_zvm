@@ -26,7 +26,7 @@ module.exports = {
     sidebar: {
       "/guide/": [
         ["", "介绍"],
-        ["instance", "组件实例"],
+        ["instance", "应用实例"],
         ["template", "模板语法"],
         ["directives", "各个指令介绍"],
       ],
