@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development rollup -c -w",
     "build": "cross-env NODE_ENV=production rollup -c",
-    "prepare": "husky install",
     "lint": "eslint src/**/*.ts",
     "commit": "npx cz"
   },
