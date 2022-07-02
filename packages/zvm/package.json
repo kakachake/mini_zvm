@@ -1,11 +1,11 @@
 {
   "name": "zvm",
-  "version": "0.0.1",
-  "private": true,
-  "main": "/dist/es/index.js",
-  "module": "dist/es/main.js",
   "author": "kakachake",
   "description": "mvvm简化版，仅供学习使用",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/umd/main.js",
+  "module": "dist/es/main.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development rollup -c -w",
     "build": "cross-env NODE_ENV=production rollup -c",
@@ -39,5 +39,6 @@
   },
   "dependencies": {
     "webpack-dev-server": "^4.9.2"
-  }
+  },
+  "unpkg": "dist/umd/main.js"
 }

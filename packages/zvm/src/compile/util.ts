@@ -20,6 +20,7 @@ export function getValueByPath(obj, path) {
   return obj;
 }
 
+// 模拟with
 export function _with(scopeName: string, exp: string) {
   //去除空格
   exp = exp.replace(/\s/g, "");
@@ -36,6 +37,7 @@ export function _with(scopeName: string, exp: string) {
   return exp;
 }
 
+// 解析JavaScript表达式，加入上下文对象，返回表达式最后的值
 export function runInScope(scope, scopeName: string, exp: string) {
   const func = new Function(scopeName, "return " + _with(scopeName, exp));
   return func(scope);

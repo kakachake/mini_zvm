@@ -29,6 +29,12 @@ export default {
       dir: "dist/iife",
       name: "ZVM",
     },
+    {
+      format: "umd",
+      // sourcemap: "inline",
+      dir: "dist/umd",
+      name: "ZVM",
+    },
   ],
   plugins: [
     typescript({
