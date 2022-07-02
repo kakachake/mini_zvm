@@ -2,6 +2,7 @@ import { Compile } from "../compile/compile";
 import { PubSub } from "../pubsub/pubsub";
 import { reactive } from "../reactivity/reactive";
 import { App, VM, ZvmOptions } from "./type";
+import { computed } from "../main";
 
 // 初始化vm
 export function createVM(options, parentVM = {}, needProxy = true): VM {
@@ -71,12 +72,12 @@ function proxyMethod(context: VM, key: string) {
   });
 }
 
-function initComputed(context: VM, computed: object) {
-  if (typeof computed === "object") {
-    Object.keys(computed).forEach((key) => {
+function initComputed(context: VM, computedFns: object) {
+  if (typeof computedFns === "object") {
+    Object.keys(computedFns).forEach((key) => {
       Object.defineProperty(context, key, {
         // 如果是函数，直接就作为get，否则可能是一个对象，使用对象的get
-        get: computed[key],
+        value: computed(computedFns[key].bind(context)),
       });
     });
   }

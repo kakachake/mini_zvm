@@ -16,6 +16,10 @@ export const render = {
         (node as HTMLInputElement).checked = text === value;
         return;
       }
+      if (inputType === "checkbox") {
+        (node as HTMLInputElement).checked = !!text;
+        return;
+      }
       (node as HTMLInputElement).value = text;
       return;
     }

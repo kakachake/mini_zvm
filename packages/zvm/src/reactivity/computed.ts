@@ -24,12 +24,14 @@ export function computed(getter: () => any) {
   const obj = {
     get value() {
       // 如果dirty为true，表示数据发生改变，需要更新
+
       if (dirty) {
         value = effectFn();
         dirty = false;
       }
       // 收集依赖
       track(obj, "value");
+
       return value;
     },
   };
