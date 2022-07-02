@@ -1,4 +1,4 @@
-import { createApp } from "zvm";
+import { createApp } from "mini-zvm";
 import axios from "axios";
 const app = createApp({
   template: "#app",

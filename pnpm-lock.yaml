@@ -52,13 +52,13 @@ importers:
       axios: ^0.27.2
       clean-webpack-plugin: ^4.0.0
       html-webpack-plugin: ^5.5.0
+      mini-zvm: workspace:^0.0.3
       require-context: ^1.1.0
       webpack: ^5.73.0
       webpack-cli: ^4.10.0
-      zvm: workspace:*
     dependencies:
       axios: registry.npmmirror.com/axios/0.27.2
-      zvm: link:../zvm
+      mini-zvm: link:../zvm
     devDependencies:
       clean-webpack-plugin: registry.npmmirror.com/clean-webpack-plugin/4.0.0_webpack@5.73.0
       html-webpack-plugin: registry.npmmirror.com/html-webpack-plugin/5.5.0_webpack@5.73.0

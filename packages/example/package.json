@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
-    "zvm": "workspace:*"
+    "mini-zvm": "workspace:^0.0.3"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",

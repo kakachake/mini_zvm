@@ -1,9 +1,8 @@
 {
-  "name": "zvm",
+  "name": "mini-zvm",
   "author": "kakachake",
   "description": "mvvm简化版，仅供学习使用",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.3",
   "main": "dist/umd/main.js",
   "module": "dist/es/main.js",
   "scripts": {
@@ -39,5 +38,8 @@
   "dependencies": {
     "webpack-dev-server": "^4.9.2"
   },
-  "unpkg": "dist/umd/main.js"
+  "unpkg": "dist/umd/main.js",
+  "files": [
+    "dist"
+  ]
 }

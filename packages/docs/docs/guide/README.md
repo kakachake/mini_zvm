@@ -35,14 +35,14 @@ app.mount("#app");
 </div>
 ```
 
+## 安装
+
+推荐使用 npm 安装
+
+```cmd
+npm install mini-zvm
+```
+
 ## 示例
-
-```
-
-pnpm i
-pnpm run dev:example
-//打开 http://localhost:8080/查看效果
-
-```
 
 [展示地址](https://mini-vue3.vercel.app/)
