@@ -17,9 +17,13 @@ const reactiveMap = new Map();
  * @param isReadonly 是否只读
  * @returns
  */
-function createReactive(obj: any, { isShallow = false }) {
+function createReactive(obj: object, { isShallow = false }) {
   return new Proxy(obj, {
-    get(target, key, receiver) {
+    get(target: object, key: string | symbol, receiver: object) {
+      // 用来判断该对象是否被代理
+      if (key === "__isProxy__") {
+        return true;
+      }
       // 代理对象可以通过RAW_KEY获取到原始数据
       if (key === RAW_KEY) {
         return target;
@@ -44,7 +48,7 @@ function createReactive(obj: any, { isShallow = false }) {
 
       return res;
     },
-    set(target, key, newVal, receiver) {
+    set(target: object, key: string | symbol, newVal: any, receiver: object) {
       const oldVal = target[key];
 
       const type = Array.isArray(target)
@@ -61,21 +65,19 @@ function createReactive(obj: any, { isShallow = false }) {
       if (oldVal !== newVal) {
         trigger(target, key, {
           type: type,
-          oldValue: oldVal,
-          newValue: newVal,
         });
       }
       return res;
     },
-    has(target, key) {
+    has(target: object, key: string | symbol) {
       track(target, key);
       return Reflect.has(target, key);
     },
-    ownKeys(target) {
+    ownKeys(target: object) {
       track(target, Array.isArray(target) ? "length" : ITERATE_KEY);
       return Reflect.ownKeys(target);
     },
-    deleteProperty(target, key) {
+    deleteProperty(target: object, key: string | symbol) {
       const hasKey = Object.prototype.hasOwnProperty.call(target, key);
       const res = Reflect.deleteProperty(target, key);
       if (hasKey && res) {
@@ -93,9 +95,10 @@ function createReactive(obj: any, { isShallow = false }) {
 }
 
 // 默认reactive函数, 深响应式化
-function reactive(obj) {
+function reactive(obj: object) {
   // 先查找当前对象是否已经代理过
   const existProxy = reactiveMap.get(obj);
+
   if (existProxy) {
     // 存在则直接返回
     return existProxy;
@@ -107,7 +110,7 @@ function reactive(obj) {
   return proxy;
 }
 
-function shallowReactive(obj) {
+function shallowReactive(obj: object) {
   return createReactive(obj, { isShallow: true });
 }
 

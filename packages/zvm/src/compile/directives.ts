@@ -60,7 +60,7 @@ function model(
   expression: string
 ) {
   // TODO bind input
-  const value = vm.$data[expression];
+
   text(node, vm, directive, expression);
 
   // 如果是input
@@ -103,7 +103,7 @@ function model(
 function text(
   node: Node,
   vm: VM,
-  directive: string,
+  _directive: string,
   expression: string,
   replace = ""
 ) {
@@ -124,7 +124,7 @@ function text(
   }
 }
 
-function _if(node: HTMLElement, vm: VM, directives, expression) {
+function _if(node: HTMLElement, vm: VM, _directives, expression) {
   const next = node.nextElementSibling;
 
   let elseNode: HTMLElement | null = null;
@@ -152,7 +152,7 @@ function _if(node: HTMLElement, vm: VM, directives, expression) {
   );
 }
 
-function _for(node: HTMLElement, vm: VM, directive, expression: string) {
+function _for(node: HTMLElement, vm: VM, _directive, expression: string) {
   //去除空格
   expression = expression.replace(/\s/g, "");
   const REF_LIST_FOR = /[(](\w+)(,(\w+))[)]in(\w+)/;

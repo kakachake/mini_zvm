@@ -8,84 +8,115 @@
   <body>
     <div id="app"></div>
   </body>
-  <script src="/dist/iife/main.js"></script>
+  <script src="./dist//iife/main.js"></script>
   <script>
     const { effect, reactive, computed, watch } = ZVM;
-    console.log(effect);
-    const data = reactive({
-      a: 1,
-      b: {
-        c: 4,
-      },
-      is: true,
-    });
-    effect(() => {
-      console.log(data.is ? data.a : data.b.c);
-      effect(() => {
-        // 会执行5次，data.is*2、data.a*3
-        console.log("嵌套的effect", data.a);
-      });
-    });
+    // console.log(effect);
+    // const data = reactive({
+    //   a: 1,
+    //   b: {
+    //     c: 4,
+    //   },
+    //   is: true,
+    // });
+    // effect(() => {
+    //   console.log(data.is ? data.a : data.b.c);
+    //   effect(() => {
+    //     // 会执行5次，data.is*2、data.a*3
+    //     console.log("嵌套的effect", data.a);
+    //   });
+    // });
 
-    effect(
-      () => {
-        console.log(data.a);
-      },
-      {
-        scheduler(effect) {
-          Promise.resolve().then(() => {
-            console.log("这是scheduler打印的，应该在最后打印：");
-            effect();
-          });
-        },
-      }
-    );
-    cData = computed(() => {
-      return data.a + data.b.c;
-    });
+    // effect(
+    //   () => {
+    //     console.log(data.a);
+    //   },
+    //   {
+    //     scheduler(effect) {
+    //       Promise.resolve().then(() => {
+    //         console.log("这是scheduler打印的，应该在最后打印：");
+    //         effect();
+    //       });
+    //     },
+    //   }
+    // );
+    // cData = computed(() => {
+    //   return data.a + data.b.c;
+    // });
 
-    watch(
-      cData,
-      (newValue) => {
-        console.log("watch computed：", newValue.value);
-      },
-      {
-        immediate: true,
-      }
-    );
-    console.log(cData);
-    watch(
-      () => cData.value,
-      (newValue) => {
-        console.log("watch computed fn：", newValue);
-      },
-      {
-        immediate: true,
-      }
-    );
-    // 虽然数据改变了四次，但是只会执行三次副作用函数
-    data.is = false; // 执行
-    data.a = 2; // 不执行，因为is===false，不会收集data.a依赖
-    data.is = true; // 执行
-    data.a = 3; // 执行
-    const a = reactive([]);
+    // watch(
+    //   cData,
+    //   (newValue) => {
+    //     console.log("watch computed：", newValue.value);
+    //   },
+    //   {
+    //     immediate: true,
+    //   }
+    // );
+    // console.log(cData);
+    // watch(
+    //   () => cData.value,
+    //   (newValue) => {
+    //     console.log("watch computed fn：", newValue);
+    //   },
+    //   {
+    //     immediate: true,
+    //   }
+    // );
+    // // 虽然数据改变了四次，但是只会执行三次副作用函数
+    // data.is = false; // 执行
+    // data.a = 2; // 不执行，因为is===false，不会收集data.a依赖
+    // data.is = true; // 执行
+    // data.a = 3; // 执行
+    // const a = reactive([]);
+
+    // // effect(() => {
+    // //   console.log("遍历开始");
+    // //   for (i in a) {
+    // //     console.log(a[i]);
+    // //   }
+    // //   console.log("遍历结束");
+    // // });
 
     // effect(() => {
-    //   console.log("遍历开始");
     //   for (i in a) {
     //     console.log(a[i]);
     //   }
-    //   console.log("遍历结束");
     // });
 
-    effect(() => {
-      for (i in a) {
-        console.log(a[i]);
-      }
+    // a.push(1);
+    // a.push(1);
+    // a.push(1);
+    // const obj2 = reactive({
+    //   a: 1,
+    //   b: 2,
+    // });
+    // const computedAPlusB = computed(() => {
+    //   return obj2.a + obj2.b;
+    // });
+    // watch(
+    //   () => computedAPlusB.value,
+    //   (newVal) => {
+    //     console.log(newVal);
+    //   }
+    // );
+    // obj2.a = 2;
+    const obj = {
+      a: 1,
+    };
+    const proxyObj = reactive(obj);
+    const obj2 = reactive({
+      a: 1,
+      b: 2,
+      c: {
+        d: 3,
+      },
+      obj,
     });
 
-    a.push(1);
-    a.push(1);
-    a.push(1);
+    watch(obj2.obj.c, (newVal) => {
+      console.log(newVal);
+    });
+    proxyObj.a = 2;
   </script>
 </html>

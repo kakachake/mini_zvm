@@ -30,7 +30,7 @@ export function _with(scopeName: string, exp: string) {
   // javascript 关键字的正则
   const boolRegex = /(true|false|null|undefined)/g;
 
-  exp = exp.replace(quickRegex, (a, b, c) => {
+  exp = exp.replace(quickRegex, (_a, b, c) => {
     return boolRegex.test(c) ? b + c : b + scopeName + "." + c;
   });
 

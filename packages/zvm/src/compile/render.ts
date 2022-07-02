@@ -33,7 +33,7 @@ export const render = {
       ? (node.textContent = originText.replace(replace, text) || "")
       : (node.textContent = typeof text == "undefined" ? "" : text);
   },
-  classRender: (node: HTMLElement, value: object, replace: string) => {
+  classRender: (node: HTMLElement, value: object) => {
     for (const key in value) {
       if (value[key]) {
         node.classList.add(key);
@@ -42,7 +42,7 @@ export const render = {
       }
     }
   },
-  attrRender: (attr: string) => (node: HTMLElement, value, replace: string) => {
+  attrRender: (attr: string) => (node: HTMLElement, value) => {
     if (value === true) node.setAttribute(attr, "");
     else if (value === false) node.removeAttribute(attr);
     else {

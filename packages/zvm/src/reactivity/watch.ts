@@ -34,7 +34,9 @@ export function watch(
     () => {
       if (typeof getter === "function") {
         return getter();
-      } else if (typeof getter === "object") {
+      } else {
+        console.log(getter);
+
         return traverse(getter);
       }
     },
@@ -55,7 +57,7 @@ export function watch(
     job();
   } else {
     // 由于设置了lazy:true，故需要手动调用effectFn进行依赖收集
-    effectFn();
+    oldVal = effectFn();
   }
 }
 

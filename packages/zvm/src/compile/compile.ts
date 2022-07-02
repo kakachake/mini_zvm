@@ -15,11 +15,13 @@ export class Compile {
     this.options = options;
     this.frag = this.nodeToFragment(this.node);
 
+    // 解决z-for的节点未编译的问题
     options.compileRoot && this.compileNode(this.node, this.vm);
-    this.compile(this.frag, this.vm);
+    this.compileFrag(this.frag, this.vm);
     // this.node.appendChild(this.frag);
   }
 
+  // 挂载节点，如果传入el，则挂载到el，否则挂载到node
   mount(el?: string) {
     if (el) {
       const element = document.querySelector(el);
@@ -30,6 +32,7 @@ export class Compile {
     this.vm.pubsub?.publish("mounted");
   }
 
+  // 节点转换成fragment
   nodeToFragment(node: Node) {
     const frag = document.createDocumentFragment();
     let child: ChildNode | null;
@@ -40,14 +43,21 @@ export class Compile {
     return frag;
   }
 
-  compile(node: DocumentFragment | HTMLElement | Node, vm: VM) {
-    const childNodes = node.childNodes;
+  // 编译入口
+  compileFrag(frag: DocumentFragment | HTMLElement | Node, vm: VM) {
+    const childNodes = frag.childNodes;
 
     Array.from(childNodes).forEach((node: Node) => {
       this.compileNode(node, vm);
+      // 如果有子节点且needDeepCompile为true，则继续深度遍历
+      if (node.childNodes && node.childNodes.length && this.needDeepCompile) {
+        this.compileFrag(node as HTMLElement, vm);
+      }
+      this.needDeepCompile = true;
     });
   }
 
+  // 编译节点
   compileNode(node: Node, vm: VM) {
     if (node.nodeType === 1) {
       //元素节点
@@ -55,13 +65,9 @@ export class Compile {
     } else if (node.nodeType === 3) {
       this.compileText(node as Text, vm);
     }
-
-    if (node.childNodes && node.childNodes.length && this.needDeepCompile) {
-      this.compile(node as HTMLElement, vm);
-    }
-    this.needDeepCompile = true;
   }
 
+  // 编译文本节点
   compileText(node: Text, vm: VM) {
     const text = node.textContent;
     if (!text) return;
@@ -72,6 +78,7 @@ export class Compile {
     }
   }
 
+  // 编译元素节点
   compileElement(node: HTMLElement, vm: VM) {
     const attr = Array.from(node.attributes);
 
@@ -90,6 +97,7 @@ export class Compile {
     });
   }
 
+  // 编译指令
   compileDirective(node: HTMLElement, vm: VM, attr: Attr) {
     const directive = attr.nodeName;
     const expression = attr.nodeValue;

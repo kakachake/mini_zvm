@@ -3,11 +3,11 @@ import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
 let activeEffectFn: EffectFn;
 
-export let needTrigger = true;
+// export let needTrigger = true;
 
-export function toggleNeedTrigger(flag: boolean) {
-  needTrigger = flag;
-}
+// export function toggleNeedTrigger(flag: boolean) {
+//   needTrigger = flag;
+// }
 
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
@@ -62,7 +62,7 @@ function cleanUp(effectFn: EffectFn) {
   effectFn.deps.length = 0;
 }
 
-export function track(target, key) {
+export function track(target: object, key: string | symbol) {
   if (!activeEffectFn || !shoudTrack) return;
   const depsMap =
     bucket.get(target) || bucket.set(target, new Map()).get(target);
@@ -74,19 +74,15 @@ export function track(target, key) {
 }
 
 export function trigger(
-  target,
+  target: object,
   key: string | symbol,
   {
     type,
-    newValue,
-    oldValue,
   }: {
     type: TriggerType;
-    oldValue?: any;
-    newValue?: any;
   }
 ) {
-  if (!needTrigger) return;
+  // if (!needTrigger) return;
   const depsMap = bucket.get(target);
 
   if (!depsMap) return;

@@ -5,11 +5,11 @@
   "author": "kakachake",
   "description": "mvvm简化版，仅供学习使用",
   "scripts": {
-    "dev:zvm": "pnpm -F zvm dev",
+    "dev:zvm": "pnpm -F mini-zvm dev",
     "dev:example": "pnpm -F example dev",
-    "build:zvm": "pnpm -F zvm build",
+    "build:zvm": "pnpm -F mini-zvm build",
     "build:example": "pnpm -F example build",
-    "build":"pnpm run build:zvm & pnpm run build:example",
+    "build": "pnpm run build:zvm & pnpm run build:example",
     "prepare": "husky install",
     "lint": "eslint packages/**/src/**/*.ts",
     "commit": "npx cz"
