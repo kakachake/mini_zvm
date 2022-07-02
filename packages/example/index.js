@@ -7,6 +7,7 @@ const nameDict = {
   text: "z-text",
   model: "z-model 双向绑定",
   created: "created 初始化数据",
+  cdn: "使用cdn加载",
 };
 
 const files = require.context("./src", false, /\.js$/);

@@ -2,27 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  <script defer src="all.35ecf5815a487adc5151.js"></script></head>
+    <script src="https://unpkg.com/mini-zvm"></script>
+    <title>mvvm</title>
+  </head>
   <body>
     <div id="app">
-      <div>
-        {{isLoading?"加载中...":"加载完成"}} 网易云热搜：
-        <ul>
-          <li
-            class="class"
-            aria-disabled=""
-            z-on:click="handleDelClick(index)"
-            z-for="(item,index) in songHotList"
-          >
-            <div>{{item.first}}</div>
-            <!-- <button z-on:click="handleDelClick(index)">删除</button> -->
-          </li>
-        </ul>
-      </div>
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div
+        id="firstEle"
+        z-bind:class="class"
+        z-on:click="handleClick('test', $event, a)"
+      >
         点击试试{{a}}
       </div>
 
@@ -49,8 +39,12 @@
         <input type="text" z-model="b" />
         <input type="checkbox" id="checkbox" value="check" z-model="checked" />
         <label for="checkbox">{{ checked }}</label>
-        <input type="radio" id="radio" z-model="picked" value="123" />
-        <input type="radio" id="radio" z-model="picked" value="456" />
+
+        <input type="radio" id="one" value="One" z-model="picked" />
+        <label for="one">One</label>
+
+        <input type="radio" id="two" value="Two" z-model="picked" />
+        <label for="two">Two</label>
         <label for="radio">{{ picked }}</label>
         <textarea name="" id="" cols="30" rows="10" z-model="b"></textarea>
       </div>
@@ -79,6 +73,79 @@
       <div>===============================</div>
     </div>
   </body>
+
+  <script>
+    const { createApp } = ZVM;
+    const app = createApp({
+      template: "#app",
+      data() {
+        return {
+          parentData: "外层的数据",
+          a: 111,
+          b: "",
+          checked: true,
+          picked: "",
+          isShow: true,
+          active: false,
+          class: {
+            active: true,
+            default: true,
+          },
+          obj: {
+            name: 123,
+          },
+          isActive: true,
+          isDisabled: false,
+          items: [
+            {
+              msg: "111",
+            },
+            {
+              msg: "222",
+            },
+            {
+              msg: "333",
+            },
+          ],
+        };
+      },
+
+      mounted() {
+        console.log("mounted");
+        const el = document.getElementById("firstEle");
+        console.log(el);
+      },
+      methods: {
+        handleClick(...args) {
+          console.log("点击了：", args[1].target);
+          console.log(args);
+          this.a++;
+          this.class.active = !this.class.active;
+        },
+        handleBtnClick() {
+          this.isShow = !this.isShow;
+        },
+        handleClassClick() {
+          this.isActive = !this.isActive;
+        },
+        handleDisabled() {
+          this.isDisabled = !this.isDisabled;
+        },
+        handleAddItem() {
+          this.items.push({
+            msg: "新增的数据" + this.a++,
+          });
+        },
+        handleDelClick(index) {
+          console.log(index);
+
+          this.items.splice(index, 1);
+        },
+      },
+    });
+
+    app.mount("#app");
+  </script>
   <style>
     * {
       user-select: none;

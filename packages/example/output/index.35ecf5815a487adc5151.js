@@ -364,7 +364,7 @@ eval("\n\nvar bind = __webpack_require__(/*! ./helpers/bind */ \"../../node_modu
   \******************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("const nameDict = {\n  all: \"全部展示\",\n  bind: \"z-bind attr绑定展示\",\n  for: \"z-for列表渲染\",\n  on: \"z-on事件处理\",\n  if: \"z-if/else\",\n  text: \"z-text\",\n  model: \"z-model 双向绑定\",\n  created: \"created 初始化数据\",\n};\n\nconst files = __webpack_require__(\"./src sync \\\\.js$\");\nconsole.log(files);\nconst keyReg = /^\\.\\/(.*).js/;\nfiles.keys().forEach((key) => {\n  key = keyReg.exec(key)[1];\n  const a = document.createElement(\"a\");\n  a.setAttribute(\"href\", `${key}.html`);\n  a.setAttribute(\"target\", \"show\");\n  a.text = nameDict[key] || key;\n  tabs.appendChild(a);\n});\n\n\n//# sourceURL=webpack://example/./index.js?");
+eval("const nameDict = {\n  all: \"全部展示\",\n  bind: \"z-bind attr绑定展示\",\n  for: \"z-for列表渲染\",\n  on: \"z-on事件处理\",\n  if: \"z-if/else\",\n  text: \"z-text\",\n  model: \"z-model 双向绑定\",\n  created: \"created 初始化数据\",\n  cdn: \"使用cdn加载\",\n};\n\nconst files = __webpack_require__(\"./src sync \\\\.js$\");\nconsole.log(files);\nconst keyReg = /^\\.\\/(.*).js/;\nfiles.keys().forEach((key) => {\n  key = keyReg.exec(key)[1];\n  const a = document.createElement(\"a\");\n  a.setAttribute(\"href\", `${key}.html`);\n  a.setAttribute(\"target\", \"show\");\n  a.text = nameDict[key] || key;\n  tabs.appendChild(a);\n});\n\n\n//# sourceURL=webpack://example/./index.js?");
 
 /***/ }),
 
@@ -387,6 +387,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var mini
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var mini_zvm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mini-zvm */ \"../zvm/dist/es/main.js\");\n\n\nconst app = (0,mini_zvm__WEBPACK_IMPORTED_MODULE_0__.createApp)({\n  template: \"#app\",\n  data() {\n    return {\n      data: \"这是绑定的值\",\n      isDisable: false,\n    };\n  },\n  methods: {\n    handleBtnClick() {\n      this.isDisable = !this.isDisable;\n    },\n  },\n});\n\napp.mount(\"#app\");\n\n\n//# sourceURL=webpack://example/./src/bind.js?");
+
+/***/ }),
+
+/***/ "./src/cdn.js":
+/*!********************!*\
+  !*** ./src/cdn.js ***!
+  \********************/
+/***/ (() => {
+
+eval("\n\n//# sourceURL=webpack://example/./src/cdn.js?");
 
 /***/ }),
 
@@ -484,7 +494,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var mini
   \**************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("var map = {\n\t\"./all.js\": \"./src/all.js\",\n\t\"./bind.js\": \"./src/bind.js\",\n\t\"./computed.js\": \"./src/computed.js\",\n\t\"./created.js\": \"./src/created.js\",\n\t\"./for.js\": \"./src/for.js\",\n\t\"./if.js\": \"./src/if.js\",\n\t\"./method.js\": \"./src/method.js\",\n\t\"./model.js\": \"./src/model.js\",\n\t\"./on.js\": \"./src/on.js\",\n\t\"./text.js\": \"./src/text.js\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./src sync \\\\.js$\";\n\n//# sourceURL=webpack://example/./src/_sync_nonrecursive_\\.js$?");
+eval("var map = {\n\t\"./all.js\": \"./src/all.js\",\n\t\"./bind.js\": \"./src/bind.js\",\n\t\"./cdn.js\": \"./src/cdn.js\",\n\t\"./computed.js\": \"./src/computed.js\",\n\t\"./created.js\": \"./src/created.js\",\n\t\"./for.js\": \"./src/for.js\",\n\t\"./if.js\": \"./src/if.js\",\n\t\"./method.js\": \"./src/method.js\",\n\t\"./model.js\": \"./src/model.js\",\n\t\"./on.js\": \"./src/on.js\",\n\t\"./text.js\": \"./src/text.js\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./src sync \\\\.js$\";\n\n//# sourceURL=webpack://example/./src/_sync_nonrecursive_\\.js$?");
 
 /***/ }),
 

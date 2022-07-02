@@ -2,12 +2,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const requireContext = require("require-context");
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const files = requireContext(path.join(__dirname, "./src"), false, /\.js$/);
+const files = requireContext(
+  path.join(__dirname, "./template"),
+  false,
+  /\.html$/
+);
 const entries = {};
 const plugins = [];
 files.keys().forEach((key) => {
-  console.log(key);
-  key = key.replace(".js", "");
+  key = key.replace(".html", "");
   entries[key] = `./src/${key}.js`;
   plugins.push(
     new HtmlWebpackPlugin({
