@@ -1,7 +1,7 @@
 module.exports = {
   title: "ZVM",
   description: "mini-vue",
-  dest: "./output",
+  dest: "./dist",
   port: "8080",
   markdown: {
     lineNumbers: true,

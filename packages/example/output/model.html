@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <script defer src="model.da1bc1efb39dde7e0ef6.js"></script></head>
+  <body>
+    <div id="app">
+      <div>
+        可以是普通的输入框，也可以是textarea
+        <input placeholder="输入试试" type="text" z-model="data" />
+        <textarea name="" id="" cols="30" rows="10" z-model="data"></textarea>
+        {{data}}
+      </div>
+      <div>
+        可以是checkbox
+        <input type="checkbox" id="checkbox" z-model="checked" />
+        <label for="checkbox">{{ checked }}</label>
+      </div>
+      <div>
+        也可以是radio
+        <input type="radio" id="radio" z-model="picked" value="123" />
+        <input type="radio" id="radio" z-model="picked" value="456" />
+        <label for="radio">{{ picked }}</label>
+      </div>
+    </div>
+  </body>
+</html>

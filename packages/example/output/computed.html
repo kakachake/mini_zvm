@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <script defer src="computed.da1bc1efb39dde7e0ef6.js"></script></head>
+  <body>
+    <div id="app">
+      <div>
+        computed惰性求值，虽然使用了多次，但只会执行一次computed函数，控制台查看结果
+      </div>
+      <div>{{count}}</div>
+      <div>computed：{{countPlus.value}}</div>
+      <div>computed：{{countPlus.value}}</div>
+      <div>computed：{{countPlus.value}}</div>
+      <div>method：{{countP(count,'1')}}</div>
+      <div>method：{{countP(count,'1')}}</div>
+      <div>method：{{countP(count,'1')}}</div>
+      <button z-on:click="handleClick">count++</button>
+    </div>
+  </body>
+</html>

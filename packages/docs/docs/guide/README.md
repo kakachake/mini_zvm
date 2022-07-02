@@ -37,6 +37,14 @@ app.mount("#app");
 
 ## 安装
 
+### CDN
+
+```javascript
+<script src="https://unpkg.com/mini-zvm"></script>
+```
+
+### npm
+
 推荐使用 npm 安装
 
 ```cmd
@@ -45,4 +53,5 @@ npm install mini-zvm
 
 ## 示例
 
-[展示地址](https://mini-vue3.vercel.app/)
+[示例地址](https://mini-vue3.vercel.app/)
+[示例代码](https://github.com/kakachake/mini-zvm-example)
