@@ -10,7 +10,7 @@ zvm 是一个简单的 MVVM 框架，支持响应式，单向绑定，双向绑�
 下面是一个最基本的示例：
 
 ```javascript
-import { createApp } from "zvm";
+import { createApp } from "mini-zvm";
 
 const app = createApp({
   template: "#app",

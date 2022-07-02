@@ -3,7 +3,7 @@
 ## 创建一个应用实例
 
 ```javascript
-import { createApp } from "zvm";
+import { createApp } from "mini-zvm";
 
 const app = createApp({
   /* 根组件选项 */
