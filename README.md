@@ -2,6 +2,8 @@
 
 简单的 MVVM 框架实现
 
+[文档地址](https://mini-zvm-doc.vercel.app/)
+
 ## 简介
 
 zvm 是一个简单的 MVVM 框架，支持响应式，单向绑定，双向绑定，参考 vue 原理实现。
