@@ -56,4 +56,4 @@ app.mount("#app");
 ### 图片懒加载
 
 点击链接查看：[http://101.43.155.53/front_end_baidu/mini_mvvm/directive.html](http://101.43.155.53/front_end_baidu/mini_mvvm/directive.html)
-源码在：
+源码在：[https://github.com/kakachake/mini_vue3/blob/master/packages/example/src/directive.js](https://github.com/kakachake/mini_vue3/blob/master/packages/example/src/directive.js)
