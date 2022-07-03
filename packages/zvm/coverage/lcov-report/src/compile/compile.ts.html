@@ -256,23 +256,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -280,6 +263,23 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -292,7 +292,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { VM } from "../zvm/type";
-import directives from "./directives";
+import { directives, triggerDirective } from "./directives";
 const DIR_REG = /^z-/;
 const DIR_FOR_REG = /^z-for/;
 export class Compile {
@@ -367,6 +367,8 @@ export class Compile {
 <span class="cstat-no" title="statement not covered" >    const reg = /\{\{(.*)\}\}/;</span>
 <span class="cstat-no" title="statement not covered" >    const res = reg.exec(text);</span>
 <span class="cstat-no" title="statement not covered" >    if (res !== null) {</span>
+<span class="cstat-no" title="statement not covered" >      console.log(directives);</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      directives["text"](node, vm, "text", res[1], res[0]);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
@@ -393,13 +395,11 @@ export class Compile {
   // 编译指令
 <span class="fstat-no" title="function not covered" >  compileDirective(node: HTMLElement, vm: VM, attr: Attr) {</span>
 <span class="cstat-no" title="statement not covered" >    const directive = attr.nodeName;</span>
-<span class="cstat-no" title="statement not covered" >    const expression = attr.nodeValue;</span>
+<span class="cstat-no" title="statement not covered" >    const expression = attr.nodeValue || "";</span>
 <span class="cstat-no" title="statement not covered" >    if (DIR_REG.test(directive)) {</span>
-<span class="cstat-no" title="statement not covered" >      // 例如 v-on:click，截取v-on</span>
-<span class="cstat-no" title="statement not covered" >      const dir = directive.substring(2).split(":")[0];</span>
-<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      // 寻找该指令</span>
-<span class="cstat-no" title="statement not covered" >      directives[dir] &amp;&amp; directives[dir](node, vm, directive, expression);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      triggerDirective(node, vm, directive, expression);</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      node.removeAttribute(directive);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -412,7 +412,7 @@ export class Compile {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat Jul 02 2022 20:38:26 GMT+0800 (中国标准时间)
+                at Sun Jul 03 2022 09:59:58 GMT+0800 (中国标准时间)
             </div>
         <script src="../../prettify.js"></script>
         <script>

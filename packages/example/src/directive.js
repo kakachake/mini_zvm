@@ -43,4 +43,9 @@ app.directive("lazyImg", (el, binding) => {
   observer.observe(el);
 });
 
+app.directive("focus", (node) => {
+  console.log(node);
+  node.focus();
+});
+
 app.mount("#app");

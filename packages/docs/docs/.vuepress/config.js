@@ -23,14 +23,31 @@ module.exports = {
         link: "https://github.com/kakachake",
       },
     ],
-    sidebar: {
-      "/guide/": [
-        ["", "介绍"],
-        ["instance", "应用实例"],
-        ["template", "模板语法"],
-        ["directives", "各个指令介绍"],
-      ],
-    },
+    sidebar: [
+      {
+        title: "开始",
+        children: [
+          ["/guide/", "介绍"],
+          ["/guide/quick-start", "快速开始"],
+        ],
+
+        collapsable: false,
+      },
+      {
+        title: "基础",
+        children: [
+          ["/guide/instance", "应用实例"],
+          ["/guide/template", "模板语法"],
+          ["/guide/directives", "各个指令介绍"],
+        ],
+        collapsable: false,
+      },
+      {
+        title: "扩展",
+        children: [["/guide/custom-directives", "自定义指令"]],
+        collapsable: false,
+      },
+    ],
     sidebarDepth: 2,
     lastUpdated: "Last Updated",
     searchMaxSuggestoins: 10,

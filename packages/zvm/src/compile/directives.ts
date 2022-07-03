@@ -28,17 +28,19 @@ export function triggerDirective(
   if (directives[name]) {
     directives[name](node, vm, directive, expression);
   } else if (customDirectives[name]) {
-    watch(
-      () => {
-        return runInScope(vm, "scope", expression);
-      },
-      (newVal: any) => {
-        customDirectives[name](node, { arg, value: newVal });
-      },
-      {
-        immediate: true,
-      }
-    );
+    vm.pubsub?.subscribe("mounted", () => {
+      watch(
+        () => {
+          return runInScope(vm, "scope", expression);
+        },
+        (newVal: any) => {
+          customDirectives[name](node, { arg, value: newVal });
+        },
+        {
+          immediate: true,
+        }
+      );
+    });
   }
 }
 export const directives = {

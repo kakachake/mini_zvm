@@ -40,9 +40,7 @@ app.mount("#app");
 ### CDN
 
 ```javascript
-<script src="https://unpkg.com/mini-zvm"></script>;
-
-const { createApp } = window.ZVM;
+<script src="https://unpkg.com/mini-zvm"></script>
 ```
 
 [CDN 引入示例地址](https://mini-vue3.vercel.app/cdn.html)

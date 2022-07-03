@@ -19,7 +19,6 @@ importers:
       rollup-plugin-typescript2: ^0.32.1
       ts-loader: ^9.3.1
       typescript: ^4.5.4
-      vite: ^2.9.9
       webpack-dev-server: ^4.9.2
     dependencies:
       webpack-dev-server: registry.npmmirror.com/webpack-dev-server/4.9.2
@@ -39,7 +38,6 @@ importers:
       rollup-plugin-typescript2: registry.npmmirror.com/rollup-plugin-typescript2/0.32.1_okefoyb4o5sittgqayreuhurei
       ts-loader: registry.npmmirror.com/ts-loader/9.3.1_typescript@4.7.4
       typescript: registry.npmmirror.com/typescript/4.7.4
-      vite: registry.npmmirror.com/vite/2.9.13
 
   packages/docs:
     specifiers:
