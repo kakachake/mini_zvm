@@ -7,7 +7,7 @@ export interface ZvmOptions {
   computed?: object;
   methods?: object;
   created?: () => void;
-  mounted?: () => void;
+  mounted?: (this: any) => void;
 }
 
 export interface VM {

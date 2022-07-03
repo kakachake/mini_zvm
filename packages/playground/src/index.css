@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+#app {
+  width: 100%;
+  height: 100vh;
+  /* background-color: aliceblue; */
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+#monaco {
+  width: 50%;
+  height: 100%;
+}
+
+.monaco-editor {
+  width: 100%;
+  height: 100%;
+}
+
+.iframeWrap {
+  width: 50%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.iframeWrap iframe {
+  width: 100%;
+  height: 100%;
+}

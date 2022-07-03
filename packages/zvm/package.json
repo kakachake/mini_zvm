@@ -2,7 +2,7 @@
   "name": "mini-zvm",
   "author": "kakachake",
   "description": "mvvm简化版，仅供学习使用",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/umd/main.js",
   "module": "dist/es/main.js",
   "scripts": {
