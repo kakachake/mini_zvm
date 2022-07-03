@@ -57,7 +57,7 @@ npm install mini-zvm
 
 这里提供了在线编辑器，可以在线编辑器中编辑示例代码，然后在线上运行。
 
-[在线编辑器](https://mini-vue3.vercel.app/editor.html)
+[在线编辑器](https://mini-zvm-playground.vercel.app/)
 
 以下是一些示例功能及其代码：
 [示例地址](https://mini-vue3.vercel.app/)
