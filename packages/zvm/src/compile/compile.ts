@@ -1,5 +1,5 @@
 import { VM } from "../zvm/type";
-import directives from "./directives";
+import { directives, triggerDirective } from "./directives";
 const DIR_REG = /^z-/;
 const DIR_FOR_REG = /^z-for/;
 export class Compile {
@@ -74,6 +74,8 @@ export class Compile {
     const reg = /\{\{(.*)\}\}/;
     const res = reg.exec(text);
     if (res !== null) {
+      console.log(directives);
+
       directives["text"](node, vm, "text", res[1], res[0]);
     }
   }
@@ -100,13 +102,11 @@ export class Compile {
   // 编译指令
   compileDirective(node: HTMLElement, vm: VM, attr: Attr) {
     const directive = attr.nodeName;
-    const expression = attr.nodeValue;
+    const expression = attr.nodeValue || "";
     if (DIR_REG.test(directive)) {
-      // 例如 v-on:click，截取v-on
-      const dir = directive.substring(2).split(":")[0];
-
       // 寻找该指令
-      directives[dir] && directives[dir](node, vm, directive, expression);
+
+      triggerDirective(node, vm, directive, expression);
 
       node.removeAttribute(directive);
     }

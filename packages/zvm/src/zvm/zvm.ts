@@ -3,6 +3,7 @@ import { PubSub } from "../pubsub/pubsub";
 import { reactive } from "../reactivity/reactive";
 import { App, VM, ZvmOptions } from "./type";
 import { computed } from "../main";
+import { registerDirective } from "../compile/directives";
 
 // 初始化vm
 export function createVM(options, parentVM = {}, needProxy = true): VM {
@@ -36,8 +37,15 @@ export function createVM(options, parentVM = {}, needProxy = true): VM {
 export function createApp(this, options: ZvmOptions): App {
   const vm = createVM(options, this);
   vm.pubsub?.publish("created");
-  const compile = new Compile(vm.$el!, vm);
-  return { vm, mount: compile.mount.bind(compile) };
+  const mount = (el: string) => {
+    const compile = new Compile(vm.$el!, vm);
+    compile.mount(el);
+  };
+  return {
+    vm,
+    mount,
+    directive: registerDirective,
+  };
 }
 
 function proxyData(obj, key) {

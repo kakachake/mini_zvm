@@ -8,7 +8,6 @@ export const render = {
     if (node.nodeName === "INPUT") {
       const inputType = (node as HTMLInputElement).getAttribute("type");
 
-      console.log(inputType);
       // radio不是设置value，而是判断是否选中
       if (inputType === "radio") {
         console.log("radio");
@@ -64,8 +63,6 @@ export const render = {
       forNodes.length = 0;
     }
     return (value, index, items, vm: VM) => {
-      console.log(items);
-
       clearNodes();
       let lastNode: Node | null = _previousNode;
       // node.parentNode?.removeChild(node);

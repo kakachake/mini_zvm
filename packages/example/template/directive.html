@@ -5,20 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  <script defer src="if.c75c1288a5917af793d1.js"></script></head>
+  </head>
   <body>
     <div id="app">
-      <button z-on:click="handleBtnClick">显示/隐藏</button>
-      <div z-if="isShow">z-if</div>
-      <div z-else>else</div>
+      <h2>图片懒加载自定义指令示例</h2>
+      <div>
+        <div z-for="item in imgList">
+          <img class="img" z-lazyImg="item" alt="" />
+        </div>
+      </div>
     </div>
   </body>
   <style>
-    * {
-      user-select: none;
-    }
-    .active {
-      background-color: red;
+    .img {
+      margin: 100px 0;
+      width: 600px;
+      height: 300px;
     }
   </style>
 </html>

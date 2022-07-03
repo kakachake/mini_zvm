@@ -1,3 +1,4 @@
+import { CustomDirectiveFn } from "../compile/type";
 import { PubSub } from "../pubsub/pubsub";
 
 export interface ZvmOptions {
@@ -20,4 +21,5 @@ export interface VM {
 export interface App {
   vm: VM;
   mount: (el: string) => void;
+  directive: (name: string, fn: CustomDirectiveFn) => void;
 }

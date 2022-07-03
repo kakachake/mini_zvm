@@ -25,13 +25,13 @@ export default {
     },
     {
       format: "iife",
-      // sourcemap: "inline",
+      sourcemap: "inline",
       dir: "dist/iife",
       name: "ZVM",
     },
     {
       format: "umd",
-      // sourcemap: "inline",
+      sourcemap: "inline",
       dir: "dist/umd",
       name: "ZVM",
     },
