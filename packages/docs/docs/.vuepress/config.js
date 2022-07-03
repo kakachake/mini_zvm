@@ -15,6 +15,10 @@ module.exports = {
         link: "/guide/",
       },
       {
+        text: "在线编辑器",
+        link: "https://mini-zvm-playground.vercel.app/",
+      },
+      {
         text: "展示",
         link: "http://101.43.155.53/front_end_baidu/mini_mvvm/",
       },

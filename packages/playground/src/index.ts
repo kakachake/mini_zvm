@@ -14,6 +14,15 @@ const initVal = `
   <body>
     <div id="app">
     <button z-on:click="handleClick">Count is: {{ count }}</button>
+    <ul>
+      <li z-on:click="handleClick(index)" z-for="(item,index) in items">
+        <span>{{item.msg}}</span>
+        <span>{{index}}</span>
+        <span>{{parentData}}</span>
+        <button z-on:click="handleDelClick(index)">删除</button>
+      </li>
+      <button z-on:click="handleAddItem">addItem</button>
+    </ul>
     </div>
   </body>
   <script>
@@ -23,11 +32,25 @@ const initVal = `
       data() {
         return {
           count: 1,
+          parentData: "外层data",
+          items: [
+            {
+              msg: "这是for循环的数据",
+            },
+          ],
         };
       },
       methods: {
         handleClick() {
           this.count++;
+        },
+        handleAddItem() {
+          this.items.push({
+            msg: "新增的数据",
+          });
+        },
+        handleDelClick(index) {
+          this.items.splice(index, 1);
         },
       },
     });
