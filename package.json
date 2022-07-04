@@ -12,6 +12,7 @@
     "build": "pnpm run build:zvm & pnpm run build:example",
     "prepare": "husky install",
     "lint": "eslint packages/**/src/**/*.ts",
+    "test": "pnpm -F mini-zvm test",
     "commit": "npx cz"
   },
   "devDependencies": {

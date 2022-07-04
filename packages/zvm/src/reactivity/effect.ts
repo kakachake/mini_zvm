@@ -1,3 +1,4 @@
+import { getType } from "../utils";
 import { shoudTrack } from "./reactive";
 import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
@@ -93,7 +94,12 @@ export function trigger(
     });
 
   // 只有添加和删除操作才会改变对象的keys，故此时需要触发iterateEffects
-  if (type === TriggerType.ADD || type === TriggerType.DELETE) {
+  if (
+    type === TriggerType.ADD ||
+    type === TriggerType.DELETE ||
+    // forEach遍历Map时，既关心键也关心值，故当修改map的值时，也应该触发iterateEffects
+    (type === TriggerType.SET && getType(target) === "map")
+  ) {
     iterateEffects &&
       iterateEffects.forEach((effectFn) => {
         if (effectFn != activeEffectFn) {

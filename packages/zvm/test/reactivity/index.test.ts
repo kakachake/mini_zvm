@@ -229,4 +229,36 @@ describe("响应式测试-reactive", () => {
     });
     m.get("p2").set("foo", "bar");
   });
+
+  it("Set,Map-forEach1", () => {
+    const m = reactive(new Map([["3", new Set([1, 2, 3])]]));
+    let i = 1;
+    effect(() => {
+      m.forEach((value: any, key: string, m: object) => {
+        if (i === 1) {
+          expect(key).toBe("3");
+          expect(value.size).toEqual(3);
+          expect(m).toBe(m);
+        } else {
+          expect(key).toBe("3");
+          expect(value.size).toEqual(4);
+          expect(m).toBe(m);
+        }
+        i++;
+      });
+    });
+    m.get("3").add(4);
+  });
+
+  it("Set,Map-forEach2", () => {
+    const m = reactive(new Map([["3", 1]]));
+    let i = 1;
+    effect(() => {
+      m.forEach((value: any) => {
+        i === 1 ? expect(value).toEqual(1) : expect(value).toEqual(3);
+        i++;
+      });
+    });
+    m.set("3", 3);
+  });
 });

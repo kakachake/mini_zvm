@@ -131,17 +131,9 @@
     // m.get("p2").set("foo", "bar");
 
     // 处理forEach
-    const m = reactive(
-      new Map([
-        ["1", 2],
-        ["3", 4],
-      ])
-    );
-    effect(() => {
-      m.forEach((value, key, m) => {
-        console.log(key, value, m);
-      });
-    });
-    m.set("2", 3);
+    const m = reactive(new Map([["3", new Set([1, 2, 3])]]));
+    effect(() => {});
+    m.set("3", 3);
+    // m.get("3").add(4);
   </script>
 </html>

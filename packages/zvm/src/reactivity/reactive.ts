@@ -63,6 +63,7 @@ const mutableInstrumentations = {
     const newVal = value[RAW_KEY] || value;
     const res = target.set(key, newVal);
     // 这里要区分是否是新增的key，新增的key需要触发ADD事件，而不是SET事件
+
     if (!hasKey) {
       trigger(target, key, {
         type: TriggerType.ADD,
@@ -76,14 +77,23 @@ const mutableInstrumentations = {
   },
   forEach(
     this: (Map<any, any> | Set<any>) & proxyObjType<Map<any, any> | Set<any>>,
-    callbackfn: ((value: any, key: any, map: Map<any, any>) => void) &
+    callbackfn: ((
+      value: any,
+      key: any,
+      map: Map<any, any> | Set<any>
+    ) => void) &
       ((value: any, value2: any, set: Set<any>) => void),
     thisArg: any
   ) {
+    // 和get方法一样，一旦我们要获取一个值，我们需要考虑下是否需要触发代理
+    const wrap = (val: any) => (typeof val === "object" ? reactive(val) : val);
     const target = this[RAW_KEY];
     track(target, ITERATE_KEY);
 
-    return target.forEach(callbackfn, thisArg);
+    return target.forEach(
+      (v, k, m) => callbackfn(wrap(v), wrap(k), m),
+      thisArg
+    );
   },
 };
 
