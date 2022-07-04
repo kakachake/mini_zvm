@@ -3,12 +3,6 @@ import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
 let activeEffectFn: EffectFn;
 
-// export let needTrigger = true;
-
-// export function toggleNeedTrigger(flag: boolean) {
-//   needTrigger = flag;
-// }
-
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
 
@@ -25,7 +19,7 @@ const effectFnStack: Array<EffectFn> = [];
  * @returns 返回副作用函数
  */
 export function effect(fn: () => void, options: EffectOptions = {}) {
-  const effectFn = () => {
+  const effectFn: EffectFn = () => {
     // 移除上次的依赖集合
     cleanUp(effectFn);
 
@@ -42,6 +36,7 @@ export function effect(fn: () => void, options: EffectOptions = {}) {
   };
 
   effectFn.options = options;
+
   effectFn.deps = [];
 
   if (!options.lazy) {

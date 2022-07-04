@@ -43,6 +43,7 @@ export function triggerDirective(
     });
   }
 }
+
 export const directives = {
   on(node: Element, vm: VM, directive: string, expression: string) {
     // z-on:click -> click
@@ -160,7 +161,7 @@ export const directives = {
     }
   },
 
-  if(node: HTMLElement, vm: VM, _directives, expression) {
+  if(node: HTMLElement, vm: VM, _directive: string, expression: string) {
     const next = node.nextElementSibling;
 
     let elseNode: HTMLElement | null = null;
@@ -168,7 +169,7 @@ export const directives = {
       elseNode = next as HTMLElement;
     }
 
-    const updated = (newvalue) => {
+    const updated = (newvalue: boolean) => {
       if (newvalue) {
         node.style.display = "block";
         elseNode && (elseNode.style.display = "none");
@@ -188,7 +189,7 @@ export const directives = {
     );
   },
 
-  for(node: HTMLElement, vm: VM, _directive, expression: string) {
+  for(node: HTMLElement, vm: VM, _directive: string, expression: string) {
     //去除空格
     expression = expression.replace(/\s/g, "");
     const REF_LIST_FOR = /([(](\w+(,\w+)?)[)]|(\w+))in(\w+)/;
@@ -197,7 +198,7 @@ export const directives = {
     if (forMatch) {
       const [, , values, , , list] = forMatch;
       let value = forMatch[1];
-      let index;
+      let index: string | undefined;
       if (values) {
         // 去左右括号
         [value, index] = values.split(",");
@@ -210,7 +211,7 @@ export const directives = {
     }
   },
 
-  bind(node: Node, vm: VM, directive, expression: string) {
+  bind(node: Node, vm: VM, directive: string, expression: string) {
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;

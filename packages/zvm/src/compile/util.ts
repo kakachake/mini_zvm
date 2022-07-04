@@ -1,5 +1,5 @@
 // 根据a.b.c设置数据
-export function setValueByPath(obj, path, value) {
+export function setValueByPath(obj: object, path: string, value: any) {
   const paths = path.split(".");
   const len = paths.length;
   let i = 0;
@@ -9,7 +9,7 @@ export function setValueByPath(obj, path, value) {
   obj[paths[i]] = value;
 }
 
-export function getValueByPath(obj, path) {
+export function getValueByPath(obj: object, path: string) {
   const paths = path.split(".");
 
   const len = paths.length;
@@ -38,7 +38,7 @@ export function _with(scopeName: string, exp: string) {
 }
 
 // 解析JavaScript表达式，加入上下文对象，返回表达式最后的值
-export function runInScope(scope, scopeName: string, exp: string) {
+export function runInScope(scope: object, scopeName: string, exp: string) {
   const func = new Function(scopeName, "return " + _with(scopeName, exp));
   return func(scope);
 }

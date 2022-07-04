@@ -5,13 +5,13 @@ export class PubSub {
   constructor() {
     this.subscribers = {};
   }
-  subscribe(topic, callback) {
+  subscribe(topic: string, callback: (...args: any[]) => void) {
     if (!this.subscribers[topic]) {
       this.subscribers[topic] = new Set();
     }
     this.subscribers[topic].add(callback);
   }
-  publish(topic, data = "") {
+  publish(topic: string, data: any = "") {
     if (this.subscribers[topic]) {
       this.subscribers[topic].forEach((callback) => {
         callback(data);

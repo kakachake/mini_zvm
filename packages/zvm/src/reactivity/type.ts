@@ -1,3 +1,5 @@
+import { RAW_KEY } from "./reactive";
+
 export type EffectFn = {
   (): void;
   deps?: Array<Set<() => void>>;
@@ -14,3 +16,7 @@ export enum TriggerType {
   ADD,
   DELETE,
 }
+
+export type proxyObjType<T> = {
+  [RAW_KEY]: T;
+};

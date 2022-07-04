@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.77% </span>
+                <span class="strong">13.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>29/227</span>
+                <span class='fraction'>30/230</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.77% </span>
+                <span class="strong">13.04% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>29/227</span>
+                <span class='fraction'>30/230</span>
             </div>
         
             
@@ -290,7 +290,10 @@
 <a name='L225'></a><a href='#L225'>225</a>
 <a name='L226'></a><a href='#L226'>226</a>
 <a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -333,6 +336,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -547,19 +553,22 @@ const customDirectives: CustomDirective = {};
 <span class="cstat-no" title="statement not covered" >  if (directives[name]) {</span>
 <span class="cstat-no" title="statement not covered" >    directives[name](node, vm, directive, expression);</span>
 <span class="cstat-no" title="statement not covered" >  } else if (customDirectives[name]) {</span>
-<span class="cstat-no" title="statement not covered" >    watch(</span>
-<span class="cstat-no" title="statement not covered" >      () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return runInScope(vm, "scope", expression);</span>
-<span class="cstat-no" title="statement not covered" >      },</span>
-<span class="cstat-no" title="statement not covered" >      (newVal: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        customDirectives[name](node, { arg, value: newVal });</span>
-<span class="cstat-no" title="statement not covered" >      },</span>
-<span class="cstat-no" title="statement not covered" >      {</span>
-<span class="cstat-no" title="statement not covered" >        immediate: true,</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >    );</span>
+<span class="cstat-no" title="statement not covered" >    vm.pubsub?.subscribe("mounted", () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      watch(</span>
+<span class="cstat-no" title="statement not covered" >        () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          return runInScope(vm, "scope", expression);</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        (newVal: any) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          customDirectives[name](node, { arg, value: newVal });</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        {</span>
+<span class="cstat-no" title="statement not covered" >          immediate: true,</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >      );</span>
+<span class="cstat-no" title="statement not covered" >    });</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
 export const directives = {
 <span class="fstat-no" title="function not covered" >  on(node: Element, vm: VM, directive: string, expression: string) {</span>
 <span class="cstat-no" title="statement not covered" >    // z-on:click -&gt; click</span>
@@ -677,7 +686,7 @@ export const directives = {
 <span class="cstat-no" title="statement not covered" >    }</span>
   },
 &nbsp;
-<span class="fstat-no" title="function not covered" >  if(node: HTMLElement, vm: VM, _directives, expression) {</span>
+<span class="fstat-no" title="function not covered" >  if(node: HTMLElement, vm: VM, _directive: string, expression: string) {</span>
 <span class="cstat-no" title="statement not covered" >    const next = node.nextElementSibling;</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    let elseNode: HTMLElement | null = null;</span>
@@ -685,7 +694,7 @@ export const directives = {
 <span class="cstat-no" title="statement not covered" >      elseNode = next as HTMLElement;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const updated = (newvalue) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const updated = (newvalue: boolean) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (newvalue) {</span>
 <span class="cstat-no" title="statement not covered" >        node.style.display = "block";</span>
 <span class="cstat-no" title="statement not covered" >        elseNode &amp;&amp; (elseNode.style.display = "none");</span>
@@ -705,7 +714,7 @@ export const directives = {
 <span class="cstat-no" title="statement not covered" >    );</span>
   },
 &nbsp;
-<span class="fstat-no" title="function not covered" >  for(node: HTMLElement, vm: VM, _directive, expression: string) {</span>
+<span class="fstat-no" title="function not covered" >  for(node: HTMLElement, vm: VM, _directive: string, expression: string) {</span>
 <span class="cstat-no" title="statement not covered" >    //去除空格</span>
 <span class="cstat-no" title="statement not covered" >    expression = expression.replace(/\s/g, "");</span>
 <span class="cstat-no" title="statement not covered" >    const REF_LIST_FOR = /([(](\w+(,\w+)?)[)]|(\w+))in(\w+)/;</span>
@@ -714,7 +723,7 @@ export const directives = {
 <span class="cstat-no" title="statement not covered" >    if (forMatch) {</span>
 <span class="cstat-no" title="statement not covered" >      const [, , values, , , list] = forMatch;</span>
 <span class="cstat-no" title="statement not covered" >      let value = forMatch[1];</span>
-<span class="cstat-no" title="statement not covered" >      let index;</span>
+<span class="cstat-no" title="statement not covered" >      let index: string | undefined;</span>
 <span class="cstat-no" title="statement not covered" >      if (values) {</span>
 <span class="cstat-no" title="statement not covered" >        // 去左右括号</span>
 <span class="cstat-no" title="statement not covered" >        [value, index] = values.split(",");</span>
@@ -727,7 +736,7 @@ export const directives = {
 <span class="cstat-no" title="statement not covered" >    }</span>
   },
 &nbsp;
-<span class="fstat-no" title="function not covered" >  bind(node: Node, vm: VM, directive, expression: string) {</span>
+<span class="fstat-no" title="function not covered" >  bind(node: Node, vm: VM, directive: string, expression: string) {</span>
 <span class="cstat-no" title="statement not covered" >    const dirSplit = directive.split(":");</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const dir = dirSplit.length &gt; 1 ? dirSplit[1] : directive;</span>
@@ -751,7 +760,7 @@ export const directives = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sun Jul 03 2022 09:59:58 GMT+0800 (中国标准时间)
+                at Mon Jul 04 2022 20:53:08 GMT+0800 (中国标准时间)
             </div>
         <script src="../../prettify.js"></script>
         <script>

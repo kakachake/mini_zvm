@@ -14,8 +14,16 @@ const app = createApp({
       imgList: [],
     };
   },
+  // 第一种设置方式
+  directives: {
+    focus: (node) => {
+      console.log(node);
+      node.focus();
+    },
+  },
 });
 
+// 第二种设置方式
 app.directive("lazyImg", (el, binding) => {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -43,9 +51,9 @@ app.directive("lazyImg", (el, binding) => {
   observer.observe(el);
 });
 
-app.directive("focus", (node) => {
-  console.log(node);
-  node.focus();
-});
+// app.directive("focus", (node) => {
+//   console.log(node);
+//   node.focus();
+// });
 
 app.mount("#app");

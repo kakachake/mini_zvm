@@ -32,6 +32,7 @@ export const render = {
       ? (node.textContent = originText.replace(replace, text) || "")
       : (node.textContent = typeof text == "undefined" ? "" : text);
   },
+
   classRender: (node: HTMLElement, value: object) => {
     for (const key in value) {
       if (value[key]) {
@@ -41,13 +42,16 @@ export const render = {
       }
     }
   },
-  attrRender: (attr: string) => (node: HTMLElement, value) => {
-    if (value === true) node.setAttribute(attr, "");
-    else if (value === false) node.removeAttribute(attr);
-    else {
-      node.setAttribute(attr, value);
-    }
-  },
+
+  attrRender:
+    (attr: string) => (node: HTMLElement, value: string | boolean) => {
+      if (value === true) node.setAttribute(attr, "");
+      else if (value === false) node.removeAttribute(attr);
+      else {
+        node.setAttribute(attr, value);
+      }
+    },
+
   forRender: (node: HTMLElement) => {
     // 利用闭包保存一个原始节点
     // 私有数据，不更改
@@ -62,7 +66,12 @@ export const render = {
       });
       forNodes.length = 0;
     }
-    return (value, index, items, vm: VM) => {
+    return (
+      value: string,
+      index: string | undefined,
+      items: string,
+      vm: VM
+    ) => {
       clearNodes();
       let lastNode: Node | null = _previousNode;
       // node.parentNode?.removeChild(node);
@@ -83,10 +92,15 @@ export const render = {
         forNodes.push(cloneNode);
         const childVm = createVM(
           {
-            data: {
-              [value]: items[i],
-              [index]: i,
-            },
+            template: cloneNode as Element,
+            data: index
+              ? {
+                  [value]: items[i],
+                  [index]: i,
+                }
+              : {
+                  [value]: items[i],
+                },
           },
           vm
         );

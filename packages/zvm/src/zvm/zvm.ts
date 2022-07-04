@@ -6,17 +6,26 @@ import { computed } from "../main";
 import { registerDirective } from "../compile/directives";
 
 // 初始化vm
-export function createVM(options, parentVM = {}, needProxy = true): VM {
+export function createVM(
+  options: ZvmOptions,
+  parentVM = {},
+  needProxy = true
+): VM {
   const vm: VM = Object.create(parentVM);
-  vm.$el = document.querySelector(options.template);
-  vm.$data =
-    typeof options.data === "function"
-      ? needProxy
-        ? reactive(options.data())
-        : options.data()
-      : needProxy
-      ? reactive(options.data)
-      : options.data;
+  vm.$el =
+    typeof options.template === "string"
+      ? document.querySelector(options.template)!
+      : options.template;
+  if (options.data) {
+    vm.$data =
+      typeof options.data === "function"
+        ? needProxy
+          ? reactive(options.data())
+          : options.data()
+        : needProxy
+        ? reactive(options.data)
+        : options.data;
+  }
 
   vm.$options = options;
   vm.pubsub = new PubSub();
@@ -30,11 +39,16 @@ export function createVM(options, parentVM = {}, needProxy = true): VM {
       proxyMethod(vm, key);
     });
   }
-  initComputed(vm, options.computed);
+  if (options.computed) {
+    initComputed(vm, options.computed);
+  }
+  if (options.directives) {
+    initDrirectives(vm, options.directives);
+  }
   return vm;
 }
 
-export function createApp(this, options: ZvmOptions): App {
+export function createApp(this: App, options: ZvmOptions): App {
   const vm = createVM(options, this);
   vm.pubsub?.publish("created");
   const mount = (el: string) => {
@@ -48,15 +62,15 @@ export function createApp(this, options: ZvmOptions): App {
   };
 }
 
-function proxyData(obj, key) {
-  Object.defineProperty(obj, key, {
+function proxyData(context: VM, key: string) {
+  Object.defineProperty(context, key, {
     configurable: false,
     enumerable: true,
     get: () => {
-      return obj.$data[key];
+      return context.$data[key];
     },
     set: (newVal) => {
-      obj.$data[key] = newVal;
+      context.$data[key] = newVal;
     },
   });
 }
@@ -67,6 +81,14 @@ function initLiftcycle(context: VM, options: ZvmOptions) {
   }
   if (options.mounted) {
     context.pubsub?.subscribe("mounted", options.mounted.bind(context));
+  }
+}
+
+function initDrirectives(_context: VM, directives: object) {
+  if (typeof directives === "object") {
+    Object.keys(directives).forEach((key) => {
+      registerDirective(key, directives[key]);
+    });
   }
 }
 

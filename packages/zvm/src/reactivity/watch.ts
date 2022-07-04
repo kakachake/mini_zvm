@@ -8,7 +8,11 @@ interface WatchOptions {
 
 export function watch(
   getter: object | (() => void),
-  fn: (newVal, oldVal, onInvalidate) => void,
+  fn: (
+    newVal: any,
+    oldVal: any,
+    onInvalidate: (fn: () => void) => void
+  ) => void,
   options: WatchOptions = {
     immediate: false,
   }
@@ -18,7 +22,7 @@ export function watch(
   // 存储过期回调
   let cleanUp: (() => void) | null;
 
-  function onInvalidate(fn) {
+  function onInvalidate(fn: () => void) {
     cleanUp = fn;
   }
 

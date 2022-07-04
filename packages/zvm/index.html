@@ -101,22 +101,47 @@
     //   }
     // );
     // obj2.a = 2;
-    const obj = {
-      a: 1,
-    };
-    const proxyObj = reactive(obj);
-    const obj2 = reactive({
-      a: 1,
-      b: 2,
-      c: {
-        d: 3,
-      },
-      obj,
-    });
+    // const s = new Set([1, 2, 3]);
+    // const m = new Map([
+    //   ["a", 1],
+    //   ["b", 2],
+    // ]);
+    // const ps = reactive(s);
+    // const pm = reactive(m);
+    // effect(() => {
+    //   console.log(ps.size);
+    //   console.log(pm.size);
+    // });
+    // ps.add(4);
+    // pm.delete("a");
+    // const p = reactive(new Map([["key", 1]]));
+    // effect(() => {
+    //   console.log(p.get("key"));
+    // });
+    // p.set("key", 2);
 
-    watch(obj2.obj.c, (newVal) => {
-      console.log(newVal);
+    // 原始值污染
+    // const m = new Map();
+    // const p1 = reactive(m);
+    // const p2 = reactive(new Map());
+    // p1.set("p2", p2);
+    // effect(() => {
+    //   console.log(m.get("p2").size);
+    // });
+    // m.get("p2").set("foo", "bar");
+
+    // 处理forEach
+    const m = reactive(
+      new Map([
+        ["1", 2],
+        ["3", 4],
+      ])
+    );
+    effect(() => {
+      m.forEach((value, key, m) => {
+        console.log(key, value, m);
+      });
     });
-    proxyObj.a = 2;
+    m.set("2", 3);
   </script>
 </html>

@@ -23,6 +23,7 @@ describe("响应式测试-reactive", () => {
     );
     obj.a = 2;
   });
+
   it("watch", () => {
     const obj = reactive({
       a: 1,
@@ -38,6 +39,7 @@ describe("响应式测试-reactive", () => {
     );
     obj.a = 2;
   });
+
   it("watch", () => {
     const obj = reactive({
       a: 1,
@@ -53,6 +55,7 @@ describe("响应式测试-reactive", () => {
     );
     obj.a = 2;
   });
+
   it("has", () => {
     const arr = reactive([1, 2, 3]);
 
@@ -70,6 +73,7 @@ describe("响应式测试-reactive", () => {
     );
     arr.push(4);
   });
+
   it("has, ownkeys", () => {
     let count = 1;
     const arr = reactive([1, 2, 3]);
@@ -91,6 +95,7 @@ describe("响应式测试-reactive", () => {
     });
     arr.push(4);
   });
+
   it("delete obj", () => {
     const obj = reactive({
       a: 1,
@@ -108,6 +113,7 @@ describe("响应式测试-reactive", () => {
 
     delete obj.c.d;
   });
+
   it("delete arr", () => {
     const arr = reactive([1, 2, 3]);
 
@@ -120,6 +126,7 @@ describe("响应式测试-reactive", () => {
     );
     delete arr[1];
   });
+
   it("避免重复代理", () => {
     const obj = {
       a: 1,
@@ -139,6 +146,7 @@ describe("响应式测试-reactive", () => {
     });
     proxyObj.a = 2;
   });
+
   it("浅响应", () => {
     const obj2 = shallowReactive({
       a: 1,
@@ -152,8 +160,11 @@ describe("响应式测试-reactive", () => {
       expect(obj2.b).toBe(2);
       expect(obj2.c.d).toBe(3);
     });
-    expect(obj2.c.__isProxy__).toBe(undefined);
+    expect(Object.prototype.hasOwnProperty.call(obj2.c, "__isProxy__")).toBe(
+      false
+    );
   });
+
   it("计算属性", () => {
     const obj2 = reactive({
       a: 1,
@@ -169,5 +180,53 @@ describe("响应式测试-reactive", () => {
       }
     );
     obj2.a = 2;
+  });
+
+  it("set,map - add, delete", () => {
+    const s = new Set([1, 2, 3]);
+    const m = new Map([
+      ["a", 1],
+      ["b", 2],
+    ]);
+    const ps = reactive(s);
+    const pm = reactive(m);
+    watch(
+      () => {
+        return ps.size;
+      },
+      (newVal) => {
+        expect(newVal).toEqual(4);
+      }
+    );
+    watch(
+      () => {
+        return pm.size;
+      },
+      (newVal) => {
+        expect(newVal).toEqual(1);
+      }
+    );
+    ps.add(4);
+    pm.delete("a");
+  });
+  it("Set,Map-get, set", () => {
+    const p = reactive(new Map([["key", 1]]));
+    let i = 1;
+    effect(() => {
+      expect(p.get("key")).toBe(i);
+      i++;
+    });
+    p.set("key", 2);
+  });
+
+  it("Set,Map-原始值污染", () => {
+    const m = new Map();
+    const p1 = reactive(m);
+    const p2 = reactive(new Map());
+    p1.set("p2", p2);
+    effect(() => {
+      expect(p1.get("p2").size).toBe(0);
+    });
+    m.get("p2").set("foo", "bar");
   });
 });
