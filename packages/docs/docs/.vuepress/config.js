@@ -6,6 +6,20 @@ module.exports = {
   markdown: {
     lineNumbers: true,
   },
+  head: [
+    [
+      "script",
+      {},
+      `var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?3f3385a3d50d9a16ce9956597ab98c1a";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    `,
+    ],
+  ],
   themeConfig: {
     smoothScroll: true,
     sidebar: "auto",
