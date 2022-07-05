@@ -105,9 +105,11 @@ function proxyMethod(context: VM, key: string) {
 function initComputed(context: VM, computedFns: object) {
   if (typeof computedFns === "object") {
     Object.keys(computedFns).forEach((key) => {
+      const getter = computed(computedFns[key].bind(context));
       Object.defineProperty(context, key, {
         // 如果是函数，直接就作为get，否则可能是一个对象，使用对象的get
-        value: computed(computedFns[key].bind(context)),
+        // value: computed(computedFns[key].bind(context)),
+        get: () => getter.value,
       });
     });
   }
