@@ -4,6 +4,8 @@ import {
   watch,
   shallowReactive,
   computed,
+  ref,
+  toRefs,
 } from "../../src/main";
 
 describe("响应式测试-reactive", () => {
@@ -260,5 +262,103 @@ describe("响应式测试-reactive", () => {
       });
     });
     m.set("3", 3);
+  });
+
+  it("Set,Map - 迭代器", () => {
+    const p = reactive(
+      new Map([
+        ["key", 1],
+        ["key2", 2],
+      ])
+    );
+    let i = 1;
+    effect(() => {
+      // console.log(p[Symbol.iterator]());
+      for (const [key, value] of p) {
+        console.log(key, value);
+      }
+      if (i === 1) {
+        expect(p.size).toBe(2);
+      } else {
+        expect(p.size).toBe(3);
+      }
+      i++;
+    });
+    p.set("key3", "3");
+  });
+
+  it("Set,Map - 迭代器keys", () => {
+    const p = reactive(
+      new Map([
+        ["key1", 1],
+        ["key2", 2],
+      ])
+    );
+    let i = 0;
+    effect(() => {
+      // console.log(p[Symbol.iterator]());
+      for (const value of p.keys()) {
+        console.log(value);
+      }
+      i++;
+    });
+    p.set("key2", "3");
+    setTimeout(() => {
+      expect(i).toBe(1);
+    }, 0);
+  });
+
+  it("Set,Map - 迭代器keys", () => {
+    const p = reactive(
+      new Map([
+        ["key1", 1],
+        ["key2", 2],
+      ])
+    );
+    let i = 0;
+    effect(() => {
+      // console.log(p[Symbol.iterator]());
+      for (const value of p.values()) {
+        console.log(value);
+      }
+      i++;
+    });
+    p.set("key2", "3");
+    setTimeout(() => {
+      expect(i).toBe(2);
+    }, 0);
+  });
+
+  it("ref", () => {
+    const refVal = ref(1);
+    let i = 1;
+    effect(() => {
+      expect(refVal.value).toBe(i);
+      i++;
+    });
+    refVal.value = 2;
+  });
+
+  it("toRef, toRefs", () => {
+    const obj = reactive({
+      a: 1,
+      b: 2,
+    });
+
+    const _obj: any = {
+      ...toRefs(obj),
+    };
+    let i = 1;
+    effect(() => {
+      if (i === 1) {
+        expect(_obj.a.value).toBe(1);
+        expect(_obj.b.value).toBe(2);
+      } else {
+        expect(_obj.a.value).toBe(2);
+        expect(_obj.b.value).toBe(2);
+      }
+      i++;
+    });
+    obj.a = 2;
   });
 });

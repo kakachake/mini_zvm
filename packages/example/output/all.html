@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <script defer src="all.f33781de91167ce50ed8.js"></script></head>
+  <body>
+    <div id="app">
+      <div>
+        {{isLoading?"加载中...":"加载完成"}} 网易云热搜：
+        <ul>
+          <li
+            class="class"
+            aria-disabled=""
+            z-on:click="handleDelClick(index)"
+            z-for="(item,index) in songHotList"
+          >
+            <div>{{item.first}}</div>
+            <!-- <button z-on:click="handleDelClick(index)">删除</button> -->
+          </li>
+        </ul>
+      </div>
+      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+        点击试试{{a}}
+      </div>
+
+      <div>
+        z-text:
+        <div z-text="a"></div>
+      </div>
+      <div>z-on:click===============================</div>
+      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+        支持在内联事件处理器中访问事件参数，点击去控制台查看效果
+      </div>
+      <div>===============================</div>
+      <div>===============================</div>
+      <div z-bind:class="{active: isActive}">支持对象形式绑定</div>
+      <button z-on:click="handleClassClick">切换class</button>
+      <div>===============================</div>
+      <button z-bind:disabled="isDisabled">disabled</button>
+      <button z-bind:data-zvm="a">普通attr,打开控制台查看</button>
+      <button z-on:click="handleDisabled">普通attr绑定</button>
+      <div>===============================</div>
+      <div>
+        可以是input,也可是textarea
+        <input type="text" z-model="b" />
+        <input type="text" z-model="b" />
+        <input type="checkbox" id="checkbox" value="check" z-model="checked" />
+        <label for="checkbox">{{ checked }}</label>
+        <input type="radio" id="radio" z-model="picked" value="123" />
+        <input type="radio" id="radio" z-model="picked" value="456" />
+        <label for="radio">{{ picked }}</label>
+        <textarea name="" id="" cols="30" rows="10" z-model="b"></textarea>
+      </div>
+      <div>当前b的值为：{{b}}。</div>
+      <div>可以是表达式：{{b+a}}</div>
+      <div>===============================</div>
+      <button z-on:click="handleBtnClick">显示/隐藏</button>
+      <div z-if="isShow">z-if</div>
+      <div z-else>else</div>
+      <div>===============================</div>
+      z-for：
+      <ul>
+        <li
+          class="class"
+          aria-disabled=""
+          z-on:click="handleDelClick(index)"
+          z-for="(item,index) in items"
+        >
+          <div>{{item.msg}}</div>
+          <div>{{index}}</div>
+          <div>{{a}}</div>
+          <!-- <button z-on:click="handleDelClick(index)">删除</button> -->
+        </li>
+      </ul>
+      <button z-on:click="handleAddItem">addItem</button>
+      <div>===============================</div>
+    </div>
+  </body>
+  <style>
+    * {
+      user-select: none;
+    }
+    .active {
+      background-color: red;
+    }
+  </style>
+</html>

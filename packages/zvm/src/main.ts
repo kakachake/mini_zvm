@@ -1,6 +1,8 @@
-export { reactive, shallowReactive } from "./reactivity/reactive";
-export { effect } from "./reactivity/effect";
-export { computed } from "./reactivity/computed";
-export { watch } from "./reactivity/watch";
-export { createApp } from "./zvm/zvm";
-console.log("zvm 0.0.3");
+export * from "./reactivity/reactive";
+export * from "./reactivity/effect";
+export * from "./reactivity/computed";
+export * from "./reactivity/watch";
+export * from "./zvm/zvm";
+export * from "./reactivity/ref";
+
+console.log("zvm 0.0.4");

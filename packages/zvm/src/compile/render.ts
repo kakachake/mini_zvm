@@ -106,7 +106,9 @@ export const render = {
         );
 
         // debugger;
-        Object.setPrototypeOf(childVm, vm);
+        // alert(1);
+
+        // Object.setPrototypeOf(childVm, vm);
 
         // console.log(childVm);
 

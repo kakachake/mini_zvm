@@ -1,4 +1,4 @@
-import { RAW_KEY } from "./reactive";
+import { RAW_KEY } from "./constant";
 
 export type EffectFn = {
   (): void;

@@ -1,3 +1,4 @@
+import { createApp } from "../main";
 import { VM } from "../zvm/type";
 import { directives, triggerDirective } from "./directives";
 const DIR_REG = /^z-/;
@@ -15,8 +16,8 @@ export class Compile {
     this.options = options;
     this.frag = this.nodeToFragment(this.node);
 
-    // 解决z-for的节点未编译的问题
     options.compileRoot && this.compileNode(this.node, this.vm);
+    // 解决z-for的节点未编译的问题
     this.compileFrag(this.frag, this.vm);
     // this.node.appendChild(this.frag);
   }
@@ -30,6 +31,10 @@ export class Compile {
       this.node.appendChild(this.frag);
     }
     this.vm.pubsub?.publish("mounted");
+  }
+
+  getFragment() {
+    return this.frag;
   }
 
   // 节点转换成fragment
@@ -59,6 +64,15 @@ export class Compile {
 
   // 编译节点
   compileNode(node: Node, vm: VM) {
+    if (vm.$components && vm.$components[node.nodeName.toLowerCase()]) {
+      console.log("组件");
+      const parseNode = createApp(vm.$components[node.nodeName.toLowerCase()]);
+      const frag = parseNode.vm.compile!.getFragment();
+
+      node.parentNode?.replaceChild(frag, node);
+      console.log(frag);
+      return;
+    }
     if (node.nodeType === 1) {
       //元素节点
       this.compileElement(node as HTMLElement, vm);
@@ -74,8 +88,6 @@ export class Compile {
     const reg = /\{\{(.*)\}\}/;
     const res = reg.exec(text);
     if (res !== null) {
-      console.log(directives);
-
       directives["text"](node, vm, "text", res[1], res[0]);
     }
   }

@@ -29,7 +29,12 @@ module.exports = {
     path: __dirname + "/output",
   },
   module: {
-    rules: [],
+    rules: [
+      {
+        test: /\.vue$/i,
+        use: ["zvm-loader"],
+      },
+    ],
   },
   plugins: [
     // see https://github.com/ampedandwired/html-webpack-plugin

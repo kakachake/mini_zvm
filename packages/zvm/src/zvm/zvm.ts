@@ -12,10 +12,18 @@ export function createVM(
   needProxy = true
 ): VM {
   const vm: VM = Object.create(parentVM);
-  vm.$el =
-    typeof options.template === "string"
-      ? document.querySelector(options.template)!
-      : options.template;
+  if (options.template || options.render) {
+    if (options.template) {
+      vm.$el =
+        typeof options.template === "string"
+          ? document.querySelector(options.template)!
+          : options.template;
+    } else if (options.render) {
+      vm.$el = options.render.call(vm, createElementByString);
+    }
+  } else {
+    throw new Error("template or render not found");
+  }
   if (options.data) {
     vm.$data =
       typeof options.data === "function"
@@ -25,6 +33,14 @@ export function createVM(
         : needProxy
         ? reactive(options.data)
         : options.data;
+  }
+  if (options.components) {
+    Object.keys(options.components).map((key) => {
+      vm.$components = {
+        ...vm.$components,
+        [key.toLowerCase()]: options.components![key],
+      };
+    });
   }
 
   vm.$options = options;
@@ -48,12 +64,14 @@ export function createVM(
   return vm;
 }
 
-export function createApp(this: App, options: ZvmOptions): App {
-  const vm = createVM(options, this);
+export function createApp(options: ZvmOptions): App {
+  const vm = createVM(options);
   vm.pubsub?.publish("created");
+  console.log(vm);
+
+  vm.compile = new Compile(vm.$el!, vm);
   const mount = (el: string) => {
-    const compile = new Compile(vm.$el!, vm);
-    compile.mount(el);
+    vm.compile!.mount(el);
   };
   return {
     vm,
@@ -113,4 +131,10 @@ function initComputed(context: VM, computedFns: object) {
       });
     });
   }
+}
+
+function createElementByString(str: string): Element {
+  const div = document.createElement("div");
+  div.innerHTML = str;
+  return div as Element;
 }

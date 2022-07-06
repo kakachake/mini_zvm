@@ -1,4 +1,5 @@
 import { getType } from "../utils";
+import { ITERATE_KEY, MAP_KEY_ITERATE_KEY } from "./constant";
 import { shoudTrack } from "./reactive";
 import { EffectFn, EffectOptions, TriggerType } from "./type";
 // 当前活动的effect函数
@@ -6,9 +7,6 @@ let activeEffectFn: EffectFn;
 
 // 存储副作用函数的map
 const bucket: WeakMap<any, Map<any, Set<EffectFn>>> = new WeakMap();
-
-// 迭代器key
-export const ITERATE_KEY = Symbol("iterate");
 
 // effect函数栈
 const effectFnStack: Array<EffectFn> = [];
@@ -102,6 +100,19 @@ export function trigger(
   ) {
     iterateEffects &&
       iterateEffects.forEach((effectFn) => {
+        if (effectFn != activeEffectFn) {
+          effectsToRun.add(effectFn);
+        }
+      });
+  }
+
+  if (
+    (type === TriggerType.ADD || type === TriggerType.DELETE) &&
+    getType(target) === "map"
+  ) {
+    const iterateKeyEffects = depsMap.get(MAP_KEY_ITERATE_KEY);
+    iterateKeyEffects &&
+      iterateKeyEffects.forEach((effectFn) => {
         if (effectFn != activeEffectFn) {
           effectsToRun.add(effectFn);
         }

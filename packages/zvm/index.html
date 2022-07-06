@@ -10,7 +10,16 @@
   </body>
   <script src="./dist//iife/main.js"></script>
   <script>
-    const { effect, reactive, computed, watch } = ZVM;
+    const {
+      effect,
+      reactive,
+      computed,
+      watch,
+      ref,
+      toRef,
+      toRefs,
+      templateCompile,
+    } = ZVM;
     // console.log(effect);
     // const data = reactive({
     //   a: 1,
@@ -131,9 +140,76 @@
     // m.get("p2").set("foo", "bar");
 
     // 处理forEach
-    const m = reactive(new Map([["3", new Set([1, 2, 3])]]));
-    effect(() => {});
-    m.set("3", 3);
+    // const m = reactive(new Map([["3", new Set([1, 2, 3])]]));
+    // effect(() => {});
+    // m.set("3", 3);
     // m.get("3").add(4);
+
+    // 迭代器方法
+
+    // const p = reactive(
+    //   new Map([
+    //     ["key1", 1],
+    //     ["key2", 2],
+    //   ])
+    // );
+    // effect(() => {
+    //   // console.log(p[Symbol.iterator]());
+    //   for (const value of p.keys()) {
+    //     console.log(value);
+    //   }
+    // });
+    // p.set("key3", "3");
+    // p.set("key2", "3");
+
+    // ref
+
+    // const refVal = ref(1);
+    // effect(() => {
+    //   console.log(refVal.value);
+    // });
+    // refVal.value = 2;
+
+    // toRef
+
+    // const obj = reactive({
+    //   a: 1,
+    //   b: 2,
+    // });
+    // const _obj = {
+    //   a: toRef(obj, "a"),
+    //   b: toRef(obj, "b"),
+    // };
+    // const _obj2 = {
+    //   ...toRefs(obj),
+    // };
+
+    // effect(() => {
+    //   console.log(_obj2.a.value);
+    //   console.log(_obj2.b.value);
+    // });
+    // obj.a = 2;
+    const res = templateCompile(
+      `
+      <template>
+        <div>
+          <div>{{a}}</div>
+          <div>{{b}}</div>
+        </div>
+      </template>
+      <script>
+        export default {
+          data() {
+            return {
+              a: 1,
+              b: 2,
+            };
+          },
+        };
+      </` +
+        `script>
+    `
+    );
+    console.log(res);
   </script>
 </html>
