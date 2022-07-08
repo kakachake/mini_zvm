@@ -2,7 +2,8 @@ export function templateCompile(content: string) {
   const templateReg =
     /<template>([\s\S]+)<\/template>\s+<script>([\s\S]+)<\/script>/;
 
-  let [, template, script] = templateReg.exec(content) || [];
+  const [, template, script] = templateReg.exec(content) || [];
+
   if (!template) {
     throw new Error("template not found");
   }
@@ -13,11 +14,10 @@ export function templateCompile(content: string) {
   let [, , scriptContent] = scriptReg.exec(script) || [];
 
   scriptContent = "render:(h)=>  h(`" + template + "`),\n" + scriptContent;
-  console.log(scriptContent);
-  script = script.replace(scriptReg, `$1${scriptContent}$3`);
-  console.log(script);
+
+  const parseScript = script.replace(scriptReg, `$1${scriptContent}$3`);
 
   return `
-    ${script}
+    ${parseScript}
   `;
 }

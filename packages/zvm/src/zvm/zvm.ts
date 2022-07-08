@@ -24,6 +24,15 @@ export function createVM(
   } else {
     throw new Error("template or render not found");
   }
+
+  // 初始化props
+  if (options.props) {
+    vm.$props = options.props;
+    // 将props代理到vm上
+    proxyProps(vm);
+  }
+
+  // 挂载data
   if (options.data) {
     vm.$data =
       typeof options.data === "function"
@@ -33,7 +42,12 @@ export function createVM(
         : needProxy
         ? reactive(options.data)
         : options.data;
+
+    // 将data中的属性代理到vm上
+    proxyData(vm);
   }
+
+  // 挂载components
   if (options.components) {
     Object.keys(options.components).map((key) => {
       vm.$components = {
@@ -45,19 +59,23 @@ export function createVM(
 
   vm.$options = options;
   vm.pubsub = new PubSub();
+
+  // 初始化生命周期
   initLiftcycle(vm, options);
-  Object.keys(vm.$data).forEach((key) => {
-    proxyData(vm, key);
-  });
+
   //将method挂载到vm上
   if (options.methods) {
     Object.keys(options.methods).forEach((key) => {
       proxyMethod(vm, key);
     });
   }
+
+  // 挂载computed
   if (options.computed) {
     initComputed(vm, options.computed);
   }
+
+  // 挂载directives
   if (options.directives) {
     initDrirectives(vm, options.directives);
   }
@@ -67,29 +85,49 @@ export function createVM(
 export function createApp(options: ZvmOptions): App {
   const vm = createVM(options);
   vm.pubsub?.publish("created");
-  console.log(vm);
 
   vm.compile = new Compile(vm.$el!, vm);
+
   const mount = (el: string) => {
     vm.compile!.mount(el);
+  };
+
+  const destroy = () => {
+    vm.compile?.unmounted();
   };
   return {
     vm,
     mount,
     directive: registerDirective,
+    destroy,
   };
 }
 
-function proxyData(context: VM, key: string) {
-  Object.defineProperty(context, key, {
-    configurable: false,
-    enumerable: true,
-    get: () => {
-      return context.$data[key];
-    },
-    set: (newVal) => {
-      context.$data[key] = newVal;
-    },
+function proxyProps(context: VM) {
+  console.log("proxyProps", context.$props);
+  Object.keys(context.$props).forEach((key) => {
+    Object.defineProperty(context, key, {
+      configurable: true,
+      enumerable: true,
+      get: () => {
+        return context.$props[key].default;
+      },
+    });
+  });
+}
+
+function proxyData(context: VM) {
+  Object.keys(context.$data).forEach((key) => {
+    Object.defineProperty(context, key, {
+      configurable: false,
+      enumerable: true,
+      get: () => {
+        return context.$data[key];
+      },
+      set: (newVal) => {
+        context.$data[key] = newVal;
+      },
+    });
   });
 }
 

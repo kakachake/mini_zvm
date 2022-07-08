@@ -1,8 +1,9 @@
 import { createApp } from "../main";
 import { VM } from "../zvm/type";
+import { CompileComp } from "./compileComp";
+import { DIR_FOR_REG, DIR_REG } from "./constant";
 import { directives, triggerDirective } from "./directives";
-const DIR_REG = /^z-/;
-const DIR_FOR_REG = /^z-for/;
+
 export class Compile {
   node: Node;
   vm: VM;
@@ -10,12 +11,18 @@ export class Compile {
   needDeepCompile = true;
   frag: DocumentFragment;
   options: any;
+  mountType: "append" | "replace" | undefined;
+  mountNode: Node | Element | undefined;
+  parentNode: Node;
+
   constructor(node: Node, vm: VM, options = { compileRoot: false }) {
-    this.node = node;
     this.vm = vm;
     this.options = options;
-    this.frag = this.nodeToFragment(this.node);
 
+    this.frag = this.nodeToFragment(node);
+    this.node = this.frag.children[0];
+
+    this.parentNode = this.node.parentNode as Node;
     options.compileRoot && this.compileNode(this.node, this.vm);
     // 解决z-for的节点未编译的问题
     this.compileFrag(this.frag, this.vm);
@@ -23,14 +30,47 @@ export class Compile {
   }
 
   // 挂载节点，如果传入el，则挂载到el，否则挂载到node
-  mount(el?: string) {
-    if (el) {
-      const element = document.querySelector(el);
-      element && element.appendChild(this.frag);
-    } else {
+  mount(el?: string | Node | Element, replace?: boolean): void {
+    if (!el || typeof el === "boolean") {
       this.node.appendChild(this.frag);
+      this.mountNode = this.node;
+      return;
     }
+    if (typeof el === "string") {
+      el = document.querySelector(el) || "";
+    }
+    if (typeof el === "string") return void 0;
+    if (el && replace) {
+      this.parentNode = el.parentNode as Node;
+      this.parentNode?.replaceChild(this.node, el);
+    } else {
+      el && el.appendChild(this.frag);
+    }
+    this.mountNode = el;
+    this.mountType = replace ? "replace" : "append";
     this.vm.pubsub?.publish("mounted");
+    return;
+  }
+
+  unmounted() {
+    console.log(this.mountNode);
+    console.log(this.node);
+
+    if (this.mountType === "append") {
+      this.mountNode?.removeChild(this.node);
+    } else {
+      this.parentNode?.replaceChild(this.mountNode!, this.node);
+    }
+    this.vm.pubsub?.publish("unmounted");
+  }
+
+  removeChilds(node: Node) {
+    while (node.firstChild) {
+      if (node.firstChild.childNodes.length) {
+        this.removeChilds(node.firstChild);
+      }
+      node.removeChild(node.firstChild);
+    }
   }
 
   getFragment() {
@@ -65,12 +105,7 @@ export class Compile {
   // 编译节点
   compileNode(node: Node, vm: VM) {
     if (vm.$components && vm.$components[node.nodeName.toLowerCase()]) {
-      console.log("组件");
-      const parseNode = createApp(vm.$components[node.nodeName.toLowerCase()]);
-      const frag = parseNode.vm.compile!.getFragment();
-
-      node.parentNode?.replaceChild(frag, node);
-      console.log(frag);
+      new CompileComp(node as Element, vm);
       return;
     }
     if (node.nodeType === 1) {
@@ -94,15 +129,15 @@ export class Compile {
 
   // 编译元素节点
   compileElement(node: HTMLElement, vm: VM) {
-    const attr = Array.from(node.attributes);
+    const attrs = Array.from(node.attributes);
 
-    const isZFor = attr.findIndex((attr: Attr) => {
+    const isZFor = attrs.findIndex((attr: Attr) => {
       return DIR_FOR_REG.test(attr.nodeName);
     });
     // 如果是v-for，则不需要继续深度遍历，只需要编译z-for，其他的指令在z-for内部进行编译
     if (!!~isZFor) {
       this.needDeepCompile = false;
-      this.compileDirective(node, vm, attr[isZFor]);
+      this.compileDirective(node, vm, attrs[isZFor]);
       return;
     }
 

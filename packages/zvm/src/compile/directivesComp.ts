@@ -1,5 +1,6 @@
 import { effect, watch } from "../main";
-import { VM } from "../zvm/type";
+import { App, propsType, VM } from "../zvm/type";
+import { CompileComp } from "./compileComp";
 import { render } from "./render";
 import { CustomDirective, CustomDirectiveFn } from "./type";
 import { getValueByPath, runInScope, setValueByPath } from "./util";
@@ -25,16 +26,19 @@ export function parseDirective(directive: string) {
   };
 }
 
-export function triggerDirective(
+export function triggerCompDirective(
   node: Node,
   vm: VM,
   directive: string,
-  expression: string
+  expression: string,
+  apps: Set<App>
 ) {
   const { name, arg } = parseDirective(directive);
   if (!name || !arg) return;
-  if (directives[name]) {
-    directives[name](node, vm, directive, expression);
+  console.log(name, arg);
+
+  if (compDirectives[name]) {
+    compDirectives[name](node, vm, directive, expression, apps);
   } else if (customDirectives[name]) {
     vm.pubsub?.subscribe("mounted", () => {
       watch(
@@ -52,7 +56,7 @@ export function triggerDirective(
   }
 }
 
-export const directives = {
+export const compDirectives = {
   on(node: Element, vm: VM, directive: string, expression: string) {
     // z-on:click -> click
     // 函数调用
@@ -90,7 +94,6 @@ export const directives = {
     const eventType = directive.split(":")[1];
 
     const fn = vm && vm[method];
-
     if (eventType && fn) {
       node.addEventListener(eventType, (e) => {
         if (!!~$eventIdx) {
@@ -170,21 +173,31 @@ export const directives = {
     }
   },
 
-  if(node: HTMLElement, vm: VM, _directive: string, expression: string) {
-    const next = node.nextElementSibling;
+  if(
+    node: HTMLElement,
+    vm: VM,
+    _directive: string,
+    expression: string,
+    compileComp: CompileComp // 编译组件实例
+  ) {
+    // const next = node.nextElementSibling;
 
-    let elseNode: HTMLElement | null = null;
-    if (next && next.getAttribute("z-else") !== undefined) {
-      elseNode = next as HTMLElement;
-    }
-
+    // TODO z-else
+    // let elseNode: HTMLElement | null = null;
+    // if (next && next.getAttribute("z-else") !== undefined) {
+    //   elseNode = next as HTMLElement;
+    // }
+    let app: App;
     const updated = (newvalue: boolean) => {
       if (newvalue) {
-        node.style.display = "block";
-        elseNode && (elseNode.style.display = "none");
+        app = compileComp.createCompApp();
+
+        compileComp.mounted(app);
+
+        // elseNode && (elseNode.style.display = "none");
       } else {
-        node.style.display = "none";
-        elseNode && (elseNode.style.display = "block");
+        compileComp.unmounted(app);
+        // elseNode && (elseNode.style.display = "block");
       }
     };
     watch(
@@ -220,20 +233,54 @@ export const directives = {
     }
   },
 
-  bind(node: Node, vm: VM, directive: string, expression: string) {
+  bind(
+    node: Node,
+    vm: VM,
+    directive: string,
+    expression: string,
+    {
+      props,
+      attrs,
+    }: {
+      props: propsType;
+      attrs: object;
+    }
+  ) {
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
-    console.log(dir);
+    if (props.hasOwnProperty(dir)) {
+      const value = runInScope(vm, "scope", expression);
 
-    let renderFn = render[dir + "Render"];
-    if (!renderFn) {
-      renderFn = render.attrRender(dir);
-    }
-    if (renderFn) {
-      effect(() => {
-        renderFn(node, runInScope(vm, "scope", expression));
+      if (Object(value) instanceof props[dir].type) {
+        Object.defineProperty(props[dir], "default", {
+          enumerable: true,
+          configurable: true,
+          get() {
+            return runInScope(vm, "scope", expression);
+          },
+        });
+      } else {
+        console.warn(`${dir} is not a ${props[dir].type.name}`);
+      }
+    } else {
+      Object.defineProperty(attrs, dir, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          return runInScope(vm, "scope", expression);
+        },
       });
     }
+
+    // let renderFn = render[dir + "Render"];
+    // if (!renderFn) {
+    //   renderFn = render.attrRender(dir);
+    // }
+    // if (renderFn) {
+    //   effect(() => {
+    //     renderFn(node, runInScope(vm, "scope", expression));
+    //   });
+    // }
   },
 };
