@@ -4,7 +4,7 @@
 
 ## 使用构建工具
 
-构建工具让我们能使用 Zvm 单文件组件 (SFC)。
+构建工具让我们能使用 zvm 单文件组件 (SFC)。
 
 ```cmd
 > npx zvm-cli create <your-project-name>
