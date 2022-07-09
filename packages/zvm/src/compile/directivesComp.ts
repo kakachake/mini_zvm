@@ -35,74 +35,47 @@ export function triggerCompDirective(
 ) {
   const { name, arg } = parseDirective(directive);
   if (!name || !arg) return;
-  console.log(name, arg);
+  console.log("triggerCompDirective", name, arg);
 
   if (compDirectives[name]) {
     compDirectives[name](node, vm, directive, expression, apps);
-  } else if (customDirectives[name]) {
-    vm.pubsub?.subscribe("mounted", () => {
-      watch(
-        () => {
-          return runInScope(vm, "scope", expression);
-        },
-        (newVal: any) => {
-          customDirectives[name](node, { arg, value: newVal });
-        },
-        {
-          immediate: true,
-        }
-      );
-    });
   }
 }
 
 export const compDirectives = {
-  on(node: Element, vm: VM, directive: string, expression: string) {
+  on(
+    node: Element,
+    vm: VM,
+    directive: string,
+    expression: string,
+    apps: Set<App>
+  ) {
     // z-on:click -> click
     // 函数调用
+    console.log("on", directive, expression);
 
-    const methodReg = /^(\w+)([(]((,?[$'\w']+)+)[)])?/;
+    const methodReg = /^(\w+)?/;
     expression = expression.replace(/\s/g, "");
     const matchMethod = expression.match(methodReg);
+    console.log("matchMethod", matchMethod);
 
     if (!matchMethod) return;
 
     const method = matchMethod[1];
-    const methodArgs: any[] = [];
 
-    const singleReg = /^'(.*)'$/;
-    const $eventReg = /(\$event)$/;
-    // 如果能查到$event就把位置记下来
-    let $eventIdx = -1;
-    if (matchMethod && matchMethod[3]) {
-      // 去除括号
-
-      const args = matchMethod[3].split(",");
-      args.forEach((arg) => {
-        // 匹配到单引号就是普通的字符串
-        if (singleReg.test(arg)) {
-          // 去除单引号
-          methodArgs.push(arg.replace(singleReg, "$1"));
-        } else if ($eventReg.test(arg)) {
-          methodArgs.push(arg);
-          $eventIdx = methodArgs.length - 1;
-        } else {
-          methodArgs.push(getValueByPath(vm.$data, arg));
-        }
-      });
-    }
     const eventType = directive.split(":")[1];
 
     const fn = vm && vm[method];
     if (eventType && fn) {
-      node.addEventListener(eventType, (e) => {
-        if (!!~$eventIdx) {
-          methodArgs.splice($eventIdx, 1, e);
-        }
-        if (!methodArgs.length) {
-          methodArgs.push(e);
-        }
-        return fn.call(vm, ...methodArgs);
+      const eventHandler = (...args: any[]) => {
+        fn.apply(vm, args);
+      };
+      const undsubscribe = vm.pubsub?.subscribe(eventType, eventHandler);
+      apps.forEach((app) => {
+        app.vm.$emit = (eventType, ...args) => {
+          vm.pubsub?.publish(eventType, ...args);
+        };
+        app.vm._unsubscribes.add(undsubscribe!);
       });
     }
   },

@@ -4,6 +4,7 @@ import { DIR_BIND_REG, DIR_FOR_REG, DIR_IF_REG, DIR_REG } from "./constant";
 
 import { compDirectives, triggerCompDirective } from "./directivesComp";
 
+// 编译模板中的组件
 export class CompileComp {
   componentName: string;
   node: Node;
@@ -26,7 +27,6 @@ export class CompileComp {
     this.initAttrs();
 
     this.initApp();
-    // this.compileDirectives();
   }
 
   createCompApp() {
@@ -38,6 +38,7 @@ export class CompileComp {
   }
 
   mounted(app: App) {
+    this.compileDirectives();
     app.vm.compile?.mount(this.node, true);
   }
 
@@ -47,24 +48,18 @@ export class CompileComp {
     this.node.parentNode?.replaceChild(this.comment!, this.node);
   }
 
-  combineProps(props: object, componentProps: propsType) {
-    Object.keys(componentProps).forEach((key) => {
-      if (!props[key]) {
-        props[key] = componentProps[key];
-      }
-    });
-  }
-
   // 初始化组件,这里需要对组件上的z-if和z-for进行预处理
   initApp() {
     const componentProps = this.component!.props;
     const attrs = this.component!.attrs;
     this.attrs.forEach((value, key) => {
+      // 在组件渲染前先对z-bind进行处理
       if (DIR_BIND_REG.test(key)) {
         compDirectives.bind(this.node, this.parentVm, key, value, {
           props: componentProps || {},
           attrs: attrs || {},
         });
+        this.attrs.delete(key);
       }
     });
 
@@ -84,8 +79,10 @@ export class CompileComp {
     }
   }
 
+  // 将组件上属性都存储到attrs中，方便后续使用
   initAttrs() {
     Array.from((this.node as Element).attributes).forEach((attr: Attr) => {
+      // attr.nodeName不区分大小写
       const directive = attr.nodeName;
       const expression = attr.nodeValue || "";
       this.attrs.set(directive, expression);
@@ -97,7 +94,6 @@ export class CompileComp {
       if (DIR_REG.test(key)) {
         const directive = key;
         const expression = value;
-
         triggerCompDirective(
           this.node,
           this.parentVm,

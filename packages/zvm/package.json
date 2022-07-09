@@ -41,6 +41,7 @@
     }
   },
   "dependencies": {
+    "@types/node": "^18.0.3",
     "webpack-dev-server": "^4.9.2"
   },
   "unpkg": "dist/umd/main.js",

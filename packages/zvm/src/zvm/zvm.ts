@@ -59,6 +59,7 @@ export function createVM(
 
   vm.$options = options;
   vm.pubsub = new PubSub();
+  vm._unsubscribes = new Set();
 
   // 初始化生命周期
   initLiftcycle(vm, options);
@@ -94,6 +95,9 @@ export function createApp(options: ZvmOptions): App {
 
   const destroy = () => {
     vm.compile?.unmounted();
+    vm._unsubscribes.forEach((fn) => {
+      fn();
+    });
   };
   return {
     vm,
@@ -104,7 +108,6 @@ export function createApp(options: ZvmOptions): App {
 }
 
 function proxyProps(context: VM) {
-  console.log("proxyProps", context.$props);
   Object.keys(context.$props).forEach((key) => {
     Object.defineProperty(context, key, {
       configurable: true,

@@ -42,9 +42,12 @@ export interface VM {
   };
   $props: propsType;
   $attrs: object;
+  $emit: (name: string, ...args: any[]) => void;
   mount?: (el: string) => void;
   pubsub?: PubSub;
   compile?: Compile;
+  // 存储自定义事件的取消订阅函数
+  _unsubscribes: Set<() => void>;
 }
 
 export interface App {

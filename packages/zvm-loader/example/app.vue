@@ -3,7 +3,7 @@
     {{ count }}
     <button z-on:click="add">click</button>
     <button z-on:click="handleClick">show</button>
-    <Sfc z-if="show" z-bind:baz="count"></Sfc>
+    <Sfc z-if="show" z-on:sfcClick="add" z-bind:baz="count"></Sfc>
 
     <!--  -->
   </div>
@@ -22,8 +22,8 @@ export default {
     };
   },
   methods: {
-    add() {
-      this.count++;
+    add(count) {
+      count >= 0 ? (this.count += count) : this.count++;
     },
     handleClick() {
       this.show = !this.show;
