@@ -2,38 +2,20 @@
 
 本文会帮助你快速开始使用 mini-zvm
 
-## 使用 npm 安装
+## 使用构建工具
+
+构建工具让我们能使用 Zvm 单文件组件 (SFC)。
 
 ```cmd
-npm install mini-zvm
+> npx zvm-cli create <your-project-name>
 ```
 
-在项目中引入
+这一指令将会执行 zvm 项目脚手架工具。在项目被创建后，通过以下步骤安装依赖并启动开发服务器：
 
-```javascript
-import { createApp } from "mini-zvm";
-
-const app = createApp({
-  template: "#app",
-  data() {
-    return {
-      count: 1,
-    };
-  },
-  methods: {
-    handleClick() {
-      this.count++;
-    },
-  },
-});
-
-app.mount("#app");
-```
-
-```html
-<div id="app">
-  <button z-on:click="handleClick">Count is: {{ count }}</button>
-</div>
+```cmd
+> cd <your-project-name>
+> npm install
+> npm run dev
 ```
 
 ## 使用 cdn 加载
