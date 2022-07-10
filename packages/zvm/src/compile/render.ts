@@ -105,13 +105,6 @@ export const render = {
           vm
         );
 
-        // debugger;
-        // alert(1);
-
-        // Object.setPrototypeOf(childVm, vm);
-
-        // console.log(childVm);
-
         new Compile(cloneNode, childVm, {
           compileRoot: true,
         }).mount();

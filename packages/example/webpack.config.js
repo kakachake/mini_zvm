@@ -2,15 +2,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const requireContext = require("require-context");
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const files = requireContext(
-  path.join(__dirname, "./template"),
-  false,
-  /\.html$/
-);
+const { webpack } = require("webpack");
+const files = requireContext(path.join(__dirname, "./src"), false, /\.js$/);
 const entries = {};
 const plugins = [];
 files.keys().forEach((key) => {
-  key = key.replace(".html", "");
+  console.log(key);
+  key = key.replace(".js", "");
   entries[key] = `./src/${key}.js`;
   plugins.push(
     new HtmlWebpackPlugin({
@@ -29,12 +27,7 @@ module.exports = {
     path: __dirname + "/output",
   },
   module: {
-    rules: [
-      {
-        test: /\.vue$/i,
-        use: ["zvm-loader"],
-      },
-    ],
+    rules: [],
   },
   plugins: [
     // see https://github.com/ampedandwired/html-webpack-plugin
@@ -47,7 +40,6 @@ module.exports = {
     new CleanWebpackPlugin(),
   ],
   devServer: {
-    hot: true,
-    port: 8080,
+    port: 8090,
   },
 };

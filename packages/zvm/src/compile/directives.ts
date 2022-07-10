@@ -32,7 +32,8 @@ export function triggerDirective(
   expression: string
 ) {
   const { name, arg } = parseDirective(directive);
-  if (!name || !arg) return;
+
+  if (!name) return;
   if (directives[name]) {
     directives[name](node, vm, directive, expression);
   } else if (customDirectives[name]) {
@@ -200,10 +201,10 @@ export const directives = {
 
   for(node: HTMLElement, vm: VM, _directive: string, expression: string) {
     //去除空格
+    console.log("for");
     expression = expression.replace(/\s/g, "");
     const REF_LIST_FOR = /([(](\w+(,\w+)?)[)]|(\w+))in(\w+)/;
     const forMatch = expression.match(REF_LIST_FOR);
-
     if (forMatch) {
       const [, , values, , , list] = forMatch;
       let value = forMatch[1];

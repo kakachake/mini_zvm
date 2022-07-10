@@ -222,8 +222,11 @@ export const compDirectives = {
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
+    console.log(props);
+
     if (props.hasOwnProperty(dir)) {
       const value = runInScope(vm, "scope", expression);
+      console.log(value);
 
       if (Object(value) instanceof props[dir].type) {
         Object.defineProperty(props[dir], "default", {

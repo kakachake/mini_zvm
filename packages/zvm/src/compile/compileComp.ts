@@ -21,6 +21,7 @@ export class CompileComp {
     this.componentName = node.nodeName.toLowerCase();
     // this.compileNode(node, vm);
     this.component = this.parentVm.$components?.[this.componentName];
+
     if (!this.component) {
       throw new Error(`component ${this.componentName} not found`);
     }
@@ -31,6 +32,8 @@ export class CompileComp {
 
   createCompApp() {
     const app = createApp(this.component!);
+    // 预编译组件
+    app.vm._runCompile();
     this.apps.add(app);
     // return app;
 
@@ -43,6 +46,7 @@ export class CompileComp {
   }
 
   unmounted(app: App) {
+    if (!app) return;
     app.destroy && app.destroy();
     this.apps.delete(app);
     this.node.parentNode?.replaceChild(this.comment!, this.node);
@@ -76,6 +80,10 @@ export class CompileComp {
         this
       );
       this.attrs.delete("z-if");
+    } else {
+      // 没有if，直接创建并挂载
+      const app = this.createCompApp();
+      this.mounted(app);
     }
   }
 

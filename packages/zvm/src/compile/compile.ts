@@ -20,8 +20,13 @@ export class Compile {
     this.options = options;
 
     this.frag = this.nodeToFragment(node);
+    // 需要挂载的结点
+    this.mountNode = node;
+
+    // 编译节点的顶层节点
     this.node = this.frag.children[0];
 
+    // 顶层编译节点的父节点
     this.parentNode = this.node.parentNode as Node;
     options.compileRoot && this.compileNode(this.node, this.vm);
     // 解决z-for的节点未编译的问题
@@ -32,7 +37,7 @@ export class Compile {
   // 挂载节点，如果传入el，则挂载到el，否则挂载到node
   mount(el?: string | Node | Element, replace?: boolean): void {
     if (!el || typeof el === "boolean") {
-      this.node.appendChild(this.frag);
+      this.mountNode!.appendChild(this.frag);
       this.mountNode = this.node;
       return;
     }
@@ -152,6 +157,7 @@ export class Compile {
     const expression = attr.nodeValue || "";
     if (DIR_REG.test(directive)) {
       // 寻找该指令
+      console.log(directive);
 
       triggerDirective(node, vm, directive, expression);
 

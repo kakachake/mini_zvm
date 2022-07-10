@@ -87,9 +87,12 @@ export function createApp(options: ZvmOptions): App {
   const vm = createVM(options);
   vm.pubsub?.publish("created");
 
-  vm.compile = new Compile(vm.$el!, vm);
+  vm._runCompile = (options) => {
+    vm.compile = new Compile(vm.$el!, vm, options);
+  };
 
   const mount = (el: string) => {
+    vm._runCompile();
     vm.compile!.mount(el);
   };
 
@@ -99,11 +102,15 @@ export function createApp(options: ZvmOptions): App {
       fn();
     });
   };
+
+  const registerComponent = createRegisterComponentFactory(vm);
+
   return {
     vm,
     mount,
     directive: registerDirective,
     destroy,
+    component: registerComponent,
   };
 }
 
@@ -178,4 +185,13 @@ function createElementByString(str: string): Element {
   const div = document.createElement("div");
   div.innerHTML = str;
   return div as Element;
+}
+
+function createRegisterComponentFactory(vm: VM) {
+  return (name: string, component: any) => {
+    vm.$components = {
+      ...vm.$components,
+      [name.toLowerCase()]: component,
+    };
+  };
 }

@@ -11,6 +11,7 @@
 
 <script>
 import Sfc from "./sfc.vue";
+
 export default {
   components: {
     Sfc,

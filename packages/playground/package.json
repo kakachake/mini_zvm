@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mini-zvm": "workspace:^0.0.5",
+    "mini-zvm": "workspace:.",
     "monaco-editor": "0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1"
   },

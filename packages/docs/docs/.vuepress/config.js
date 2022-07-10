@@ -57,6 +57,7 @@ module.exports = {
           ["/guide/instance", "应用实例"],
           ["/guide/template", "模板语法"],
           ["/guide/directives", "各个指令介绍"],
+          ["/guide/component-basics", "组件基础"],
         ],
         collapsable: false,
       },

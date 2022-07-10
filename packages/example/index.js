@@ -12,7 +12,7 @@ const nameDict = {
 };
 
 const files = require.context("./src", false, /\.js$/);
-console.log(files);
+
 const keyReg = /^\.\/(.*).js/;
 files.keys().forEach((key) => {
   key = keyReg.exec(key)[1];

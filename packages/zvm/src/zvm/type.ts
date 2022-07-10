@@ -48,6 +48,7 @@ export interface VM {
   compile?: Compile;
   // 存储自定义事件的取消订阅函数
   _unsubscribes: Set<() => void>;
+  _runCompile: (...args: any[]) => void;
 }
 
 export interface App {
@@ -55,4 +56,5 @@ export interface App {
   mount: (el: string) => void;
   directive: (name: string, fn: CustomDirectiveFn) => void;
   destroy?: () => void;
+  component: (name: string, options: ZvmOptions) => void;
 }
