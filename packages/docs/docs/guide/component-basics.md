@@ -90,3 +90,48 @@ app.component("button-counter", {
 ```
 
 当一个值被传递给一个 prop attribute 时，它就成为该组件实例中的一个 property。该 property 的值可以在模板中访问，就像任何其他组件 property 一样。
+
+## 监听子组件事件
+
+在开发子组件时，我们可能需要与父组件进行沟通，比如，当子组件发出一个事件时，父组件可以做出响应：
+
+子组件：
+
+```javascript
+app.component("button-counter", {
+  // ...
+  methods: {
+    add() {
+      this.count++;
+      // 发送一个事件给父组件，功能是让父组件的count++,这里可以传递参数
+      this.$emit("addCount", ...args);
+    },
+  },
+  // ...
+});
+```
+
+父组件：
+
+```html
+<div id="app">
+  <!-- 通过z-on绑定事件 -->
+  <button-counter z-on:addCount="add" z-bind:propcount="count"></button-counter>
+</div>
+```
+
+```javascript
+  methods: {
+    // ...
+    data() {
+      return {
+        count: 0,
+      };
+    },
+    // 子组件可以触发到这个函数,args可以接收子组件传递回来的参数
+    add(...args) {
+      this.count++;
+    },
+    // ...
+  },
+```

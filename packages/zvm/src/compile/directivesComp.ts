@@ -35,7 +35,6 @@ export function triggerCompDirective(
 ) {
   const { name, arg } = parseDirective(directive);
   if (!name || !arg) return;
-  console.log("triggerCompDirective", name, arg);
 
   if (compDirectives[name]) {
     compDirectives[name](node, vm, directive, expression, apps);
@@ -52,12 +51,10 @@ export const compDirectives = {
   ) {
     // z-on:click -> click
     // 函数调用
-    console.log("on", directive, expression);
 
     const methodReg = /^(\w+)?/;
     expression = expression.replace(/\s/g, "");
     const matchMethod = expression.match(methodReg);
-    console.log("matchMethod", matchMethod);
 
     if (!matchMethod) return;
 
@@ -67,13 +64,10 @@ export const compDirectives = {
 
     const fn = vm && vm[method];
     if (eventType && fn) {
-      const eventHandler = (...args: any[]) => {
-        fn.apply(vm, args);
-      };
-      const undsubscribe = vm.pubsub?.subscribe(eventType, eventHandler);
       apps.forEach((app) => {
+        const undsubscribe = vm.pubsub?.subscribe(eventType + app.vm.id, fn);
         app.vm.$emit = (eventType, ...args) => {
-          vm.pubsub?.publish(eventType, ...args);
+          vm.pubsub?.publish(eventType.toLowerCase() + app.vm.id, ...args);
         };
         app.vm._unsubscribes.add(undsubscribe!);
       });
@@ -222,11 +216,9 @@ export const compDirectives = {
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
-    console.log(props);
 
     if (props.hasOwnProperty(dir)) {
       const value = runInScope(vm, "scope", expression);
-      console.log(value);
 
       if (Object(value) instanceof props[dir].type) {
         Object.defineProperty(props[dir], "default", {

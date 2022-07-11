@@ -43,6 +43,7 @@ export interface VM {
   $props: propsType;
   $attrs: object;
   $emit: (name: string, ...args: any[]) => void;
+  id: string;
   mount?: (el: string) => void;
   pubsub?: PubSub;
   compile?: Compile;

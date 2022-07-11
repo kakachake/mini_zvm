@@ -4,6 +4,7 @@ import { reactive } from "../reactivity/reactive";
 import { App, VM, ZvmOptions } from "./type";
 import { computed } from "../main";
 import { registerDirective } from "../compile/directives";
+import { getRandomId } from "../utils";
 
 // 初始化vm
 export function createVM(
@@ -12,6 +13,7 @@ export function createVM(
   needProxy = true
 ): VM {
   const vm: VM = Object.create(parentVM);
+  vm.id = getRandomId();
   if (options.template || options.render) {
     if (options.template) {
       vm.$el =
@@ -59,6 +61,8 @@ export function createVM(
 
   vm.$options = options;
   vm.pubsub = new PubSub();
+  console.log(vm.pubsub);
+
   vm._unsubscribes = new Set();
 
   // 初始化生命周期
@@ -163,7 +167,7 @@ function proxyMethod(context: VM, key: string) {
     configurable: false,
     enumerable: true,
     get: () => {
-      return context.$options?.methods?.[key];
+      return context.$options?.methods?.[key].bind(context);
     },
   });
 }

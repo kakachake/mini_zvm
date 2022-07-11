@@ -9,7 +9,9 @@ export class PubSub {
     if (!this.subscribers[topic]) {
       this.subscribers[topic] = new Set();
     }
+
     this.subscribers[topic].add(callback);
+
     return () => {
       this.undsubscribe(topic, callback);
     };

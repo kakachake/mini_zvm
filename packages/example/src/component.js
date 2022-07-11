@@ -1,6 +1,17 @@
 import { createApp } from "mini-zvm";
 const app = createApp({
   template: "#app",
+  data() {
+    return {
+      count: 0,
+    };
+  },
+  methods: {
+    add() {
+      this.count++;
+      console.log(this.count);
+    },
+  },
 });
 
 // 定义一个名为 button-counter 的新全局组件
@@ -23,13 +34,18 @@ app.component("button-counter", {
   methods: {
     add() {
       this.count++;
+      this.$emit("addCount");
     },
   },
   render(h) {
     return h(`
-    <button z-on:click="add" >
-      You clicked me {{ count }} times.
-    </button>`);
+    <div>
+      <button z-on:click="add" >
+        You clicked me {{ count }} times.
+      </button>
+      {{propcount}}
+    </div>
+    `);
   },
 });
 
