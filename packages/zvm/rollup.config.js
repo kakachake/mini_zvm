@@ -20,18 +20,15 @@ export default {
   output: [
     {
       format: "es",
-      sourcemap: "inline",
       dir: "dist/es",
     },
     {
       format: "iife",
-      sourcemap: "inline",
       dir: "dist/iife",
       name: "ZVM",
     },
     {
       format: "umd",
-      sourcemap: "inline",
       dir: "dist/umd",
       name: "ZVM",
     },

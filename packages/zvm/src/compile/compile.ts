@@ -28,17 +28,23 @@ export class Compile {
 
     // 顶层编译节点的父节点
     this.parentNode = this.node.parentNode as Node;
+
     options.compileRoot && this.compileNode(this.node, this.vm);
     // 解决z-for的节点未编译的问题
     this.compileFrag(this.frag, this.vm);
+
     // this.node.appendChild(this.frag);
   }
 
   // 挂载节点，如果传入el，则挂载到el，否则挂载到node
-  mount(el?: string | Node | Element, replace?: boolean): void {
+  mount(
+    el?: string | Node | Element | DocumentFragment,
+    replace?: boolean
+  ): void {
     if (!el || typeof el === "boolean") {
       this.mountNode!.appendChild(this.frag);
       this.mountNode = this.node;
+      this.vm.pubsub?.publish("mounted");
       return;
     }
     if (typeof el === "string") {
@@ -58,9 +64,6 @@ export class Compile {
   }
 
   unmounted() {
-    console.log(this.mountNode);
-    console.log(this.node);
-
     if (this.mountType === "append") {
       this.mountNode?.removeChild(this.node);
     } else {
@@ -109,6 +112,7 @@ export class Compile {
 
   // 编译节点
   compileNode(node: Node, vm: VM) {
+    // 如果是组件，则进入组件编译
     if (vm.$components && vm.$components[node.nodeName.toLowerCase()]) {
       new CompileComp(node as Element, vm);
       return;
@@ -157,7 +161,6 @@ export class Compile {
     const expression = attr.nodeValue || "";
     if (DIR_REG.test(directive)) {
       // 寻找该指令
-      console.log(directive);
 
       triggerDirective(node, vm, directive, expression);
 

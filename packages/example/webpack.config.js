@@ -41,5 +41,13 @@ module.exports = {
   ],
   devServer: {
     port: 8090,
+    proxy: {
+      "/api": {
+        target: "http://101.43.155.53:9001",
+        pathRewrite: {
+          "^/api": "",
+        },
+      },
+    },
   },
 };

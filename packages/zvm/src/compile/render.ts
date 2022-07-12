@@ -80,7 +80,7 @@ export const render = {
         const cloneNode = _cloneNode.cloneNode(true);
 
         // node.appendChild(frag);
-        // TODO
+
         (cloneNode as Element).removeAttribute("z-for");
 
         if (lastNode) {

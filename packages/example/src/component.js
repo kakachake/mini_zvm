@@ -4,6 +4,17 @@ const app = createApp({
   data() {
     return {
       count: 0,
+      items: [
+        {
+          msg: "111",
+        },
+        {
+          msg: "222",
+        },
+        {
+          msg: "333",
+        },
+      ],
     };
   },
   methods: {
@@ -21,6 +32,12 @@ app.component("button-counter", {
       type: Number,
       default: 0,
     },
+    item: {
+      type: Object,
+      default: {
+        msg: 123,
+      },
+    },
   },
   data() {
     return {
@@ -28,7 +45,6 @@ app.component("button-counter", {
     };
   },
   created() {
-    console.log("button-counter created");
     this.count = this.propcount;
   },
   methods: {
@@ -43,6 +59,7 @@ app.component("button-counter", {
       <button z-on:click="add" >
         You clicked me {{ count }} times.
       </button>
+      <div>{{item.msg}}</div>
       {{propcount}}
     </div>
     `);

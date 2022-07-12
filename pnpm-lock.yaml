@@ -115,6 +115,7 @@ importers:
       '@typescript-eslint/parser': ^5.29.0
       commitizen: ^4.2.4
       cross-env: ^7.0.3
+      deepmerge: ^4.2.2
       eslint: ^8.18.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -132,6 +133,7 @@ importers:
       webpack-dev-server: ^4.9.2
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node/18.0.3
+      deepmerge: registry.npmmirror.com/deepmerge/4.2.2
       webpack-dev-server: registry.npmmirror.com/webpack-dev-server/4.9.3
     devDependencies:
       '@rollup/plugin-commonjs': registry.npmmirror.com/@rollup/plugin-commonjs/22.0.1_rollup@2.76.0
@@ -6461,7 +6463,6 @@ packages:
     name: deepmerge
     version: 4.2.2
     engines: {node: '>=0.10.0'}
-    dev: true
 
   registry.npmmirror.com/default-gateway/4.2.0:
     resolution: {integrity: sha512-h6sMrVB1VMWVrW13mSc6ia/DwYYw5MN6+exNu1OaJeFac5aSAvwM7lZ0NVfTABuSkQelr4h5oebg3KB1XPdjgA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/default-gateway/-/default-gateway-4.2.0.tgz}

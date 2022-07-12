@@ -9,18 +9,8 @@
   <body>
     <div id="app">
       <button-counter
-        z-on:addCount="add"
-        z-bind:propcount="count"
-      ></button-counter>
-      <button-counter
-        z-on:addCount="add"
-        z-bind:propcount="count"
-      ></button-counter>
-      <button-counter
-        z-on:addCount="add"
-        z-bind:propcount="count"
-      ></button-counter>
-      <button-counter
+        z-for="item in items"
+        z-bind:item="item"
         z-on:addCount="add"
         z-bind:propcount="count"
       ></button-counter>

@@ -1,9 +1,9 @@
 import { createApp } from "mini-zvm";
-import axios from "axios";
+import request from "./request";
 const app = createApp({
   template: "#app",
   created() {
-    axios.get("http://101.43.155.53:9001/banner?type=2").then((res) => {
+    request.get("/banner?type=2").then((res) => {
       this.imgList = res.data.banners.map((item) => {
         return item.pic;
       });
@@ -25,6 +25,7 @@ const app = createApp({
 
 // 第二种设置方式
 app.directive("lazyImg", (el, binding) => {
+  console.log(111);
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

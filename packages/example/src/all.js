@@ -7,7 +7,7 @@ const app = createApp({
     this.isLoading = true;
     console.log(this.isShow);
     axios
-      .get("http://101.43.155.53:9001/search/hot", {
+      .get("/api/search/hot", {
         headers: {},
         responseType: "json",
       })

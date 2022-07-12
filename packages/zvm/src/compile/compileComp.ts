@@ -1,8 +1,9 @@
-import { createApp } from "../main";
+import { createApp, createVM } from "../main";
 import { App, propsType, VM, ZvmOptions } from "../zvm/type";
 import { DIR_BIND_REG, DIR_FOR_REG, DIR_IF_REG, DIR_REG } from "./constant";
 
 import { compDirectives, triggerCompDirective } from "./directivesComp";
+import deepMerge from "deepmerge";
 
 // 编译模板中的组件
 export class CompileComp {
@@ -14,15 +15,16 @@ export class CompileComp {
   apps: Set<App> = new Set();
   attrs: Map<any, string> = new Map();
   props: object = {};
-  component: ZvmOptions | undefined;
+  componentOptions: ZvmOptions | undefined;
   constructor(node: Element, parentVm: VM) {
     this.node = node;
     this.parentVm = parentVm;
     this.componentName = node.nodeName.toLowerCase();
     // this.compileNode(node, vm);
-    this.component = this.parentVm.$components?.[this.componentName];
+    // 获取组件options
+    this.componentOptions = this.parentVm.$components?.[this.componentName];
 
-    if (!this.component) {
+    if (!this.componentOptions) {
       throw new Error(`component ${this.componentName} not found`);
     }
     this.initAttrs();
@@ -30,19 +32,50 @@ export class CompileComp {
     this.initApp();
   }
 
-  createCompApp() {
-    const app = createApp(this.component!);
+  createCompApp(): App {
+    const app = createApp(this.componentOptions!);
     // 预编译组件
-    app.vm._runCompile();
+
     this.apps.add(app);
     // return app;
 
     return app;
   }
 
-  mounted(app: App) {
-    this.compileDirectives();
-    app.vm.compile?.mount(this.node, true);
+  createCompApps(value: string, index?: string) {
+    const fragment = document.createDocumentFragment();
+    return (list: any[]) => {
+      list.forEach((item, i) => {
+        console.log(i);
+        const app = this.createCompApp();
+        const newVm = createVM(
+          {
+            template: this.comment as Element,
+            data: index
+              ? {
+                  [value]: list[i],
+                  [index]: i,
+                }
+              : {
+                  [value]: list[i],
+                },
+          },
+          this.parentVm
+        );
+
+        this.mount(app, fragment, false, newVm);
+      });
+
+      this.node.parentNode?.replaceChild(fragment, this.node!);
+    };
+  }
+
+  mount(app: App, node?: Node, replace = true, newVm?: VM) {
+    console.log("mount", newVm);
+
+    this.compileDirectives(app, newVm || this.parentVm);
+    app.vm._runCompile();
+    app.vm.compile?.mount(node || this.node, replace);
   }
 
   unmounted(app: App) {
@@ -54,19 +87,6 @@ export class CompileComp {
 
   // 初始化组件,这里需要对组件上的z-if和z-for进行预处理
   initApp() {
-    const componentProps = this.component!.props;
-    const attrs = this.component!.attrs;
-    this.attrs.forEach((value, key) => {
-      // 在组件渲染前先对z-bind进行处理
-      if (DIR_BIND_REG.test(key)) {
-        compDirectives.bind(this.node, this.parentVm, key, value, {
-          props: componentProps || {},
-          attrs: attrs || {},
-        });
-        this.attrs.delete(key);
-      }
-    });
-
     if (this.attrs.get("z-if")) {
       // 创建注释结点, 用来显示隐藏的时候做替换
       this.comment = document.createComment("z-if");
@@ -80,10 +100,24 @@ export class CompileComp {
         this
       );
       this.attrs.delete("z-if");
+    } else if (this.attrs.get("z-for")) {
+      // for循环的情况
+      // 创建注释结点, 用来做替换
+      this.comment = document.createComment("z-for");
+      this.node.parentNode?.replaceChild(this.comment, this.node);
+      this.node = this.comment;
+      compDirectives["for"](
+        this.node as HTMLElement,
+        this.parentVm,
+        "for",
+        this.attrs.get("z-for") || "",
+        this
+      );
+      this.attrs.delete("z-for");
     } else {
       // 没有if，直接创建并挂载
       const app = this.createCompApp();
-      this.mounted(app);
+      this.mount(app);
     }
   }
 
@@ -97,9 +131,17 @@ export class CompileComp {
     });
   }
 
-  compileDirectives() {
+  compileDirectives(app: App, vm: VM) {
+    const componentProps = this.componentOptions!.props;
+    const attrs = this.componentOptions!.attrs;
     this.attrs.forEach((value, key) => {
-      if (DIR_REG.test(key)) {
+      if (DIR_BIND_REG.test(key)) {
+        compDirectives.bind(this.node, vm, key, value, {
+          props: componentProps || {},
+          attrs: attrs || {},
+        });
+        // this.attrs.delete(key);
+      } else if (DIR_REG.test(key)) {
         const directive = key;
         const expression = value;
         triggerCompDirective(
@@ -107,14 +149,12 @@ export class CompileComp {
           this.parentVm,
           directive,
           expression,
-          this.apps
+          app
         );
         // (this.node as Element).removeAttribute(directive);
       } else {
         // attrs
-        this.apps.forEach((app) => {
-          app.vm.$attrs[key] = value;
-        });
+        app.vm.$attrs[key] = value;
       }
     });
   }

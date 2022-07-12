@@ -61,7 +61,6 @@ export function createVM(
 
   vm.$options = options;
   vm.pubsub = new PubSub();
-  console.log(vm.pubsub);
 
   vm._unsubscribes = new Set();
 

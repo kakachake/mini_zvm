@@ -31,24 +31,18 @@ export function triggerCompDirective(
   vm: VM,
   directive: string,
   expression: string,
-  apps: Set<App>
+  app: App
 ) {
   const { name, arg } = parseDirective(directive);
   if (!name || !arg) return;
 
   if (compDirectives[name]) {
-    compDirectives[name](node, vm, directive, expression, apps);
+    compDirectives[name](node, vm, directive, expression, app);
   }
 }
 
 export const compDirectives = {
-  on(
-    node: Element,
-    vm: VM,
-    directive: string,
-    expression: string,
-    apps: Set<App>
-  ) {
+  on(node: Element, vm: VM, directive: string, expression: string, app: App) {
     // z-on:click -> click
     // 函数调用
 
@@ -64,13 +58,11 @@ export const compDirectives = {
 
     const fn = vm && vm[method];
     if (eventType && fn) {
-      apps.forEach((app) => {
-        const undsubscribe = vm.pubsub?.subscribe(eventType + app.vm.id, fn);
-        app.vm.$emit = (eventType, ...args) => {
-          vm.pubsub?.publish(eventType.toLowerCase() + app.vm.id, ...args);
-        };
-        app.vm._unsubscribes.add(undsubscribe!);
-      });
+      const undsubscribe = vm.pubsub?.subscribe(eventType + app.vm.id, fn);
+      app.vm.$emit = (eventType, ...args) => {
+        vm.pubsub?.publish(eventType.toLowerCase() + app.vm.id, ...args);
+      };
+      app.vm._unsubscribes.add(undsubscribe!);
     }
   },
 
@@ -147,24 +139,14 @@ export const compDirectives = {
     expression: string,
     compileComp: CompileComp // 编译组件实例
   ) {
-    // const next = node.nextElementSibling;
-
-    // TODO z-else
-    // let elseNode: HTMLElement | null = null;
-    // if (next && next.getAttribute("z-else") !== undefined) {
-    //   elseNode = next as HTMLElement;
-    // }
     let app: App;
     const updated = (newvalue: boolean) => {
       if (newvalue) {
         app = compileComp.createCompApp();
 
-        compileComp.mounted(app);
-
-        // elseNode && (elseNode.style.display = "none");
+        compileComp.mount(app);
       } else {
         compileComp.unmounted(app);
-        // elseNode && (elseNode.style.display = "block");
       }
     };
     watch(
@@ -178,7 +160,13 @@ export const compDirectives = {
     );
   },
 
-  for(node: HTMLElement, vm: VM, _directive: string, expression: string) {
+  for(
+    node: HTMLElement,
+    vm: VM,
+    _directive: string,
+    expression: string,
+    compileComp: CompileComp // 编译组件实例
+  ) {
     //去除空格
     expression = expression.replace(/\s/g, "");
     const REF_LIST_FOR = /([(](\w+(,\w+)?)[)]|(\w+))in(\w+)/;
@@ -192,10 +180,9 @@ export const compDirectives = {
         // 去左右括号
         [value, index] = values.split(",");
       }
-
-      const renderFor = render.forRender(node);
+      const render = compileComp.createCompApps(value, index);
       effect(() => {
-        renderFor(value, index, runInScope(vm, "scope", list), vm);
+        render(runInScope(vm, "scope", list));
       });
     }
   },
@@ -213,9 +200,12 @@ export const compDirectives = {
       attrs: object;
     }
   ) {
+    console.log("bind", vm);
+
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
+    console.log(dir);
 
     if (props.hasOwnProperty(dir)) {
       const value = runInScope(vm, "scope", expression);
@@ -240,15 +230,5 @@ export const compDirectives = {
         },
       });
     }
-
-    // let renderFn = render[dir + "Render"];
-    // if (!renderFn) {
-    //   renderFn = render.attrRender(dir);
-    // }
-    // if (renderFn) {
-    //   effect(() => {
-    //     renderFn(node, runInScope(vm, "scope", expression));
-    //   });
-    // }
   },
 };

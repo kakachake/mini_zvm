@@ -201,7 +201,7 @@ export const directives = {
 
   for(node: HTMLElement, vm: VM, _directive: string, expression: string) {
     //去除空格
-    console.log("for");
+
     expression = expression.replace(/\s/g, "");
     const REF_LIST_FOR = /([(](\w+(,\w+)?)[)]|(\w+))in(\w+)/;
     const forMatch = expression.match(REF_LIST_FOR);
@@ -225,7 +225,6 @@ export const directives = {
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
-    console.log(dir);
 
     let renderFn = render[dir + "Render"];
     if (!renderFn) {
