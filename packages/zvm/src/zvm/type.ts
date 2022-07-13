@@ -11,6 +11,7 @@ export interface propsType {
       | typeof Object
       | typeof Array;
     default?: any;
+    value?: any;
   };
 }
 

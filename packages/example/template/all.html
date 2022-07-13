@@ -66,13 +66,13 @@
         <li
           class="class"
           aria-disabled=""
-          z-on:click="handleDelClick(index)"
           z-for="(item,index) in items"
+          z-on:click="handleDelClick(index)"
         >
           <div>{{item.msg}}</div>
           <div>{{index}}</div>
           <div>{{a}}</div>
-          <!-- <button z-on:click="handleDelClick(index)">删除</button> -->
+          <button z-on:click="handleDelClick(index)">删除</button>
         </li>
       </ul>
       <button z-on:click="handleAddItem">addItem</button>

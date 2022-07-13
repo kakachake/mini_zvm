@@ -29,9 +29,9 @@ export function createVM(
 
   // 初始化props
   if (options.props) {
-    vm.$props = options.props;
+    vm.$props = {};
     // 将props代理到vm上
-    proxyProps(vm);
+    proxyProps(vm, options.props);
   }
 
   // 挂载data
@@ -117,15 +117,17 @@ export function createApp(options: ZvmOptions): App {
   };
 }
 
-function proxyProps(context: VM) {
-  Object.keys(context.$props).forEach((key) => {
-    Object.defineProperty(context, key, {
-      configurable: true,
-      enumerable: true,
-      get: () => {
-        return context.$props[key].default;
-      },
-    });
+function proxyProps(context: VM, props: ZvmOptions["props"]) {
+  Object.keys(props!).forEach((key) => {
+    if (props!.hasOwnProperty(key)) {
+      Object.defineProperty(context, key, {
+        configurable: true,
+        enumerable: true,
+        get: () => {
+          return context.$props[key] || props![key].default;
+        },
+      });
+    }
   });
 }
 

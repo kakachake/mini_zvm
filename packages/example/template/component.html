@@ -14,6 +14,12 @@
         z-on:addCount="add"
         z-bind:propcount="count"
       ></button-counter>
+      <button-counter
+        z-if="show"
+        z-on:addCount="add"
+        z-bind:propcount="count"
+      ></button-counter>
+      <button z-on:click="toggle">toogleShow</button>
     </div>
   </body>
 </html>

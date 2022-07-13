@@ -13,27 +13,22 @@ export class Compile {
   options: any;
   mountType: "append" | "replace" | undefined;
   mountNode: Node | Element | undefined;
-  parentNode: Node;
+  parentNode: Node | undefined;
 
   constructor(node: Node, vm: VM, options = { compileRoot: false }) {
     this.vm = vm;
     this.options = options;
 
+    // 将节点转换成fragment
     this.frag = this.nodeToFragment(node);
     // 需要挂载的结点
     this.mountNode = node;
 
-    // 编译节点的顶层节点
+    // 编译节点的顶层节点，针对组件类型做的处理
     this.node = this.frag.children[0];
-
-    // 顶层编译节点的父节点
-    this.parentNode = this.node.parentNode as Node;
-
-    options.compileRoot && this.compileNode(this.node, this.vm);
+    options.compileRoot && this.compileNode(node, this.vm);
     // 解决z-for的节点未编译的问题
     this.compileFrag(this.frag, this.vm);
-
-    // this.node.appendChild(this.frag);
   }
 
   // 挂载节点，如果传入el，则挂载到el，否则挂载到node
@@ -43,7 +38,7 @@ export class Compile {
   ): void {
     if (!el || typeof el === "boolean") {
       this.mountNode!.appendChild(this.frag);
-      this.mountNode = this.node;
+
       this.vm.pubsub?.publish("mounted");
       return;
     }
@@ -53,7 +48,9 @@ export class Compile {
     if (typeof el === "string") return void 0;
     if (el && replace) {
       this.parentNode = el.parentNode as Node;
-      this.parentNode?.replaceChild(this.node, el);
+      console.log("replace");
+
+      this.parentNode?.replaceChild(this.frag, el);
     } else {
       el && el.appendChild(this.frag);
     }
@@ -67,6 +64,8 @@ export class Compile {
     if (this.mountType === "append") {
       this.mountNode?.removeChild(this.node);
     } else {
+      console.log(this.node);
+
       this.parentNode?.replaceChild(this.mountNode!, this.node);
     }
     this.vm.pubsub?.publish("unmounted");

@@ -3,6 +3,7 @@ const app = createApp({
   template: "#app",
   data() {
     return {
+      show: false,
       count: 0,
       items: [
         {
@@ -22,6 +23,10 @@ const app = createApp({
       this.count++;
       console.log(this.count);
     },
+    toggle() {
+      this.show = !this.show;
+      console.log(this.show);
+    },
   },
 });
 
@@ -35,7 +40,7 @@ app.component("button-counter", {
     item: {
       type: Object,
       default: {
-        msg: 123,
+        msg: 456,
       },
     },
   },

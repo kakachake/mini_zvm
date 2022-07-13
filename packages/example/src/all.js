@@ -1,13 +1,13 @@
 import { createApp } from "mini-zvm";
-import axios from "axios";
+import request from "./request";
 
 const app = createApp({
   template: "#app",
   created() {
     this.isLoading = true;
     console.log(this.isShow);
-    axios
-      .get("/api/search/hot", {
+    request
+      .get("/search/hot", {
         headers: {},
         responseType: "json",
       })

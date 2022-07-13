@@ -10,7 +10,6 @@ export const render = {
 
       // radio不是设置value，而是判断是否选中
       if (inputType === "radio") {
-        console.log("radio");
         const value = (node as HTMLInputElement).value;
         (node as HTMLInputElement).checked = text === value;
         return;

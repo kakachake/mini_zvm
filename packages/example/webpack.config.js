@@ -4,23 +4,29 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { webpack } = require("webpack");
 const files = requireContext(path.join(__dirname, "./src"), false, /\.js$/);
+const fs = require("fs");
 const entries = {};
 const plugins = [];
 files.keys().forEach((key) => {
   console.log(key);
   key = key.replace(".js", "");
   entries[key] = `./src/${key}.js`;
-  plugins.push(
-    new HtmlWebpackPlugin({
-      template: `./template/${key}.html`,
-      filename: `${key}.html`,
-      chunks: [key],
-    })
-  );
+  try {
+    fs.accessSync(`./template/${key}.html`, fs.constants.R_OK);
+    plugins.push(
+      new HtmlWebpackPlugin({
+        template: `./template/${key}.html`,
+        filename: `${key}.html`,
+        chunks: [key],
+      })
+    );
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = {
-  mode: "development",
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   entry: { ...entries, index: "./index.js" },
   output: {
     filename: "[name].[hash].js",

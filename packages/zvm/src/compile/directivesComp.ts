@@ -195,23 +195,22 @@ export const compDirectives = {
     {
       props,
       attrs,
+      componentProps,
     }: {
       props: propsType;
       attrs: object;
+      componentProps: propsType;
     }
   ) {
-    console.log("bind", vm);
-
     const dirSplit = directive.split(":");
 
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
-    console.log(dir);
 
-    if (props.hasOwnProperty(dir)) {
+    if (componentProps.hasOwnProperty(dir)) {
       const value = runInScope(vm, "scope", expression);
 
-      if (Object(value) instanceof props[dir].type) {
-        Object.defineProperty(props[dir], "default", {
+      if (Object(value) instanceof componentProps[dir].type) {
+        Object.defineProperty(props, dir, {
           enumerable: true,
           configurable: true,
           get() {

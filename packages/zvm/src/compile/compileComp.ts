@@ -46,7 +46,6 @@ export class CompileComp {
     const fragment = document.createDocumentFragment();
     return (list: any[]) => {
       list.forEach((item, i) => {
-        console.log(i);
         const app = this.createCompApp();
         const newVm = createVM(
           {
@@ -71,8 +70,6 @@ export class CompileComp {
   }
 
   mount(app: App, node?: Node, replace = true, newVm?: VM) {
-    console.log("mount", newVm);
-
     this.compileDirectives(app, newVm || this.parentVm);
     app.vm._runCompile();
     app.vm.compile?.mount(node || this.node, replace);
@@ -132,13 +129,15 @@ export class CompileComp {
   }
 
   compileDirectives(app: App, vm: VM) {
-    const componentProps = this.componentOptions!.props;
-    const attrs = this.componentOptions!.attrs;
+    const props = app.vm!.$props;
+    const attrs = app.vm!.$attrs;
+    const componentProps = app.vm!.$options.props;
     this.attrs.forEach((value, key) => {
       if (DIR_BIND_REG.test(key)) {
         compDirectives.bind(this.node, vm, key, value, {
-          props: componentProps || {},
+          props: props || {},
           attrs: attrs || {},
+          componentProps: componentProps || {},
         });
         // this.attrs.delete(key);
       } else if (DIR_REG.test(key)) {

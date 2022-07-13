@@ -29,6 +29,7 @@ const app = createApp({
       });
     },
     handleDelClick(index) {
+      console.log(index);
       this.items.splice(index, 1);
     },
   },

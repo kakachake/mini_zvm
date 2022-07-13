@@ -1,5 +1,5 @@
 import { createApp } from "mini-zvm";
-import axios from "axios";
+import request from "./request";
 const app = createApp({
   template: "#app",
   data() {
@@ -11,8 +11,8 @@ const app = createApp({
   created() {
     this.isLoading = true;
     setTimeout(() => {
-      axios
-        .get("/api/search/hot", {
+      request
+        .get("/search/hot", {
           headers: {},
           responseType: "json",
         })

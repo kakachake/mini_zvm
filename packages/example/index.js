@@ -14,8 +14,10 @@ const nameDict = {
 const files = require.context("./src", false, /\.js$/);
 
 const keyReg = /^\.\/(.*).js/;
+
 files.keys().forEach((key) => {
   key = keyReg.exec(key)[1];
+
   const a = document.createElement("a");
   a.setAttribute("href", `${key}.html`);
   a.setAttribute("target", "show");

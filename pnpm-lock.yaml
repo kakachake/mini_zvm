@@ -53,6 +53,7 @@ importers:
     specifiers:
       axios: ^0.27.2
       clean-webpack-plugin: ^4.0.0
+      cross-env: ^7.0.3
       html-webpack-plugin: ^5.5.0
       mini-zvm: workspace:^0.1.0
       require-context: ^1.1.0
@@ -63,6 +64,7 @@ importers:
       mini-zvm: link:../zvm
     devDependencies:
       clean-webpack-plugin: registry.npmmirror.com/clean-webpack-plugin/4.0.0_webpack@5.73.0
+      cross-env: registry.npmmirror.com/cross-env/7.0.3
       html-webpack-plugin: registry.npmmirror.com/html-webpack-plugin/5.5.0_webpack@5.73.0
       require-context: registry.npmmirror.com/require-context/1.1.0
       webpack: registry.npmmirror.com/webpack/5.73.0_webpack-cli@4.10.0
