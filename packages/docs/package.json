@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "html-entities": "1.4.0",
-    "vuepress": "^1.9.7"
+    "vuepress": "^2.0.0-beta.49"
   },
   "resolutions": {
     "webpack-hot-middleware": "2.25.0"

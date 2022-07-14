@@ -1,6 +1,8 @@
+const { defaultTheme } = require("@vuepress/theme-default");
+
 module.exports = {
-  title: "ZVM",
-  description: "mini-vue",
+  title: "mini-ZVM",
+  description: "一款用于构建 Web 界面的框架",
   dest: "./dist",
   port: "8080",
   markdown: {
@@ -20,10 +22,11 @@ module.exports = {
     `,
     ],
   ],
-  themeConfig: {
+  theme: defaultTheme({
     smoothScroll: true,
     sidebar: "auto",
-    nav: [
+    logo: "./assets/logo.png",
+    navbar: [
       {
         text: "指南",
         link: "/guide/",
@@ -41,30 +44,63 @@ module.exports = {
         link: "https://github.com/kakachake",
       },
     ],
+    sidebarDepth: 2,
     sidebar: [
       {
-        title: "开始",
+        text: "开始",
+        collapsible: true,
         children: [
-          ["/guide/", "介绍"],
-          ["/guide/quick-start", "快速开始"],
+          {
+            text: "介绍",
+            link: "/guide/",
+          },
+          {
+            text: "快速上手",
+            link: "/guide/quick-start.html",
+          },
         ],
-
-        collapsable: false,
       },
       {
-        title: "基础",
+        text: "基础",
         children: [
-          ["/guide/instance", "应用实例"],
-          ["/guide/template", "模板语法"],
-          ["/guide/directives", "各个指令介绍"],
-          ["/guide/component-basics", "组件基础"],
+          {
+            text: "应用实例",
+            link: "/guide/instance.html",
+          },
+          {
+            text: "模板语法",
+            link: "/guide/template.html",
+          },
+          {
+            text: "指令介绍",
+            link: "/guide/directives.html",
+          },
+          {
+            text: "组件基础",
+            link: "/guide/component-basics.html",
+          },
         ],
-        collapsable: false,
+        collapsible: true,
       },
       {
-        title: "扩展",
-        children: [["/guide/custom-directives", "自定义指令"]],
-        collapsable: false,
+        text: "工具",
+        children: [
+          {
+            text: "单文件组件",
+            link: "/guide/single-file-component.html",
+          },
+        ],
+        collapsible: true,
+      },
+      {
+        text: "扩展",
+        children: [
+          {
+            text: "自定义指令",
+            link: "/guide/custom-directives.html",
+          },
+        ],
+        collapsible: true,
       },
     ],
     sidebarDepth: 2,
@@ -78,5 +114,5 @@ module.exports = {
     },
     editLinks: true,
     editLinkText: "在 GitHub 上编辑此页 ！",
-  },
+  }),
 };
