@@ -8,6 +8,7 @@
   </head>
   <body>
     <div id="app">
+      <button z-on:click="addItem">add item</button>
       <button-counter
         z-for="item in items"
         z-bind:item="item"

@@ -32,15 +32,12 @@ export class Compile {
   }
 
   // 挂载节点，如果传入el，则挂载到el，否则挂载到node
-  mount(
-    el?: string | Node | Element | DocumentFragment,
-    replace?: boolean
-  ): void {
+  mount(el?: string | Node | Element | DocumentFragment, replace?: boolean) {
     if (!el || typeof el === "boolean") {
       this.mountNode!.appendChild(this.frag);
 
       this.vm.pubsub?.publish("mounted");
-      return;
+      return this.frag;
     }
     if (typeof el === "string") {
       el = document.querySelector(el) || "";
@@ -48,7 +45,6 @@ export class Compile {
     if (typeof el === "string") return void 0;
     if (el && replace) {
       this.parentNode = el.parentNode as Node;
-      console.log("replace");
 
       this.parentNode?.replaceChild(this.frag, el);
     } else {
@@ -57,18 +53,20 @@ export class Compile {
     this.mountNode = el;
     this.mountType = replace ? "replace" : "append";
     this.vm.pubsub?.publish("mounted");
-    return;
+    return this.node;
   }
 
   unmounted() {
-    if (this.mountType === "append") {
-      this.mountNode?.removeChild(this.node);
-    } else {
-      console.log(this.node);
+    try {
+      if (this.mountType === "append") {
+        this.mountNode?.removeChild(this.node);
+      } else {
+        console.log(this.node);
 
-      this.parentNode?.replaceChild(this.mountNode!, this.node);
-    }
-    this.vm.pubsub?.publish("unmounted");
+        this.parentNode?.replaceChild(this.mountNode!, this.node);
+      }
+      this.vm.pubsub?.publish("unmounted");
+    } catch (error) {}
   }
 
   removeChilds(node: Node) {

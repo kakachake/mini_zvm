@@ -181,9 +181,17 @@ export const compDirectives = {
         [value, index] = values.split(",");
       }
       const render = compileComp.createCompApps(value, index);
-      effect(() => {
-        render(runInScope(vm, "scope", list));
-      });
+      watch(
+        () => {
+          runInScope(vm, "scope", list + ".length");
+        },
+        (newValue) => {
+          render(runInScope(vm, "scope", list));
+        },
+        {
+          immediate: true,
+        }
+      );
     }
   },
 

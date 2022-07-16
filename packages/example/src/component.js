@@ -27,6 +27,13 @@ const app = createApp({
       this.show = !this.show;
       console.log(this.show);
     },
+    addItem() {
+      console.log("addItem");
+      this.items.push({
+        msg: "444",
+      });
+      console.log(this.items);
+    },
   },
 });
 

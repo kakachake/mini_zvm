@@ -12,7 +12,11 @@ export class CompileComp {
   parentVm: VM;
   comment: Node | undefined;
   // 可能有多个子组件(for循环的情况)
-  apps: Set<App> = new Set();
+  apps: Set<
+    App & {
+      node?: Node;
+    }
+  > = new Set();
   attrs: Map<any, string> = new Map();
   props: object = {};
   componentOptions: ZvmOptions | undefined;
@@ -43,28 +47,38 @@ export class CompileComp {
   }
 
   createCompApps(value: string, index?: string) {
-    const fragment = document.createDocumentFragment();
     return (list: any[]) => {
+      const fragment = document.createDocumentFragment();
+      let i = 0;
+      const size = this.apps.size;
+      this.apps.forEach((app) => {
+        this.unmounted(app, {
+          node: app.node,
+          remove: i != size - 1,
+        });
+        i++;
+      });
       list.forEach((item, i) => {
-        const app = this.createCompApp();
+        const app: App & {
+          node?: Node;
+        } = this.createCompApp();
         const newVm = createVM(
           {
             template: this.comment as Element,
             data: index
               ? {
-                  [value]: list[i],
+                  [value]: item,
                   [index]: i,
                 }
               : {
-                  [value]: list[i],
+                  [value]: item,
                 },
           },
           this.parentVm
         );
 
-        this.mount(app, fragment, false, newVm);
+        app.node = this.mount(app, fragment, false, newVm);
       });
-
       this.node.parentNode?.replaceChild(fragment, this.node!);
     };
   }
@@ -72,14 +86,29 @@ export class CompileComp {
   mount(app: App, node?: Node, replace = true, newVm?: VM) {
     this.compileDirectives(app, newVm || this.parentVm);
     app.vm._runCompile();
-    app.vm.compile?.mount(node || this.node, replace);
+    return app.vm.compile?.mount(node || this.node, replace);
   }
 
-  unmounted(app: App) {
+  unmounted(
+    app: App,
+    options?: {
+      node?: Node;
+      remove?: boolean;
+    }
+  ) {
     if (!app) return;
     app.destroy && app.destroy();
     this.apps.delete(app);
-    this.node.parentNode?.replaceChild(this.comment!, this.node);
+    if (options?.node) {
+      if (options.remove) {
+        options.node.parentNode?.removeChild(options.node);
+      } else {
+        options.node.parentNode?.replaceChild(this.node, options.node);
+      }
+    } else {
+      this.node.parentNode?.replaceChild(this.comment!, this.node);
+      this.node = this.comment as Element;
+    }
   }
 
   // 初始化组件,这里需要对组件上的z-if和z-for进行预处理
@@ -101,8 +130,10 @@ export class CompileComp {
       // for循环的情况
       // 创建注释结点, 用来做替换
       this.comment = document.createComment("z-for");
+
       this.node.parentNode?.replaceChild(this.comment, this.node);
       this.node = this.comment;
+
       compDirectives["for"](
         this.node as HTMLElement,
         this.parentVm,
