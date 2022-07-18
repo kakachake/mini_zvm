@@ -1,6 +1,6 @@
 <div align="center">
   <a target="_blank" href="https://github.com/kakachake/mini_zvm">
-    <img src="https://github.com/kakachake/mini_zvm/blob/master/assets/logo.png" alt="logo" width="100px"/>
+    <img src="https://github.com/kakachake/mini_zvm/blob/master/assets/logo.png" alt="logo" width="150px"/>
   </a>
   <h1>ZVM</h1>
   <p>简单的 MVVM 框架实现</p>
