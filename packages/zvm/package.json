@@ -6,7 +6,7 @@
     "url": "https://kakachake.github.io/"
   },
   "description": "mvvm简化版，仅供学习使用",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "main": "dist/umd/main.js",
   "homepage": "https://mini-zvm-doc.vercel.app/",
   "module": "dist/es/main.js",

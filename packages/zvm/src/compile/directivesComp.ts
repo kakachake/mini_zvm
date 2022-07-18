@@ -1,9 +1,8 @@
-import { effect, watch } from "../main";
+import { watch } from "../main";
 import { App, propsType, VM } from "../zvm/type";
 import { CompileComp } from "./compileComp";
-import { render } from "./render";
 import { CustomDirective, CustomDirectiveFn } from "./type";
-import { getValueByPath, runInScope, setValueByPath } from "./util";
+import { runInScope } from "./util";
 
 const customDirectives: CustomDirective = {};
 
@@ -27,7 +26,6 @@ export function parseDirective(directive: string) {
 }
 
 export function triggerCompDirective(
-  node: Node,
   vm: VM,
   directive: string,
   expression: string,
@@ -37,12 +35,12 @@ export function triggerCompDirective(
   if (!name || !arg) return;
 
   if (compDirectives[name]) {
-    compDirectives[name](node, vm, directive, expression, app);
+    compDirectives[name](vm, directive, expression, app);
   }
 }
 
 export const compDirectives = {
-  on(node: Element, vm: VM, directive: string, expression: string, app: App) {
+  on(vm: VM, directive: string, expression: string, app: App) {
     // z-on:click -> click
     // 函数调用
 
@@ -66,74 +64,7 @@ export const compDirectives = {
     }
   },
 
-  model(node: HTMLInputElement, vm: VM, directive: string, expression: string) {
-    // TODO bind input
-
-    this.text(node, vm, directive, expression);
-
-    // 如果是input
-    if (
-      (node.tagName === "INPUT" && node.type === "text") ||
-      node.tagName === "TEXTAREA"
-    ) {
-      node.addEventListener("input", (e: Event) => {
-        setValueByPath(
-          vm.$data,
-          expression,
-          (e.target as HTMLInputElement).value
-        );
-        e.preventDefault();
-      });
-    }
-    // 如果是checkbox
-    if (node.tagName === "INPUT" && node.type === "checkbox") {
-      node.addEventListener("change", (e: Event) => {
-        setValueByPath(
-          vm.$data,
-          expression,
-          (e.target as HTMLInputElement).checked
-        );
-      });
-    }
-    //如果是radio
-    if (node.tagName === "INPUT" && node.type === "radio") {
-      node.addEventListener("change", (e: Event) => {
-        setValueByPath(
-          vm.$data,
-          expression,
-          (e.target as HTMLInputElement).value
-        );
-      });
-    }
-  },
-
-  // 通用函数，既适用z-text，也适用{{text}}
-  text(
-    node: Node,
-    vm: VM,
-    _directive: string,
-    expression: string,
-    replace = ""
-  ) {
-    const renderFn = render["textRender"];
-
-    if (renderFn) {
-      watch(
-        () => {
-          return runInScope(vm, "scope", expression);
-        },
-        (newValue) => {
-          renderFn && renderFn(node, newValue, replace);
-        },
-        {
-          immediate: true,
-        }
-      );
-    }
-  },
-
   if(
-    node: HTMLElement,
     vm: VM,
     _directive: string,
     expression: string,
@@ -161,7 +92,6 @@ export const compDirectives = {
   },
 
   for(
-    node: HTMLElement,
     vm: VM,
     _directive: string,
     expression: string,
@@ -185,7 +115,7 @@ export const compDirectives = {
         () => {
           runInScope(vm, "scope", list + ".length");
         },
-        (newValue) => {
+        () => {
           render(runInScope(vm, "scope", list));
         },
         {
@@ -196,7 +126,6 @@ export const compDirectives = {
   },
 
   bind(
-    node: Node,
     vm: VM,
     directive: string,
     expression: string,

@@ -1,9 +1,8 @@
 import { createApp, createVM } from "../main";
-import { App, propsType, VM, ZvmOptions } from "../zvm/type";
-import { DIR_BIND_REG, DIR_FOR_REG, DIR_IF_REG, DIR_REG } from "./constant";
+import { App, VM, ZvmOptions } from "../zvm/type";
+import { DIR_BIND_REG, DIR_REG } from "./constant";
 
 import { compDirectives, triggerCompDirective } from "./directivesComp";
-import deepMerge from "deepmerge";
 
 // 编译模板中的组件
 export class CompileComp {
@@ -119,7 +118,6 @@ export class CompileComp {
       this.node.parentNode?.replaceChild(this.comment, this.node);
       this.node = this.comment;
       compDirectives["if"](
-        this.node as HTMLElement,
         this.parentVm,
         "if",
         this.attrs.get("z-if") || "",
@@ -135,7 +133,6 @@ export class CompileComp {
       this.node = this.comment;
 
       compDirectives["for"](
-        this.node as HTMLElement,
         this.parentVm,
         "for",
         this.attrs.get("z-for") || "",
@@ -165,7 +162,7 @@ export class CompileComp {
     const componentProps = app.vm!.$options.props;
     this.attrs.forEach((value, key) => {
       if (DIR_BIND_REG.test(key)) {
-        compDirectives.bind(this.node, vm, key, value, {
+        compDirectives.bind(vm, key, value, {
           props: props || {},
           attrs: attrs || {},
           componentProps: componentProps || {},
@@ -174,13 +171,7 @@ export class CompileComp {
       } else if (DIR_REG.test(key)) {
         const directive = key;
         const expression = value;
-        triggerCompDirective(
-          this.node,
-          this.parentVm,
-          directive,
-          expression,
-          app
-        );
+        triggerCompDirective(this.parentVm, directive, expression, app);
         // (this.node as Element).removeAttribute(directive);
       } else {
         // attrs

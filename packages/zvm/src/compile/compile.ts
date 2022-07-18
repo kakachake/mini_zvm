@@ -1,4 +1,3 @@
-import { createApp } from "../main";
 import { VM } from "../zvm/type";
 import { CompileComp } from "./compileComp";
 import { DIR_FOR_REG, DIR_REG } from "./constant";

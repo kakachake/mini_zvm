@@ -3,6 +3,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 export const file = (type) => `dist/index.${type}.js`;
+console.log(process.env.NODE_ENV);
 const isProd = process.env.NODE_ENV === "production";
 const overrides = {
   compilerOptions: {
