@@ -3,6 +3,8 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 export const file = (type) => `dist/index.${type}.js`;
+import json from "@rollup/plugin-json";
+
 console.log(process.env.NODE_ENV);
 const isProd = process.env.NODE_ENV === "production";
 const overrides = {
@@ -43,5 +45,6 @@ export default {
     }),
     commonjs(), // 转换为ES6版本
     isProd ? terser() : null,
+    json(),
   ],
 };

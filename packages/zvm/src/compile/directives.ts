@@ -2,7 +2,12 @@ import { effect, watch } from "../main";
 import { VM } from "../zvm/type";
 import { render } from "./render";
 import { CustomDirective, CustomDirectiveFn } from "./type";
-import { getValueByPath, runInScope, setValueByPath } from "./util";
+import {
+  createRunInScopeFn,
+  getValueByPath,
+  runInScope,
+  setValueByPath,
+} from "./util";
 
 const customDirectives: CustomDirective = {};
 
@@ -58,39 +63,46 @@ export const directives = {
     // z-on:click -> click
     // 函数调用
 
-    const methodReg = /^(\w+)([(]((,?[$'\w']+)+)[)])?/;
+    const methodReg = /^(\w+)([(]((,?[$'\w']+)+)[)])?$/;
     expression = expression.replace(/\s/g, "");
     const matchMethod = expression.match(methodReg);
-
-    if (!matchMethod) return;
-
-    const method = matchMethod[1];
-    const methodArgs: any[] = [];
-
-    const singleReg = /^'(.*)'$/;
-    const $eventReg = /(\$event)$/;
-    // 如果能查到$event就把位置记下来
+    let fn: () => void;
     let $eventIdx = -1;
-    if (matchMethod && matchMethod[3]) {
-      // 去除括号
-
-      const args = matchMethod[3].split(",");
-      args.forEach((arg) => {
-        // 匹配到单引号就是普通的字符串
-        if (singleReg.test(arg)) {
-          // 去除单引号
-          methodArgs.push(arg.replace(singleReg, "$1"));
-        } else if ($eventReg.test(arg)) {
-          methodArgs.push(arg);
-          $eventIdx = methodArgs.length - 1;
-        } else {
-          methodArgs.push(getValueByPath(vm.$data, arg));
-        }
-      });
-    }
+    const methodArgs: any[] = [];
     const eventType = directive.split(":")[1];
+    if (!matchMethod) {
+      fn = createRunInScopeFn(vm, "scope", expression);
+      console.log("fn=" + fn);
+    } else {
+      const method = matchMethod[1];
 
-    const fn = vm && vm[method];
+      const singleReg = /^'(.*)'$/;
+      const $eventReg = /(\$event)$/;
+      // 如果能查到$event就把位置记下来
+
+      if (matchMethod && matchMethod[3]) {
+        // 去除括号
+
+        const args = matchMethod[3].split(",");
+        args.forEach((arg) => {
+          // 匹配到单引号就是普通的字符串
+          if (singleReg.test(arg)) {
+            // 去除单引号
+            methodArgs.push(arg.replace(singleReg, "$1"));
+          } else if ($eventReg.test(arg)) {
+            methodArgs.push(arg);
+            $eventIdx = methodArgs.length - 1;
+          } else {
+            methodArgs.push(getValueByPath(vm.$data, arg));
+          }
+        });
+      }
+
+      fn = vm && vm[method];
+      if (typeof fn !== "function") {
+        throw new Error(`method "${method}" not found, please check it`);
+      }
+    }
 
     if (eventType && fn) {
       node.addEventListener(eventType, (e) => {
@@ -100,7 +112,7 @@ export const directives = {
         if (!methodArgs.length) {
           methodArgs.push(e);
         }
-        return fn.call(vm, ...methodArgs);
+        return fn.apply(vm, methodArgs as []);
       });
     }
   },

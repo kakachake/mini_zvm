@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="app">
-      <div>
+      <div class="text-lg">
         {{isLoading?"加载中...":"加载完成"}} 网易云热搜：
         <ul>
           <li
@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div z-bind:class="className" z-on:click="handleClick('test', $event, a)">
         点击试试{{a}}
       </div>
 
@@ -31,7 +31,7 @@
         <div z-text="a"></div>
       </div>
       <div>z-on:click===============================</div>
-      <div z-bind:class="class" z-on:click="handleClick('test', $event, a)">
+      <div z-bind:class="className" z-on:click="handleClick('test', $event, a)">
         支持在内联事件处理器中访问事件参数，点击去控制台查看效果
       </div>
       <div>===============================</div>

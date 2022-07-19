@@ -1,4 +1,5 @@
 import { createApp } from "mini-zvm";
+
 import request from "./request";
 const app = createApp({
   template: "#app",

@@ -1,4 +1,5 @@
 import { createApp } from "mini-zvm";
+
 const app = createApp({
   template: "#app",
   data() {

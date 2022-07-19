@@ -2,6 +2,7 @@ import { VM } from "../zvm/type";
 import { createVM } from "../zvm/zvm";
 import { Compile } from "./compile";
 import { insertAfter } from "./dom";
+import { camelToDash } from "./util";
 
 export const render = {
   textRender: (node: Node, text: string, replace: string) => {
@@ -35,9 +36,9 @@ export const render = {
   classRender: (node: HTMLElement, value: object) => {
     for (const key in value) {
       if (value[key]) {
-        node.classList.add(key);
+        node.classList.add(camelToDash(key));
       } else {
-        node.classList.remove(key);
+        node.classList.remove(camelToDash(key));
       }
     }
   },

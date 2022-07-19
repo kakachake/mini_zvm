@@ -33,7 +33,12 @@ module.exports = {
     path: __dirname + "/output",
   },
   module: {
-    rules: [],
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+    ],
   },
   plugins: [
     // see https://github.com/ampedandwired/html-webpack-plugin

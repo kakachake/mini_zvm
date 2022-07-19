@@ -8,8 +8,9 @@
   </head>
   <body>
     <div id="app">
-      <div z-bind:class="class">
-        <button z-on:click="handleClick('test', $event, data)">点击我</button>
+      <div z-bind:class="className">
+        <button z-on:click="handleClick('test', $event, data) ">点击我</button>
+        <button z-on:click="data++">点击我</button>
         点击打开控制台查看效果{{data}}
       </div>
       <div>
