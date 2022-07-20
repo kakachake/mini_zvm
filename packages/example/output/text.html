@@ -1,6 +1,0 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Document</title><script defer="defer" src="text.a245ac37255670cdcfe1.js"></script></head><body><div id="app"><h2>z-text:</h2><div class="text-lg" z-text="text" z-on:click="handleClick"></div><div z-text="count"></div><div z-text="countP(count,'1')"></div><div z-text="message.split('').reverse().join('')"></div><h2>普通文本插值</h2><div z-on:click="handleClick">{{text}}</div><div>{{count}}</div><div>{{countP(count,'1')}}</div><div>{{ message.split('').reverse().join('') }}</div><button z-on:click="handleBtnClick">count++</button></div></body><style>* {
-      user-select: none;
-    }
-    .active {
-      background-color: red;
-    }</style></html>
