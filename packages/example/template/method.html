@@ -13,6 +13,8 @@
       <div>{{countP(count,'1')}}</div>
       <div>{{ message.split('').reverse().join('') }}</div>
       <button z-on:click="handleClick">count++</button>
+      <div>{{obj.count}}</div>
+      <button z-on:click="obj.count++">obj.count++</button>
     </div>
   </body>
 </html>

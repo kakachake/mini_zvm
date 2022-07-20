@@ -25,22 +25,22 @@ export function getValueByPath(obj: object, path: string) {
   return obj;
 }
 
-// 模拟with
-export function _with(scopeName: string, exp: string) {
-  //去除空格
-  exp = exp.replace(/\s/g, "");
-  exp = " " + exp;
-  const quickRegex =
-    /((?!["'])[\(:,\s\+\-\*\/%&\|\^!\*~]\s*?)(([a-zA-Z_$][a-zA-Z_$0-9]*)\s*?(?!["':]))/g;
-  // javascript 关键字的正则
-  const boolRegex = /(true|false|null|undefined)/g;
+// // 模拟with
+// export function _with(scopeName: string, exp: string) {
+//   //去除空格
+//   exp = exp.replace(/\s/g, "");
+//   exp = " " + exp;
+//   const quickRegex =
+//     /((?!["'])[\(:,\s\+\-\*\/%&\|\^!\*~]\s*?)(([a-zA-Z_$][a-zA-Z_$0-9]*)\s*?(?!["':]))/g;
+//   // javascript 关键字的正则
+//   const boolRegex = /(true|false|null|undefined)/g;
 
-  exp = exp.replace(quickRegex, (_a, b, c) => {
-    return boolRegex.test(c) ? b + c : b + scopeName + "." + c;
-  });
+//   exp = exp.replace(quickRegex, (_a, b, c) => {
+//     return boolRegex.test(c) ? b + c : b + scopeName + "." + c;
+//   });
 
-  return exp;
-}
+//   return exp;
+// }
 
 export function createRunInScopeFn(
   scope: object,
@@ -48,7 +48,6 @@ export function createRunInScopeFn(
   exp: string
 ) {
   const func = new Function(scopeName, "return " + __with(scopeName, exp));
-  console.log("func=" + func);
 
   return function () {
     return func(scope);
@@ -62,13 +61,13 @@ export function runInScope(scope: object, scopeName: string, exp: string): any {
 
 export function camelToDash(str: string) {
   return str.replace(/[A-Z]|([0-9]+)/g, function (item: string) {
-    console.log("item=" + item); //user-name
     return "-" + item.toLowerCase();
   });
 }
 
 // 模拟with
 export function __with(scopeName: string, exp: string) {
+  if (!exp) return "";
   const code = "(" + exp + ")";
 
   const tree = esprima.parseScript(code); // 生成语法树
@@ -100,8 +99,6 @@ export function __with(scopeName: string, exp: string) {
 
   // 编译修改后的语法树；
   const compileTreeJS = escodegen.generate(tree);
-  console.log(compileTreeJS);
 
   return compileTreeJS;
 }
-__with("scope", "1");

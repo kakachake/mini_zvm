@@ -1,5 +1,6 @@
 import { createApp } from "mini-zvm";
 import request from "./request";
+import "./assets/styles.css";
 
 const app = createApp({
   template: "#app",
@@ -25,7 +26,7 @@ const app = createApp({
   data() {
     return {
       checked: true,
-      picked: "",
+      picked: "123",
       songHotList: [],
       parentData: "外层的数据",
       a: 111,

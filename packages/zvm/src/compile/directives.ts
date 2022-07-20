@@ -16,7 +16,7 @@ export function registerDirective(name: string, fn: CustomDirectiveFn) {
 }
 
 export function parseDirective(directive: string) {
-  const directiveReg = /^z-(\w+)\s*(:(\w*))?$/;
+  const directiveReg = /^z-(\w+)\s*(:([\w-]*))?$/;
 
   const matchDirective = directive.match(directiveReg);
 
@@ -235,8 +235,9 @@ export const directives = {
 
   bind(node: Node, vm: VM, directive: string, expression: string) {
     const dirSplit = directive.split(":");
-
+    console.log(dirSplit);
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
+    console.log("dir=" + dir);
 
     let renderFn = render[dir + "Render"];
     if (!renderFn) {
