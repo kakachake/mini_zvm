@@ -26,3 +26,4 @@ output
 *.sln
 *.sw?
 .cache
+.temp
