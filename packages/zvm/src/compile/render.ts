@@ -6,7 +6,7 @@ import { camelToDash } from "./util";
 
 export const render = {
   textRender: (node: Node, text: string, replace: string) => {
-    if (node.nodeName === "INPUT") {
+    if (node.nodeName === "INPUT" || node.nodeName === "TEXTAREA") {
       const inputType = (node as HTMLInputElement).getAttribute("type");
 
       // radio不是设置value，而是判断是否选中
@@ -33,12 +33,17 @@ export const render = {
       : (node.textContent = typeof text == "undefined" ? "" : text);
   },
 
-  classRender: (node: HTMLElement, value: object) => {
-    for (const key in value) {
-      if (value[key]) {
-        node.classList.add(camelToDash(key));
-      } else {
-        node.classList.remove(camelToDash(key));
+  classRender: (node: HTMLElement, value: object | string) => {
+    if (typeof value === "string") {
+      node.className = value;
+      return;
+    } else {
+      for (const key in value) {
+        if (value[key]) {
+          node.classList.add(camelToDash(key));
+        } else {
+          node.classList.remove(camelToDash(key));
+        }
       }
     }
   },

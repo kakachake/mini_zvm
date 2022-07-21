@@ -21,12 +21,12 @@ export interface ZvmOptions {
   data?: (() => object) | object;
   computed?: object;
   props?: propsType;
-  methods?: {
-    [key: string]: (...args: any[]) => any;
-  };
+  methods?: any;
   created?: () => void;
   mounted?: (this: any) => void;
-  directives?: CustomDirectiveFn[];
+  directives?: {
+    [key: string]: CustomDirectiveFn;
+  };
   components?: {
     [key: string]: ZvmOptions;
   };

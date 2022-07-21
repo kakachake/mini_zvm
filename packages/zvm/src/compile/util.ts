@@ -1,7 +1,6 @@
-import esprima from "esprima";
+import * as esprima from "esprima";
 import estraverse from "estraverse";
 import escodegen from "escodegen";
-import { off } from "process";
 
 // 根据a.b.c设置数据
 export function setValueByPath(obj: object, path: string, value: any) {
@@ -92,9 +91,6 @@ export function __with(scopeName: string, exp: string) {
       }
       return node;
     },
-    // leave(node) {
-    //   console.log("leave", node.type);
-    // },
   });
 
   // 编译修改后的语法树；

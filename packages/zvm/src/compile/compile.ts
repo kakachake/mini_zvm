@@ -3,6 +3,9 @@ import { CompileComp } from "./compileComp";
 import { DIR_FOR_REG, DIR_REG } from "./constant";
 import { directives, triggerDirective } from "./directives";
 
+/**
+ * 指令解析器
+ */
 export class Compile {
   node: Node;
   vm: VM;
@@ -14,6 +17,12 @@ export class Compile {
   mountNode: Node | Element | undefined;
   parentNode: Node | undefined;
 
+  /**
+   * 编译构造入口
+   * @param node 元素节点
+   * @param vm vm实例
+   * @param options 编译参数
+   */
   constructor(node: Node, vm: VM, options = { compileRoot: false }) {
     this.vm = vm;
     this.options = options;
@@ -30,7 +39,12 @@ export class Compile {
     this.compileFrag(this.frag, this.vm);
   }
 
-  // 挂载节点，如果传入el，则挂载到el，否则挂载到node
+  /**
+   * 挂载节点，如果传入el，则挂载到el，否则挂载到node
+   * @param el 元素节点
+   * @param replace  是否替换
+   * @returns 返回挂载的节点
+   */
   mount(el?: string | Node | Element | DocumentFragment, replace?: boolean) {
     if (!el || typeof el === "boolean") {
       this.mountNode!.appendChild(this.frag);
@@ -55,19 +69,24 @@ export class Compile {
     return this.node;
   }
 
+  /**
+   * 卸载节点
+   */
   unmounted() {
     try {
       if (this.mountType === "append") {
         this.mountNode?.removeChild(this.node);
       } else {
-        console.log(this.node);
-
         this.parentNode?.replaceChild(this.mountNode!, this.node);
       }
       this.vm.pubsub?.publish("unmounted");
     } catch (error) {}
   }
 
+  /**
+   * 移除子节点
+   * @param node 元素节点
+   */
   removeChilds(node: Node) {
     while (node.firstChild) {
       if (node.firstChild.childNodes.length) {
@@ -77,11 +96,19 @@ export class Compile {
     }
   }
 
+  /**
+   * 返回当前fragment
+   * @returns 当前fragment
+   */
   getFragment() {
     return this.frag;
   }
 
-  // 节点转换成fragment
+  /**
+   * 节点转换成fragment
+   * @param node 元素节点
+   * @returns 返回fragment
+   */
   nodeToFragment(node: Node) {
     const frag = document.createDocumentFragment();
     let child: ChildNode | null;

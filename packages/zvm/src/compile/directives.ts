@@ -72,7 +72,6 @@ export const directives = {
     const eventType = directive.split(":")[1];
     if (!matchMethod) {
       fn = createRunInScopeFn(vm, "scope", expression);
-      console.log("fn=" + fn);
     } else {
       const method = matchMethod[1];
 
@@ -128,6 +127,8 @@ export const directives = {
       node.tagName === "TEXTAREA"
     ) {
       node.addEventListener("input", (e: Event) => {
+        console.log(e);
+
         setValueByPath(
           vm.$data,
           expression,
@@ -174,6 +175,8 @@ export const directives = {
           return runInScope(vm, "scope", expression);
         },
         (newValue) => {
+          console.log(newValue, node);
+
           renderFn && renderFn(node, newValue, replace);
         },
         {
@@ -235,9 +238,8 @@ export const directives = {
 
   bind(node: Node, vm: VM, directive: string, expression: string) {
     const dirSplit = directive.split(":");
-    console.log(dirSplit);
+
     const dir = dirSplit.length > 1 ? dirSplit[1] : directive;
-    console.log("dir=" + dir);
 
     let renderFn = render[dir + "Render"];
     if (!renderFn) {

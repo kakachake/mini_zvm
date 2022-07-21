@@ -6,6 +6,7 @@ const app = createApp({
     return {
       data: "这是绑定的值",
       isDisable: true,
+      classNae: "red",
     };
   },
   methods: {
