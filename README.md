@@ -1,12 +1,11 @@
 <div align="center">
   <a target="_blank" href="https://github.com/kakachake/mini_zvm">
-    <img src="https://github.com/kakachake/mini_zvm/blob/master/assets/logo.png" alt="logo" width="150px"/>
+    <img src="./assets/logo.png" alt="logo" width="150px"/>
   </a>
   <h1>ZVM</h1>
+  <h4><a href="https://mini-zvm-doc.vercel.app/">最新文档地址</a></h4>
   <p>简单的 MVVM 框架实现</p>
 </div>
-
-[文档地址](https://mini-zvm-doc.vercel.app/)
 
 ## 简介
 
